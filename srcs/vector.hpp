@@ -6,19 +6,13 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/11/21 00:42:18 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/11/21 00:44:39 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-# include <numeric>
-# include <sstream>
-# include <cstring>
-# include <stdexcept>
-# include <exception>
-# include <memory>
 
 namespace ft
 {
@@ -89,7 +83,7 @@ class ft::vector
 {
 public:
 	typedef T value_type;
-	typedef Allocator allocator_type;
+	typedef Alloc allocator_type;
 }
 
 
