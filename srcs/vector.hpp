@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/11/22 19:55:51 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/11/22 23:05:40 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <memory>
 # include <exception>
+# include "algorithm.hpp"
+
 namespace ft
 {
 	template < typename T, typename Alloc = std::allocator<T> >
@@ -47,8 +49,7 @@ namespace ft
 	template <typename T>
 	bool	operator>(vector<T> const& v1, vector<T> const& v2)
 	{
-		return (std::lexicographical_compare(v1.begin(), v1.end(), v2.begin(), v2.end()));
-		//Faire la comparaison lexicographicale nous même
+		return (lexicographical_compare(v1.begin(), v1.end(), v2.begin(), v2.end()));
 	}
 
 	template <typename T>
@@ -121,6 +122,9 @@ public:
 	}
 	//operator=
 	vector	&operator=(vector<value_type>)
+	{
+		
+	}
 	~vector(){
 		clear();
 		_allocator.deallocate(_data, _capacity);
@@ -140,7 +144,7 @@ public:
 	}
 	bool	empty() const
 	{
-		return (!_size);
+		return (_size == 0);
 	}
 	//reserve
 	//ACCESS
