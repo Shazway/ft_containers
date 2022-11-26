@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/11/22 23:05:40 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/11/26 21:07:57 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <memory>
 # include <exception>
 # include "algorithm.hpp"
+# include "type_traits.hpp"
 
 namespace ft
 {
@@ -110,12 +111,13 @@ public:
 	explicit vector(size_type count, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()): _data(NULL), _capacity(0), _size(0){
 		assign(count, val); // a coder
 	}
-	//template <class InputIterator>
-	/*vector(InputIterator first, InputIterator, last, allocator_type const& alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
+	template <class InputIterator>
+	vector(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
 	{
-		//is integral
-		//init vector
-	}*/
+		typedef typename ft::is_integral_base<InputIterator>::state	Integral;
+
+		_init_vec(first, last, Integral());
+	}
 	vector(const vector &copy, allocator_type const& alloc = allocator_type() = allocator_type()): _data(NULL), _capacity(0), _size(0), allocator(alloc)
 	{
 		*this = copy;
@@ -180,6 +182,15 @@ public:
 	{
 		return (_data[_size - 1]);
 	}
+
+	template <typename InputIterator>
+	void assign(InputIterator first, InputIterator last)
+	{
+		typedef typename ft::is_integral_base<InputIterator>::state Integral;
+	
+		clear();
+		dispatch_assignation(first, last, Integral());
+	}
 	//assign inputiterator first, iterator last
 	//assign size n, value val
 	//push_back(const value_type &val)
@@ -220,6 +231,49 @@ private:
 	
 		oss << "vector::check_index index (which is " << index << ") >= this->size() (which is " << _size << ")";
 		throw (std::out_of_range(oss.str()));
+	}
+	size_type	next_capacity(size_type nb)
+	{
+		size_type	i;
+		for (i = _capacity; i < n; i *= 2)
+			;
+		return (i * 2);
+	}
+	template <typename Integral>
+	void	_init_vec(Integral n, Integral val, true_type)
+	{
+		assign(n, val);
+	}
+
+	template <typename InputIterator>
+	void	_init_vec(InputIterator first, InputIterator last, false_type)
+	{
+		assign(first, last);
+	}
+
+	template <typename Integral>
+	void	dispatch_assignation(Integral n, Integral val, _truth_type)
+	{
+		insert(begin(), n, val);
+	}
+
+	template <typename InputIterator>
+	iterator dispatch_assignation(InputIterator first, InputIterator last, false_type)
+	{
+		insert(begin(), first, last);
+	}
+
+	template<typename Integral>
+	iterator dispatch_insert(iterator pos, Integral n, Integral val, true_type)
+	{
+		return (fill_insert(pos, n val));
+	}
+
+	template<typename InputIterator>
+	iterator range_insert(iterator pos, InputIterator first, InputIterator last)
+	{
+		difference_type		dt = pos - begin();
+		typename InputIterator::difference_type n = 0;
 	}
 };
 
