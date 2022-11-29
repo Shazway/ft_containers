@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/11/26 21:07:57 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/11/29 19:14:02 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,24 @@ public:
 	{
 		return (_size == 0);
 	}
-	//reserve
+	void	reserve(size_type n)
+	{
+		if (_capacity == 0)
+			n = n ? n : 1;
+
+		if (_capacity < n)
+		{
+			pointer data = _allocator.allocate(n);
+		
+			if (_data)
+			{
+				memcpy(data, _data, sizeof(value_type) * _size);
+				allocator.deallocate(_data, _capacity);
+			}
+			_capacity = n;
+			_data = data;
+		}
+	}
 	//ACCESS
 	reference		operator[](size_type index){
 		return (_data[index]);
@@ -193,16 +210,52 @@ public:
 	}
 	//assign inputiterator first, iterator last
 	//assign size n, value val
-	//push_back(const value_type &val)
+	void	push_back(const value_type &val)
+	{
+		if (_size == _capacity || _capacity == 0)
+			reserve(_capacity * 2);
+		_allocator.construct(_data + _size++, val);
+	}
+
 	void	pop_back()
 	{
 		_data[--_size].~value_type();
 	}
-	//insert pos val
-	//insert pos size val
-	//insert pos iterator first iterator last
-	//erase pos
-	//erase from first to last
+
+	iterator	insert(iterator pos, value_type const& val)
+	{
+		return (fill_insert(pos, 1, val));
+	}
+
+	void	insert(iterator pos, value_type const& val)
+	{
+		fill_insert(pos, n, val);
+	}
+
+	template <typename InputIterator>
+	void	insert(iterator pos, InputIterator first, InputIterator last)
+	{
+		typedef typename ft::is_integral<InputIterator>::state	Integral;
+		dispatch_insert(pos, first, last, Integral());
+	}
+
+	iterator	erase(iterator pos)
+	{
+		return (erase(pos, pos + 1));
+	}
+
+	iterator	erase(iterator first, iterator last)
+	{
+		difference_type	start = first - begin();
+		difference_type	end = last - begin();
+
+		for (difference_type i = start; i != end; i++)
+			_data[i].~value_type();
+		memmove(_data + start, _data + end, sizeof(value_type) * (_size - end));
+		_size -= end - start;
+		return (iterator(_data + start));
+	}
+
 	void	swap(vector& elem)
 	{
 		vector	tmp = *this;
@@ -210,6 +263,7 @@ public:
 		*this = elem;
 		elem = tmp;
 	}
+
 	void	clear()
 	{
 		if (!_data)
@@ -218,11 +272,14 @@ public:
 			_allocator.destroy(_data + i);
 		_size = 0;
 	}
+
 	allocator_type	get_allocator() const
 	{
 		return (_allocator);
 	}
+//--UTILS FOR PUBLIC FUNCTIONS--//
 private:
+//--INDEX CHECKER--//
 	void	check_index(size_type	index) const
 	{
 		if (index < _size)
@@ -232,6 +289,7 @@ private:
 		oss << "vector::check_index index (which is " << index << ") >= this->size() (which is " << _size << ")";
 		throw (std::out_of_range(oss.str()));
 	}
+//--CAPACITY NEEDS CALCULATION--//
 	size_type	next_capacity(size_type nb)
 	{
 		size_type	i;
@@ -239,12 +297,14 @@ private:
 			;
 		return (i * 2);
 	}
+//--INITIALIZE VECTOR (Classic/integral type)--//
 	template <typename Integral>
 	void	_init_vec(Integral n, Integral val, true_type)
 	{
 		assign(n, val);
 	}
 
+//--INITIALIZE VECTOR (from first to last/not integral type)--//
 	template <typename InputIterator>
 	void	_init_vec(InputIterator first, InputIterator last, false_type)
 	{
@@ -258,22 +318,59 @@ private:
 	}
 
 	template <typename InputIterator>
-	iterator dispatch_assignation(InputIterator first, InputIterator last, false_type)
+	iterator	dispatch_assignation(InputIterator first, InputIterator last, false_type)
 	{
 		insert(begin(), first, last);
 	}
 
 	template<typename Integral>
-	iterator dispatch_insert(iterator pos, Integral n, Integral val, true_type)
+	iterator	dispatch_insert(iterator pos, Integral n, Integral val, true_type)
 	{
 		return (fill_insert(pos, n val));
 	}
-
+	template<typename InputIterator>
+	iterator	dispatch_insert(iterator pos, InputIterator first, InputIterator end, _false_type)
+	{
+		return (range_insert(pos, first, last))
+	}
+//--INSERT NEW ELEMENTS WITH A RANGE BETWEEN TWO ITERATORS--//
 	template<typename InputIterator>
 	iterator range_insert(iterator pos, InputIterator first, InputIterator last)
 	{
-		difference_type		dt = pos - begin();
+		difference_type		diff = pos - begin();
 		typename InputIterator::difference_type n = 0;
+
+		for (InputIterator it = first; it != last; it++)
+			n++;
+
+		if (!_capacity)
+			reserve(n);
+		else if (_size + n > _capacity)
+			reserve(next_capacity(n));
+
+		memmove(_data + diff + n, _data + diff, sizeof(value_type) * (_size - diff));
+		size_type i = 0;
+		for (InputIterator it != first; it != last; it++, i++)
+			allocator.construct(_data + diff + i, *it);
+		_size += n;
+
+		return (iterator(_data + diff));
+	}
+
+	iterator fill_insert(iterator pos, size_type n, value_type const& val)
+	{
+		difference_type diff = pos - begin();
+	
+		if (!_capacity)
+			reserve(n);
+		else if(_size + n > _capacity)
+			reserve(next_capacity(n));
+
+		memmove(_data + diff + n, _data + diff, sizeof(value_type) * (_size - diff));
+		for (size_type i = 0; i < n; i++)
+			allocator.construct(_data + diff + i, val);
+		_size += n;
+		return (iterator(_data + diff));
 	}
 };
 

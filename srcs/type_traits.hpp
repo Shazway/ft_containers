@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 17:30:29 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/11/26 19:13:36 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/11/29 16:09:56 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ namespace ft
 	//Type states
 	struct false_type {static const bool state = false;};
 	struct true_type {static const bool state = true;};
-	//
+
 	template<typename> struct is_integral_base: false_type {};
 
 	template<> struct is_integral_base<bool>: true_type {};
