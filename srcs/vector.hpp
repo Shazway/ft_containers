@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/11/29 19:14:02 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/11/29 21:29:48 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,14 +122,39 @@ public:
 	{
 		*this = copy;
 	}
-	//operator=
-	vector	&operator=(vector<value_type>)
-	{
-		
-	}
 	~vector(){
 		clear();
 		_allocator.deallocate(_data, _capacity);
+	}
+	vector	&operator=(vector<value_type> const& assign)
+	{
+		_allocator = assign._allocator;
+		assign(assign.begin(), assign.end());
+		return (*this);
+	}
+	iterator	begin()
+	{
+		return (_data);
+	}
+	iterator	end()
+	{
+		return (_data + _size);
+	}
+	const_iterator	begin() const
+	{
+		return (const_iterator(_data));
+	}
+	const_iterator	end() const
+	{
+		return (const_iterator(_data + _size));
+	}
+	reverse_iterator	rbegin()
+	{
+		return (reverse_iterator(end()));
+	}
+	reverse_iterator	rend()
+	{
+		return (reverse_iterator(begin()));
 	}
 	size_type	size() const
 	{
@@ -139,7 +164,16 @@ public:
 	{
 		return (_allocator.max_size());
 	}
-	//resize
+	void		resize(size_type nb, value_type val = value_type())
+	{
+		if (n < _size)
+			erase(begin() + n, end());
+		else if (n > _size)
+		{
+			difference_type	diff = n - _size;
+			insert(end(), diff, val);
+		}
+	}
 	size_type	capacity() const
 	{
 		return (_capacity);
@@ -170,31 +204,38 @@ public:
 	reference		operator[](size_type index){
 		return (_data[index]);
 	}
+
 	const_reference	operator[](size_type index) const{
 		return (_data[index]);
 	}
+
 	reference		at(size_type index)
 	{
 		check_index(index); // a faire
 		return (_data[n]);
 	}
+
 	const_reference	at(size_type index) const
 	{
 		check_index(index); // a faire
 		return (_data[n]);
 	}
+
 	reference		front()
 	{
 		return (_data[0])
 	}
+
 	const_reference	front() const
 	{
 		return (_data[0])
 	}
+
 	reference		back()
 	{
 		return (_data[_size - 1]);
 	}
+	
 	const_reference	back() const
 	{
 		return (_data[_size - 1]);
