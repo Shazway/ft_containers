@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 17:30:29 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/11/29 16:09:56 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/01 17:05:05 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@
 namespace ft
 {
 	//Remove either const or volatile types (or both)
-	template <class T> struct remove_cv						{typdef T type};
-	template <class T> struct remove_cv<const T>			{typdef T type};
-	template <class T> struct remove_cv<volatile T>			{typdef T type};
-	template <class T> struct remove_cv<const volatile T>	{typdef T type};
+	template <class T> struct remove_cv						{typedef T type;};
+	template <class T> struct remove_cv<const T>			{typedef T type;};
+	template <class T> struct remove_cv<volatile T>			{typedef T type;};
+	template <class T> struct remove_cv<const volatile T>	{typedef T type;};
 
-	template <class T> struct remove_const					{typdef T type};
-	template <class T> struct remove_const<const T>			{typdef T type};
+	template <class T> struct remove_const					{typedef T type;};
+	template <class T> struct remove_const<const T>			{typedef T type;};
 	
-	template <class T> struct remove_volatile				{typdef T type};
-	template <class T> struct remove_volatile<volatile T>	{typdef T type};
+	template <class T> struct remove_volatile				{typedef T type;};
+	template <class T> struct remove_volatile<volatile T>	{typedef T type;};
 
 	//Enable if
 	template <bool Cond, typename Result=void>
@@ -45,8 +45,6 @@ namespace ft
 
 	template<> struct is_integral_base<bool>: true_type {};
 	template<> struct is_integral_base<char>: true_type {};
-	template<> struct is_integral_base<char16_t>: true_type {};
-	template<> struct is_integral_base<char32_t>: true_type {};
 	template<> struct is_integral_base<wchar_t>: true_type {};
 	template<> struct is_integral_base<short>: true_type {};
 	template<> struct is_integral_base<int>: true_type {};

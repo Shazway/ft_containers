@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/01 16:59:35 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/01 18:31:11 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 # include <exception>
 # include "algorithm.hpp"
 # include "type_traits.hpp"
+# include <vector>
+# include <sstream>
+# include <string.h>
+#include "Colors.hpp"
 
 namespace ft
 {
@@ -40,7 +44,7 @@ namespace ft
 	}
 
 	template <typename T>
-	bool	operator!=(vector<T> const& v1, vector<T> const&& v2)
+	bool	operator!=(vector<T> const& v1, vector<T> const& v2)
 	{
 		if (v1 == v2)
 			return (false);
@@ -50,7 +54,7 @@ namespace ft
 	template <typename T>
 	bool	operator>(vector<T> const& v1, vector<T> const& v2)
 	{
-		return (lexicographical_compare(v1.begin(), v1.end(), v2.begin(), v2.end()));
+		return (ft::lexicographical_compare(v1.begin(), v1.end(), v2.begin(), v2.end()));
 	}
 
 	template <typename T>
@@ -93,10 +97,10 @@ public:
 	typedef typename allocator_type::pointer			pointer;
 	typedef typename allocator_type::const_pointer		const_pointer;
 	//Iterators (les faire soit même)
-	typedef typename std::vector::iterator						iterator;
-	typedef typename std::vector::const_iterator				const_iterator;
-	typedef typename std::vector::reverse_iterator				reverse_iterator;
-	typedef typename std::vector::const_reverse_iterator		const_reverse_iterator;
+	typedef typename std::vector<T>::iterator					iterator;
+	typedef typename std::vector<T>::const_iterator				const_iterator;
+	typedef typename std::vector<T>::reverse_iterator			reverse_iterator;
+	typedef typename std::vector<T>::const_reverse_iterator		const_reverse_iterator;
 
 	typedef typename allocator_type::size_type			size_type;
 	typedef typename allocator_type::difference_type	difference_type;
@@ -107,24 +111,26 @@ private:
 	allocator_type	_allocator;
 public:
 	//CONSTRUCT/DESTRUCT
-	explicit vector(const allocator_type &alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), allocator(alloc)
+	explicit vector(const allocator_type &alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
 	{
 	}
 	
-	explicit vector(size_type count, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()): _data(NULL), _capacity(0), _size(0)
+	explicit vector(size_type count, value_type const& val = value_type(), allocator_type const& alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
 	{
+		std::cout << RED << "First" << END << std::endl;
 		assign(count, val);
 	}
 
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
 	{
-		typedef typename ft::is_integral_base<InputIterator>::state	Integral;
+		typedef typename ft::is_integral<InputIterator>	_Integral;
 
-		_init_vec(first, last, Integral());
+		std::cout << RED << "Second" << END << std::endl;
+		_init_vec(first, last, _Integral());
 	}
 
-	vector(const vector &copy, allocator_type const& alloc = allocator_type() = allocator_type()): _data(NULL), _capacity(0), _size(0), allocator(alloc)
+	vector(vector const& copy, allocator_type const& alloc = allocator_type() = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
 	{
 		*this = copy;
 	}
@@ -134,10 +140,10 @@ public:
 		_allocator.deallocate(_data, _capacity);
 	}
 
-	vector	&operator=(vector<value_type> const& assign)
+	vector	&operator=(vector<value_type> const& _assign)
 	{
-		_allocator = assign._allocator;
-		assign(assign.begin(), assign.end());
+		_allocator = _assign._allocator;
+		assign(_assign.begin(), _assign.end());
 		return (*this);
 	}
 
@@ -193,11 +199,11 @@ public:
 
 	void		resize(size_type nb, value_type val = value_type())
 	{
-		if (n < _size)
-			erase(begin() + n, end());
-		else if (n > _size)
+		if (nb < _size)
+			erase(begin() + nb, end());
+		else if (nb > _size)
 		{
-			difference_type	diff = n - _size;
+			difference_type	diff = nb - _size;
 			insert(end(), diff, val);
 		}
 	}
@@ -224,7 +230,7 @@ public:
 			if (_data)
 			{
 				memcpy(data, _data, sizeof(value_type) * _size);
-				allocator.deallocate(_data, _capacity);
+				_allocator.deallocate(_data, _capacity);
 			}
 			_capacity = n;
 			_data = data;
@@ -242,24 +248,24 @@ public:
 
 	reference		at(size_type index)
 	{
-		check_index(index); // a faire
-		return (_data[n]);
+		check_index(index);
+		return (_data[index]);
 	}
 
 	const_reference	at(size_type index) const
 	{
-		check_index(index); // a faire
-		return (_data[n]);
+		check_index(index);
+		return (_data[index]);
 	}
 
 	reference		front()
 	{
-		return (_data[0])
+		return (_data[0]);
 	}
 
 	const_reference	front() const
 	{
-		return (_data[0])
+		return (_data[0]);
 	}
 
 	reference		back()
@@ -275,13 +281,13 @@ public:
 	template <typename InputIterator>
 	void assign(InputIterator first, InputIterator last)
 	{
-		typedef typename ft::is_integral_base<InputIterator>::state _Integral;
+		typedef typename ft::is_integral<InputIterator> _Integral;
 	
 		clear();
 		dispatch_assignation(first, last, _Integral());
 	}
 
-	void	assign(size_type n, value_type &val)
+	void	assign(size_type n, value_type const& val)
 	{
 		clear();
 		insert(begin(), n, val);
@@ -304,7 +310,7 @@ public:
 		return (fill_insert(pos, 1, val));
 	}
 
-	void	insert(iterator pos, value_type const& val)
+	void	insert(iterator pos, size_type n, value_type const& val)
 	{
 		fill_insert(pos, n, val);
 	}
@@ -312,7 +318,7 @@ public:
 	template <typename InputIterator>
 	void	insert(iterator pos, InputIterator first, InputIterator last)
 	{
-		typedef typename ft::is_integral<InputIterator>::state	_Integral;
+		typedef typename ft::is_integral<InputIterator>	_Integral;
 		dispatch_insert(pos, first, last, _Integral());
 	}
 
@@ -370,7 +376,7 @@ private:
 	size_type	next_capacity(size_type nb)
 	{
 		size_type	i;
-		for (i = _capacity; i < n; i *= 2)
+		for (i = _capacity; i < nb; i *= 2)
 			;
 		return (i * 2);
 	}
@@ -389,7 +395,7 @@ private:
 	}
 
 	template <typename Integral>
-	void	dispatch_assignation(Integral n, Integral val, _truth_type)
+	void	dispatch_assignation(Integral n, Integral val, true_type)
 	{
 		insert(begin(), n, val);
 	}
@@ -403,12 +409,12 @@ private:
 	template<typename Integral>
 	iterator	dispatch_insert(iterator pos, Integral n, Integral val, true_type)
 	{
-		return (fill_insert(pos, n val));
+		return (fill_insert(pos, n, val));
 	}
 	template<typename InputIterator>
-	iterator	dispatch_insert(iterator pos, InputIterator first, InputIterator end, _false_type)
+	iterator	dispatch_insert(iterator pos, InputIterator first, InputIterator end, false_type)
 	{
-		return (range_insert(pos, first, last))
+		return (range_insert(pos, first, end));
 	}
 //--INSERT NEW ELEMENTS WITH A RANGE BETWEEN TWO ITERATORS--//
 	template<typename InputIterator>
@@ -427,8 +433,8 @@ private:
 
 		memmove(_data + diff + n, _data + diff, sizeof(value_type) * (_size - diff));
 		size_type i = 0;
-		for (InputIterator it != first; it != last; it++, i++)
-			allocator.construct(_data + diff + i, *it);
+		for (InputIterator it = first; it != last; it++, i++)
+			_allocator.construct(_data + diff + i, *it);
 		_size += n;
 
 		return (iterator(_data + diff));
@@ -445,7 +451,7 @@ private:
 
 		memmove(_data + diff + n, _data + diff, sizeof(value_type) * (_size - diff));
 		for (size_type i = 0; i < n; i++)
-			allocator.construct(_data + diff + i, val);
+			_allocator.construct(_data + diff + i, val);
 		_size += n;
 		return (iterator(_data + diff));
 	}
