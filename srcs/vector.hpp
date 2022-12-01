@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/11/29 21:29:48 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/01 16:59:35 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,15 @@ private:
 	allocator_type	_allocator;
 public:
 	//CONSTRUCT/DESTRUCT
-	explicit vector(const allocator_type &alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), allocator(alloc){}
-	explicit vector(size_type count, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()): _data(NULL), _capacity(0), _size(0){
-		assign(count, val); // a coder
+	explicit vector(const allocator_type &alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), allocator(alloc)
+	{
 	}
+	
+	explicit vector(size_type count, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()): _data(NULL), _capacity(0), _size(0)
+	{
+		assign(count, val);
+	}
+
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
 	{
@@ -118,52 +123,74 @@ public:
 
 		_init_vec(first, last, Integral());
 	}
+
 	vector(const vector &copy, allocator_type const& alloc = allocator_type() = allocator_type()): _data(NULL), _capacity(0), _size(0), allocator(alloc)
 	{
 		*this = copy;
 	}
+
 	~vector(){
 		clear();
 		_allocator.deallocate(_data, _capacity);
 	}
+
 	vector	&operator=(vector<value_type> const& assign)
 	{
 		_allocator = assign._allocator;
 		assign(assign.begin(), assign.end());
 		return (*this);
 	}
+
 	iterator	begin()
 	{
-		return (_data);
+		return (iterator(_data));
 	}
+	
 	iterator	end()
 	{
-		return (_data + _size);
+		return (iterator(_data + _size));
 	}
+
 	const_iterator	begin() const
 	{
 		return (const_iterator(_data));
 	}
+
 	const_iterator	end() const
 	{
 		return (const_iterator(_data + _size));
 	}
+
 	reverse_iterator	rbegin()
 	{
 		return (reverse_iterator(end()));
 	}
+
 	reverse_iterator	rend()
 	{
 		return (reverse_iterator(begin()));
 	}
+
+	const_reverse_iterator	rbegin() const
+	{
+		return (const_reverse_iterator(end()));
+	}
+
+	const_reverse_iterator	rend() const
+	{
+		return (const_reverse_iterator(begin()));
+	}
+
 	size_type	size() const
 	{
 		return (_size);
 	}
+
 	size_type	max_size() const
 	{
 		return (_allocator.max_size());
 	}
+
 	void		resize(size_type nb, value_type val = value_type())
 	{
 		if (n < _size)
@@ -174,14 +201,17 @@ public:
 			insert(end(), diff, val);
 		}
 	}
+
 	size_type	capacity() const
 	{
 		return (_capacity);
 	}
+
 	bool	empty() const
 	{
 		return (_size == 0);
 	}
+
 	void	reserve(size_type n)
 	{
 		if (_capacity == 0)
@@ -200,6 +230,7 @@ public:
 			_data = data;
 		}
 	}
+
 	//ACCESS
 	reference		operator[](size_type index){
 		return (_data[index]);
@@ -244,13 +275,18 @@ public:
 	template <typename InputIterator>
 	void assign(InputIterator first, InputIterator last)
 	{
-		typedef typename ft::is_integral_base<InputIterator>::state Integral;
+		typedef typename ft::is_integral_base<InputIterator>::state _Integral;
 	
 		clear();
-		dispatch_assignation(first, last, Integral());
+		dispatch_assignation(first, last, _Integral());
 	}
-	//assign inputiterator first, iterator last
-	//assign size n, value val
+
+	void	assign(size_type n, value_type &val)
+	{
+		clear();
+		insert(begin(), n, val);
+	}
+
 	void	push_back(const value_type &val)
 	{
 		if (_size == _capacity || _capacity == 0)
@@ -276,8 +312,8 @@ public:
 	template <typename InputIterator>
 	void	insert(iterator pos, InputIterator first, InputIterator last)
 	{
-		typedef typename ft::is_integral<InputIterator>::state	Integral;
-		dispatch_insert(pos, first, last, Integral());
+		typedef typename ft::is_integral<InputIterator>::state	_Integral;
+		dispatch_insert(pos, first, last, _Integral());
 	}
 
 	iterator	erase(iterator pos)
@@ -359,7 +395,7 @@ private:
 	}
 
 	template <typename InputIterator>
-	iterator	dispatch_assignation(InputIterator first, InputIterator last, false_type)
+	void	dispatch_assignation(InputIterator first, InputIterator last, false_type)
 	{
 		insert(begin(), first, last);
 	}
@@ -414,6 +450,5 @@ private:
 		return (iterator(_data + diff));
 	}
 };
-
 
 #endif
