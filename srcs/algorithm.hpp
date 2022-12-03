@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 22:44:40 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/01 17:42:38 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/01 20:45:14 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,20 @@ namespace ft
 			begin2++;
 		}
 		return (compare(*begin2, *end2));
+	}
+	template<class iterator1, class iterator2>
+	bool	equal(iterator1 first1, iterator1 end1, iterator2 first2, iterator2 end2)
+	{
+		if (end2 - first2 != end1 - first1)
+			return (false);
+		while (first1 != end1)
+		{
+			if (*first1 != *first2)
+				return (false);
+			first1++;
+			first2++;
+		}
+		return (*first2 == *first2);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/01 18:31:11 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/03 19:57:28 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ public:
 	
 	explicit vector(size_type count, value_type const& val = value_type(), allocator_type const& alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
 	{
-		std::cout << RED << "First" << END << std::endl;
 		assign(count, val);
 	}
 
@@ -126,7 +125,6 @@ public:
 	{
 		typedef typename ft::is_integral<InputIterator>	_Integral;
 
-		std::cout << RED << "Second" << END << std::endl;
 		_init_vec(first, last, _Integral());
 	}
 
@@ -135,7 +133,8 @@ public:
 		*this = copy;
 	}
 
-	~vector(){
+	~vector()
+	{
 		clear();
 		_allocator.deallocate(_data, _capacity);
 	}
@@ -222,9 +221,9 @@ public:
 	{
 		if (_capacity == 0)
 			n = n ? n : 1;
-
 		if (_capacity < n)
 		{
+			std::cout << RED << "[" << n << "]" << END << std::endl;
 			pointer data = _allocator.allocate(n);
 		
 			if (_data)
@@ -302,7 +301,7 @@ public:
 
 	void	pop_back()
 	{
-		_data[--_size].~value_type();
+		_allocator.destroy(_data + --_size);
 	}
 
 	iterator	insert(iterator pos, value_type const& val)
@@ -319,6 +318,7 @@ public:
 	void	insert(iterator pos, InputIterator first, InputIterator last)
 	{
 		typedef typename ft::is_integral<InputIterator>	_Integral;
+
 		dispatch_insert(pos, first, last, _Integral());
 	}
 
@@ -332,8 +332,8 @@ public:
 		difference_type	start = first - begin();
 		difference_type	end = last - begin();
 
-		for (difference_type i = start; i != end; i++)
-			_data[i].~value_type();
+		for (difference_type i = start; i < end; i++)
+				_data[i].~value_type();
 		memmove(_data + start, _data + end, sizeof(value_type) * (_size - end));
 		_size -= end - start;
 		return (iterator(_data + start));
@@ -425,7 +425,6 @@ private:
 
 		for (InputIterator it = first; it != last; it++)
 			n++;
-
 		if (!_capacity)
 			reserve(n);
 		else if (_size + n > _capacity)
