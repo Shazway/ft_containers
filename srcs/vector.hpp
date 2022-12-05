@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/03 19:57:28 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/05 23:37:47 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ namespace ft
 	class vector;
 
 	template <typename T>
-	void	swap(vector<T> &a, vector<T> &b){
+	void	swap(vector<T> &a, vector<T> &b)
+	{
 		a.swap(b);
 	}
 	//Faire les iterators
@@ -52,32 +53,26 @@ namespace ft
 	}
 
 	template <typename T>
-	bool	operator>(vector<T> const& v1, vector<T> const& v2)
+	bool	operator<(vector<T> const& v1, vector<T> const& v2)
 	{
 		return (ft::lexicographical_compare(v1.begin(), v1.end(), v2.begin(), v2.end()));
 	}
 
 	template <typename T>
-	bool	operator<(vector<T> const& v1, vector<T> const& v2)
+	bool	operator>(vector<T> const& v1, vector<T> const& v2)
 	{
-		if (v1 > v2 && v1 != v2)
-			return (false);
-		return (true);
+		return (v2 < v1);
 	}
 
 	template <typename T>
 	bool	operator<=(vector<T> const& v1, vector<T> const& v2)
 	{
-		if (v1 < v2 || v1 == v2)
-			return (true);
-		return (false);
+		return (!(v2 < v1));
 	}
 	template <typename T>
 	bool	operator>=(vector<T> const& v1, vector<T> const& v2)
 	{
-		if (v1 > v2 || v1 == v2)
-			return (true);
-		return (false);
+		return (!(v1 < v2));
 	}
 }
 
@@ -135,7 +130,6 @@ public:
 
 	~vector()
 	{
-		clear();
 		_allocator.deallocate(_data, _capacity);
 	}
 
@@ -214,7 +208,7 @@ public:
 
 	bool	empty() const
 	{
-		return (_size == 0);
+		return (!_size);
 	}
 
 	void	reserve(size_type n)
@@ -223,7 +217,6 @@ public:
 			n = n ? n : 1;
 		if (_capacity < n)
 		{
-			std::cout << RED << "[" << n << "]" << END << std::endl;
 			pointer data = _allocator.allocate(n);
 		
 			if (_data)
@@ -301,7 +294,7 @@ public:
 
 	void	pop_back()
 	{
-		_allocator.destroy(_data + --_size);
+		_data[--_size].~value_type();
 	}
 
 	iterator	insert(iterator pos, value_type const& val)
@@ -329,22 +322,33 @@ public:
 
 	iterator	erase(iterator first, iterator last)
 	{
-		difference_type	start = first - begin();
-		difference_type	end = last - begin();
+		size_type dist = std::distance(first, last);
 
-		for (difference_type i = start; i < end; i++)
-				_data[i].~value_type();
-		memmove(_data + start, _data + end, sizeof(value_type) * (_size - end));
-		_size -= end - start;
-		return (iterator(_data + start));
+		if (dist == 0)
+			return (last);
+		for (size_type i = 0; (last + i) != end(); i++)
+			*(first + i) = *(last + i);
+		for (size_type i = 0; i < dist; i++)
+			pop_back();
+		return (first);
 	}
 
 	void	swap(vector& elem)
 	{
-		vector	tmp = *this;
-	
-		*this = elem;
-		elem = tmp;
+		pointer			data = elem._data;
+		size_type		size = elem._size;
+		size_type		cap = elem._capacity;
+		allocator_type	alloc = elem._allocator;
+
+		elem._data = this->_data;
+		elem._size = this->_size;
+		elem._allocator = this->_allocator;
+		elem._capacity = this->_capacity;
+
+		this->_data = data;
+		this->_size = size;
+		this->_capacity = cap;
+		this->_allocator = alloc;
 	}
 
 	void	clear()
@@ -360,12 +364,13 @@ public:
 	{
 		return (_allocator);
 	}
+
 //--UTILS FOR PUBLIC FUNCTIONS--//
 private:
 //--INDEX CHECKER--//
 	void	check_index(size_type	index) const
 	{
-		if (index < _size)
+		if (index < _size && index >= 0)
 			return ;
 		std::ostringstream	oss;
 	
@@ -376,6 +381,7 @@ private:
 	size_type	next_capacity(size_type nb)
 	{
 		size_type	i;
+
 		for (i = _capacity; i < nb; i *= 2)
 			;
 		return (i * 2);
@@ -421,7 +427,7 @@ private:
 	iterator range_insert(iterator pos, InputIterator first, InputIterator last)
 	{
 		difference_type		diff = pos - begin();
-		typename InputIterator::difference_type n = 0;
+		difference_type		n = 0;
 
 		for (InputIterator it = first; it != last; it++)
 			n++;

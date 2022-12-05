@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 22:44:40 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/01 20:45:14 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/05 20:34:45 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,29 @@
 
 namespace ft
 {
+	template <typename T>
+	void	__swap(T &a, T &b)
+	{
+		T temp = a;
+		a = b;
+		b = temp;
+	}
+
 	template <typename iterator1, typename iterator2>
 	bool	lexicographical_compare(iterator1 begin1, iterator1 end1, iterator2 begin2, iterator2 end2)
 	{
 		while (begin1 != end1)
 		{
-			if (begin2 == end2 || *begin1 > *end2)
+			if (begin2 == end2 || *begin1 > *begin2)
 				return (false);
-			else if (*begin1 < *end2)
+			else if (*begin1 < *begin2)
 				return (true);
-			begin1++;
-			begin2++;
+			++begin1;
+			++begin2;
 		}
 		return (begin2 != end2);
 	}
+
 	template <typename iterator1, typename iterator2, typename Comparator>
 	bool	lexicographical_compare(iterator1 begin1, iterator1 end1, iterator2 begin2, iterator2 end2, Comparator compare)
 	{
@@ -36,13 +45,14 @@ namespace ft
 		{
 			if (begin2 == end2 || !compare(*begin1, *begin2))
 				return (false);
-			else if (compare(*begin1, *end2))
+			else if (compare(*begin1, *begin2))
 				return (true);
-			begin1++;
-			begin2++;
+			++begin1;
+			++begin2;
 		}
-		return (compare(*begin2, *end2));
+		return (begin2 != end2);
 	}
+
 	template<class iterator1, class iterator2>
 	bool	equal(iterator1 first1, iterator1 end1, iterator2 first2, iterator2 end2)
 	{
