@@ -5,7 +5,7 @@ FLAGS = -Wall -Wextra -Werror -std=c++98 -g3
 
 SRC_PATH	=	srcs/
 OBJ_PATH	=	obj/
-INC	=	-Isrcs
+INC	=	-Isrcs -Isrcs/containers_test/srcs/vector
 
 SRC_NAME	=	test.cpp
 OBJ_NAME	=	$(SRC_NAME:.cpp=.o)

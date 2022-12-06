@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/05 23:37:47 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/06 22:36:36 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,10 @@ public:
 	
 	explicit vector(size_type count, value_type const& val = value_type(), allocator_type const& alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
 	{
-		assign(count, val);
+		_data = _allocator.allocate(count);
+		_capacity = count;
+		for (;_size < count; _size++)
+			_allocator.construct(_data + _size, val);
 	}
 
 	template <class InputIterator>
@@ -130,6 +133,7 @@ public:
 
 	~vector()
 	{
+		//clear();
 		_allocator.deallocate(_data, _capacity);
 	}
 
@@ -218,10 +222,10 @@ public:
 		if (_capacity < n)
 		{
 			pointer data = _allocator.allocate(n);
-		
+			
 			if (_data)
 			{
-				memcpy(data, _data, sizeof(value_type) * _size);
+				ft_memcpy(data, _data, sizeof(value_type) * _size);
 				_allocator.deallocate(_data, _capacity);
 			}
 			_capacity = n;
@@ -274,7 +278,7 @@ public:
 	void assign(InputIterator first, InputIterator last)
 	{
 		typedef typename ft::is_integral<InputIterator> _Integral;
-	
+
 		clear();
 		dispatch_assignation(first, last, _Integral());
 	}
@@ -356,7 +360,7 @@ public:
 		if (!_data)
 			return ;
 		for (size_type i = 0; i < _size; i++)
-			_allocator.destroy(_data + i);
+			_data[i].~value_type();
 		_size = 0;
 	}
 
@@ -436,7 +440,7 @@ private:
 		else if (_size + n > _capacity)
 			reserve(next_capacity(n));
 
-		memmove(_data + diff + n, _data + diff, sizeof(value_type) * (_size - diff));
+		ft_memmove(_data + diff + n, _data + diff, sizeof(value_type) * (_size - diff));
 		size_type i = 0;
 		for (InputIterator it = first; it != last; it++, i++)
 			_allocator.construct(_data + diff + i, *it);
@@ -454,11 +458,52 @@ private:
 		else if(_size + n > _capacity)
 			reserve(next_capacity(n));
 
-		memmove(_data + diff + n, _data + diff, sizeof(value_type) * (_size - diff));
+		ft_memmove(_data + diff + n, _data + diff, sizeof(value_type) * (_size - diff));
 		for (size_type i = 0; i < n; i++)
 			_allocator.construct(_data + diff + i, val);
 		_size += n;
 		return (iterator(_data + diff));
+	}
+	void	*ft_memmove(void *dest, const void *src, size_t n)
+	{
+		unsigned int	i;
+
+		if (!dest && !src)
+			return (NULL);
+		if (dest > src)
+		{
+			while (n > 0)
+			{
+				((char *)dest)[n - 1] = ((char *)src)[n - 1];
+				n--;
+			}
+		}
+		else
+		{
+			i = 0;
+			while (i < n)
+			{
+				((char *)dest)[i] = ((char *)src)[i];
+				i++;
+			}
+		}
+		return (dest);
+	}
+	void	*ft_memcpy(void *dest, const void *src, size_t n)
+	{
+		unsigned char	*cast_dst;
+		unsigned char	*cast_src;
+
+		cast_dst = (unsigned char *)dest;
+		cast_src = (unsigned char *)src;
+		if (!n || dest == src)
+			return (dest);
+		while (n)
+		{
+			*cast_dst++ = *cast_src++;
+			n--;
+		}
+		return (dest);
 	}
 };
 

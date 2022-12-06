@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/05 18:21:42 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/06 22:52:35 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "type_traits.hpp"
 #include <istream>
 
+#define TESTED_TYPE std::string
 typedef std::string	_value;
 
 void	print_separator()
@@ -24,43 +25,50 @@ void	print_separator()
 	std::cout << WHITE << "~~~~~~~~~~~~~~~~~~" << END << std::endl;
 }
 
-void	display_my_v(ft::vector<_value> vec)
+void	display_my_v(ft::vector<TESTED_TYPE> vec)
 {
-	for (ft::vector<_value>::iterator i = vec.begin(); i != vec.end(); i++)
+	for (ft::vector<TESTED_TYPE>::iterator i = vec.begin(); i != vec.end(); i++)
 		std::cout << GREEN << "[" << (*i) << "]" << END << std::endl;
 	if (vec.empty())
 		std::cout << YELLOW << "Empty arguments /!\\" << END << std::endl;
 }
 
-void	display_std_v(std::vector<_value> vec)
+void	display_std_v(std::vector<TESTED_TYPE> vec)
 {
-	for (std::vector<_value>::iterator i = vec.begin(); i != vec.end(); i++)
+	for (std::vector<TESTED_TYPE>::iterator i = vec.begin(); i != vec.end(); i++)
 		std::cout << GREEN << "[" << (*i) << "]" << END << std::endl;
 	if (vec.empty())
 		std::cout << YELLOW << "Empty arguments /!\\" << END << std::endl;
 }
 
-int main()
+#include "common.hpp"
+
+
+int		main(void)
 {
-	std::vector<_value>	v1;
-	// ft::vector<_value>::iterator it;
-	// ft::vector<_value>::iterator it2;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(8);
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
 
-	v1.push_back("AAAAAAAAAA");
-	v1.push_back("BBBBBBBBB");
-	v1.push_back("CCCCCCCC");
-	v1.push_back("DDDDDDD");
-	v1.push_back("EEEEEE");
-	v1.push_back("FFFFF");
-	v1.push_back("GGGG");
-	v1.push_back("HHH");
-	v1.push_back("II");
-	v1.push_back("J");
+	std::cout << RED << vct.size() << END << std::endl;
 
-	ft::vector<_value>			v2(v1.begin(), v1.end());
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		it[i] = std::string((vct.size() - i), i + 65);
+	printSize(vct, true);
 
-	display_my_v(v2);
-	v2.erase(v2.begin());
-	print_separator();
-	display_my_v(v2);
+	std::cout << "push_back():\n" << std::endl;
+
+	vct.push_back("One long string");
+	vct2.push_back("Another long string");
+
+	display_my_v(vct);
+	display_my_v(vct2);
+
+	vct.pop_back();
+	vct2.pop_back();
+
+	display_my_v(vct);
+	display_my_v(vct2);
+
+	return (0);
 }
