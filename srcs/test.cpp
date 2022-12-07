@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/06 22:52:35 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/07 17:47:25 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,28 +47,14 @@ void	display_std_v(std::vector<TESTED_TYPE> vec)
 int		main(void)
 {
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(8);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
 
 	std::cout << RED << vct.size() << END << std::endl;
-
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-		it[i] = std::string((vct.size() - i), i + 65);
 	printSize(vct, true);
 
 	std::cout << "push_back():\n" << std::endl;
-
 	vct.push_back("One long string");
-	vct2.push_back("Another long string");
-
-	display_my_v(vct);
-	display_my_v(vct2);
-
 	vct.pop_back();
-	vct2.pop_back();
-
 	display_my_v(vct);
-	display_my_v(vct2);
 
 	return (0);
 }

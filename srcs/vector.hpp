@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/06 22:36:36 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/07 17:48:07 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ public:
 		_capacity = count;
 		for (;_size < count; _size++)
 			_allocator.construct(_data + _size, val);
+//		assign(count, val);
 	}
 
 	template <class InputIterator>
@@ -133,7 +134,7 @@ public:
 
 	~vector()
 	{
-		//clear();
+		clear();
 		_allocator.deallocate(_data, _capacity);
 	}
 
@@ -360,7 +361,7 @@ public:
 		if (!_data)
 			return ;
 		for (size_type i = 0; i < _size; i++)
-			_data[i].~value_type();
+			_allocator.destroy(_data + i);
 		_size = 0;
 	}
 
