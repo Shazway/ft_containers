@@ -6,20 +6,23 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/07 17:48:07 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/08 23:23:18 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-# include <memory>
-# include <exception>
 # include "algorithm.hpp"
 # include "type_traits.hpp"
-# include <vector>
-# include <sstream>
-# include <string.h>
+#include <numeric>
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <stdexcept>
+#include <exception>
+#include <memory>
+#include <vector>
 #include "Colors.hpp"
 
 namespace ft
@@ -116,7 +119,7 @@ public:
 		_capacity = count;
 		for (;_size < count; _size++)
 			_allocator.construct(_data + _size, val);
-//		assign(count, val);
+		//assign(count, val);
 	}
 
 	template <class InputIterator>
@@ -218,19 +221,26 @@ public:
 
 	void	reserve(size_type n)
 	{
+		if (n > max_size())
+			throw (std::length_error("vector::reserve"));
 		if (_capacity == 0)
 			n = n ? n : 1;
 		if (_capacity < n)
 		{
-			pointer data = _allocator.allocate(n);
-			
-			if (_data)
-			{
-				ft_memcpy(data, _data, sizeof(value_type) * _size);
-				_allocator.deallocate(_data, _capacity);
-			}
+			pointer	tmp_data;
+			size_type	tmp_cap;
+
+			tmp_data = _data;
+			tmp_cap = _capacity;
+
+			_data = _allocator.allocate(n);
 			_capacity = n;
-			_data = data;
+			for (size_type i = 0; i < _size; i++)
+			{
+				_allocator.construct(_data + i, *(tmp_data + i));
+				_allocator.destroy(tmp_data + i);
+			}
+			_allocator.deallocate(tmp_data, tmp_cap);
 		}
 	}
 
@@ -361,7 +371,10 @@ public:
 		if (!_data)
 			return ;
 		for (size_type i = 0; i < _size; i++)
+		{
+			std::cout << "SIZE == " << _size <<std::endl;
 			_allocator.destroy(_data + i);
+		}
 		_size = 0;
 	}
 
@@ -465,6 +478,7 @@ private:
 		_size += n;
 		return (iterator(_data + diff));
 	}
+
 	void	*ft_memmove(void *dest, const void *src, size_t n)
 	{
 		unsigned int	i;

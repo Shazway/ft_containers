@@ -6,15 +6,26 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 22:44:40 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/05 20:34:45 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/08 22:43:06 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ALGORITHM_HPP
 # define ALGORITHM_HPP
 
+#include <sstream>
+
+
 namespace ft
 {
+	template <typename T>
+	std::string to_string(T n)
+	{
+		std::ostringstream ss;
+		ss << n;
+		return (ss.str());
+	}
+
 	template <typename T>
 	void	__swap(T &a, T &b)
 	{
