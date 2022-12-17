@@ -1,0 +1,10 @@
+.swp
+*.swp
+**/diff/
+**/leak/
+**/logs/
+**/out/
+**/stderror/
+**/bin/
+.include_path
+.path

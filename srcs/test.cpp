@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/08 23:22:42 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/16 00:44:41 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,22 +46,43 @@ void	display_std_v(std::vector<TESTED_TYPE> vec)
 
 int		main(void)
 {
-	std::cout << "\nINSERT RANGE\n";
-	ft::vector<std::string>	insert_in_me;
-	std::vector<std::string>	insert_bis;
+	{
+		std::cout << "\nINSERT RANGE\n";
+		std::vector<std::string>	insert_in_me;
+		std::vector<std::string>	insert_bis;
 
-	for (size_t i = 0; i < 7; i++)
-		insert_bis.push_back(ft::to_string(3 * i));
-	for (size_t i = 0; i < insert_bis.size(); i++)
-		std::cout << insert_bis[i] << ' ';
-	std::cout << '\n';
+		for (size_t i = 0; i < 7; i++)
+			insert_bis.push_back(ft::to_string(3 * i));
+		for (size_t i = 0; i < insert_bis.size(); i++)
+			std::cout << insert_bis[i] << ' ';
+		std::cout << '\n';
 
-	insert_in_me.push_back("Oui");
-	insert_in_me.push_back("Oui");
-	insert_in_me.push_back("Oui");
-	insert_bis.insert(insert_bis.begin() + 5, insert_in_me.begin(), insert_in_me.end());
-	for (size_t i = 0; i < insert_bis.size(); i++)
-		std::cout << insert_bis[i] << ' ';
-	std::cout << '\n';
+		insert_in_me.push_back("Oui");
+		insert_in_me.push_back("Oui");
+		insert_in_me.push_back("Oui");
+		insert_bis.insert(insert_bis.begin() + 5, insert_in_me.begin(), insert_in_me.end());
+		for (size_t i = 0; i < insert_bis.size(); i++)
+			std::cout << insert_bis[i] << ' ';
+		std::cout << '\n';
+	}
+	{
+		std::cout << "\nINSERT RANGE\n";
+		ft::vector<std::string>	insert_in_me;
+		ft::vector<std::string>	insert_bis;
+
+		for (size_t i = 0; i < 7; i++)
+			insert_bis.push_back(ft::to_string(3 * i));
+		for (size_t i = 0; i < insert_bis.size(); i++)
+			std::cout << insert_bis[i] << ' ';
+		std::cout << '\n';
+
+		insert_in_me.push_back("Oui");
+		insert_in_me.push_back("Oui");
+		insert_in_me.push_back("Oui");
+		insert_bis.insert(insert_bis.begin() + 5, insert_in_me.begin(), insert_in_me.end());
+		for (size_t i = 0; i < insert_bis.size(); i++)
+			std::cout << insert_bis[i] << ' ';
+		std::cout << '\n';
+	}
 	return (0);
 }

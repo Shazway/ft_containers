@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/08 23:23:18 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/17 20:24:01 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ public:
 		_capacity = count;
 		for (;_size < count; _size++)
 			_allocator.construct(_data + _size, val);
-		//assign(count, val);
 	}
 
 	template <class InputIterator>
@@ -285,14 +284,13 @@ public:
 		return (_data[_size - 1]);
 	}
 
-	template <typename InputIterator>
-	void assign(InputIterator first, InputIterator last)
-	{
-		typedef typename ft::is_integral<InputIterator> _Integral;
-
-		clear();
-		dispatch_assignation(first, last, _Integral());
-	}
+	template <class InputIterator>
+		typename ft::enable_if<!ft::is_integral<InputIterator>::state>::type
+		assign(InputIterator first, InputIterator last)
+		{
+			clear();
+			insert(begin(), first, last);
+		}
 
 	void	assign(size_type n, value_type const& val)
 	{
@@ -314,21 +312,56 @@ public:
 
 	iterator	insert(iterator pos, value_type const& val)
 	{
-		return (fill_insert(pos, 1, val));
+		if (_size == 0 || pos == end())
+		{
+			push_back(val);
+			return (end() - 1);
+		}
+		size_type 	i;
+		size_type	index_of_pos = pos - begin();
+
+		if (_capacity < _size + 1)
+		{
+			reserve(_capacity * 2);
+			pos = begin() + index_of_pos;
+		}
+		i = _size;
+		if (i != index_of_pos)
+		{
+			_allocator.construct(_data + i, _data[i - 1]);
+			--i;
+			for (; i > index_of_pos; i--)
+				_data[i] = _data[i - 1];
+			_data[i] = val;
+		}
+		else
+			_allocator.construct(_data + i, val);
+		_size++;
+		return (pos);
 	}
 
 	void	insert(iterator pos, size_type n, value_type const& val)
 	{
-		fill_insert(pos, n, val);
+		if (_size + n > _capacity) 
+		{
+			size_type	to_add = pos- begin();
+			if (_size + n > _capacity * 2)
+				reserve(_size + n);
+			else
+				reserve(_size * 2);
+			pos = begin() + to_add;
+		}
+		for (size_type i = 0; i < n; ++i)
+			pos = insert(pos, val) + 1;
 	}
 
-	template <typename InputIterator>
-	void	insert(iterator pos, InputIterator first, InputIterator last)
-	{
-		typedef typename ft::is_integral<InputIterator>	_Integral;
-
-		dispatch_insert(pos, first, last, _Integral());
-	}
+	template <class InputIterator>
+		typename ft::enable_if<!ft::is_integral<InputIterator>::state>::type
+		insert(iterator pos, InputIterator first, InputIterator last)
+		{
+			for (; first != last; first++)
+				pos = insert(pos, *first) + 1;
+		}
 
 	iterator	erase(iterator pos)
 	{
@@ -371,10 +404,7 @@ public:
 		if (!_data)
 			return ;
 		for (size_type i = 0; i < _size; i++)
-		{
-			std::cout << "SIZE == " << _size <<std::endl;
 			_allocator.destroy(_data + i);
-		}
 		_size = 0;
 	}
 
