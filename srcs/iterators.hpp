@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 23:44:11 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/18 01:18:05 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/18 01:35:54 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ namespace ft
 
 			RandomAccessIterator	operator-(difference_type const& nb) const
 			{
-				return (RandomAccessIterator(_data - nb));
+				return (_data - nb);
 			}
 
 			RandomAccessIterator&	operator-=(difference_type const& nb)
@@ -315,13 +315,13 @@ namespace ft
 	template<typename Iterator1, typename Iterator2>
 	bool	operator!=(reverse_iterator<Iterator1> const& it1, reverse_iterator<Iterator2> const& it2)
 	{
-		return (it1.base() != it2.base());
+		return (!(it1.base() == it2.base()));
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool	operator<(reverse_iterator<Iterator1> const& it1, reverse_iterator<Iterator2> const& it2)
 	{
-		return (it1.base() < it2.base());
+		return (it2.base() < it1.base());
 	}
 
 	template<typename Iterator1, typename Iterator2>
@@ -346,7 +346,7 @@ namespace ft
 		typename reverse_iterator<Iterator1>::difference_type
 		operator-(reverse_iterator<Iterator1> const& it1, reverse_iterator<Iterator2> const& it2)
 		{
-			return (it1.base() - it2.base());
+			return (it2.base() - it1.base());
 		}
 
 	template<typename Iterator>
