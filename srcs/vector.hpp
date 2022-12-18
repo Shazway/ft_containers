@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/17 20:24:01 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/18 01:05:16 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "algorithm.hpp"
 # include "type_traits.hpp"
+# include "iterators.hpp"
 #include <numeric>
 #include <cstring>
 #include <string>
@@ -95,10 +96,10 @@ public:
 	typedef typename allocator_type::pointer			pointer;
 	typedef typename allocator_type::const_pointer		const_pointer;
 	//Iterators (les faire soit même)
-	typedef typename std::vector<T>::iterator					iterator;
-	typedef typename std::vector<T>::const_iterator				const_iterator;
-	typedef typename std::vector<T>::reverse_iterator			reverse_iterator;
-	typedef typename std::vector<T>::const_reverse_iterator		const_reverse_iterator;
+	typedef typename ft::RandomAccessIterator<T>				iterator;
+	typedef typename ft::RandomAccessIterator<const T>			const_iterator;
+	typedef typename ft::reverse_iterator<iterator>				reverse_iterator;
+	typedef typename ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 	typedef typename allocator_type::size_type			size_type;
 	typedef typename allocator_type::difference_type	difference_type;
@@ -425,7 +426,7 @@ private:
 		oss << "vector::check_index index (which is " << index << ") >= this->size() (which is " << _size << ")";
 		throw (std::out_of_range(oss.str()));
 	}
-//--CAPACITY NEEDS CALCULATION--//
+//--CAPACITY NEEDS HIGH INCREMENT--//
 	size_type	next_capacity(size_type nb)
 	{
 		size_type	i;
@@ -446,109 +447,6 @@ private:
 	void	_init_vec(InputIterator first, InputIterator last, false_type)
 	{
 		assign(first, last);
-	}
-
-	template <typename Integral>
-	void	dispatch_assignation(Integral n, Integral val, true_type)
-	{
-		insert(begin(), n, val);
-	}
-
-	template <typename InputIterator>
-	void	dispatch_assignation(InputIterator first, InputIterator last, false_type)
-	{
-		insert(begin(), first, last);
-	}
-
-	template<typename Integral>
-	iterator	dispatch_insert(iterator pos, Integral n, Integral val, true_type)
-	{
-		return (fill_insert(pos, n, val));
-	}
-	template<typename InputIterator>
-	iterator	dispatch_insert(iterator pos, InputIterator first, InputIterator end, false_type)
-	{
-		return (range_insert(pos, first, end));
-	}
-//--INSERT NEW ELEMENTS WITH A RANGE BETWEEN TWO ITERATORS--//
-	template<typename InputIterator>
-	iterator range_insert(iterator pos, InputIterator first, InputIterator last)
-	{
-		difference_type		diff = pos - begin();
-		difference_type		n = 0;
-
-		for (InputIterator it = first; it != last; it++)
-			n++;
-		if (!_capacity)
-			reserve(n);
-		else if (_size + n > _capacity)
-			reserve(next_capacity(n));
-
-		ft_memmove(_data + diff + n, _data + diff, sizeof(value_type) * (_size - diff));
-		size_type i = 0;
-		for (InputIterator it = first; it != last; it++, i++)
-			_allocator.construct(_data + diff + i, *it);
-		_size += n;
-
-		return (iterator(_data + diff));
-	}
-
-	iterator fill_insert(iterator pos, size_type n, value_type const& val)
-	{
-		difference_type diff = pos - begin();
-	
-		if (!_capacity)
-			reserve(n);
-		else if(_size + n > _capacity)
-			reserve(next_capacity(n));
-
-		ft_memmove(_data + diff + n, _data + diff, sizeof(value_type) * (_size - diff));
-		for (size_type i = 0; i < n; i++)
-			_allocator.construct(_data + diff + i, val);
-		_size += n;
-		return (iterator(_data + diff));
-	}
-
-	void	*ft_memmove(void *dest, const void *src, size_t n)
-	{
-		unsigned int	i;
-
-		if (!dest && !src)
-			return (NULL);
-		if (dest > src)
-		{
-			while (n > 0)
-			{
-				((char *)dest)[n - 1] = ((char *)src)[n - 1];
-				n--;
-			}
-		}
-		else
-		{
-			i = 0;
-			while (i < n)
-			{
-				((char *)dest)[i] = ((char *)src)[i];
-				i++;
-			}
-		}
-		return (dest);
-	}
-	void	*ft_memcpy(void *dest, const void *src, size_t n)
-	{
-		unsigned char	*cast_dst;
-		unsigned char	*cast_src;
-
-		cast_dst = (unsigned char *)dest;
-		cast_src = (unsigned char *)src;
-		if (!n || dest == src)
-			return (dest);
-		while (n)
-		{
-			*cast_dst++ = *cast_src++;
-			n--;
-		}
-		return (dest);
 	}
 };
 
