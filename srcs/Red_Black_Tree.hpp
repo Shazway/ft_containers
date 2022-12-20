@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/20 21:34:34 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/20 21:39:28 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ namespace ft
 				*this = copy;
 			}
 
-			RBTreeIterator	&operator=(RBTreeConstIterator const& assign)
+			RBTreeIterator	&operator=(RBTreeIterator const& assign)
 			{
 				_current = assign._current;
 				_start = assign._start;
@@ -210,6 +210,11 @@ namespace ft
 			reference	operator*() const
 			{
 				return (_current->data);
+			}
+
+			pointer	operator->() const
+			{
+				return (_current->data_addr());
 			}
 
 			RBTreeIterator	&operator++()
@@ -325,6 +330,11 @@ namespace ft
 			}
 
 			reference	operator*() const
+			{
+				return (_current->data_addr());
+			}
+
+			pointer	operator->() const
 			{
 				return (_current->data_addr());
 			}
