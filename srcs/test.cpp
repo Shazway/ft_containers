@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/18 02:16:31 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/19 19:23:08 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,19 @@ void	display_std_v(std::vector<TESTED_TYPE> vec)
 
 #include "common.hpp"
 
-
 int		main(void)
 {
-	ft::stack<int, ft::vector<int> >	s1;
-	ft::stack<int, ft::vector<int> >	s2;
+	ft::vector<ft::vector<int> >	v1;
 
-	s1.push(8);
-	s1.push(8);
-	s2.push(8);
-	s2.push(9);
-	if (s2 == s1)
-		std::cout << "works" << std::endl;
-	
+	for (int i = 0; i < 20; i++)
+	{
+		ft::vector<int>	tmp(2, i);
+
+		v1.push_back(tmp);
+	}
+	for (ft::vector<ft::vector<int> >::iterator it = v1.begin(); it != v1.end(); it++)
+	{
+		std::cout << (*it).size() << std::endl;
+	}
 	return (0);
 }
