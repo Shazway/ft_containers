@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/20 21:58:30 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/22 23:06:35 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <memory>
 # include <cstdlib>
 # include <fstream>
+# include "iterators.hpp"
 
 namespace ft
 {
@@ -366,6 +367,83 @@ namespace ft
 				_current = Node::predecessor(_current, _end);
 				return (it);
 			}
+	};
+
+
+	template <typename T, typename Compare, typename Alloc>
+	class RBTree
+	{
+		public:
+			typedef T 			value_type;
+			typedef Compare		compare_type;
+			typedef Alloc		allocator_type;
+
+			typedef value_type&			reference;
+			typedef value_type const&	const_reference;
+			typedef value_type			*pointer;
+			typedef value_type const	*const_pointer;
+
+			typedef std::ptrdiff_t		difference_type;
+			typedef std::size_t			size_type;
+
+		private:
+			typedef RBTReeNode <vlue_type> Node;
+			typename allocator_type::template rebind<Node>::other allocator_node;
+
+		public:
+			typedef RBTreeIterator<value_type>				iterator;
+			typedef RBTreeConstIterator<value_type>			const_iterator;
+			typedef ft::reverse_iterator<iterator>			reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+
+		private:
+			Node			*_root;
+			size_type		_size;
+			Node			*_sentinelStart;
+			Node			*_sentinelEnd;
+			compare_type	_comparator;
+			allocator_type	_allocator;
+			bool			_clear;
+
+		public:
+			RBTree(compare_type const& comp = compare_type(), allocator_type const& alloc = allocator_type()): _root(NULL),
+			_size(0), _sentinelStart(NULL), _sentinelEnd(NULL), _comparator(comp), _alloc(alloc), _clear(true)
+			{
+				_init_tree();
+			}
+	
+		private:
+
+			void	_init_tree()
+			{
+				_sentinelEnd = create_node();
+				_sentinelStart = create_node();
+				_sentinelEnd->color = BLACK;
+				_sentinelStart->color = BLACK;
+				root = _sentinelEnd;
+
+				_clear = true;
+			}
+
+			Node	*create_node(const_reference val = value_type())
+			{
+				Node	*node = allocator_node.allocate(1);
+
+				allocator_node.construct(node, Node());
+				_allocator.construct(node->data_addr(), val);
+
+				node->color = RED;
+				return (node);
+			}
+
+			void	destroy_node(Node *node)
+			{
+				_allocator.destroy(node->data_addr());
+				allocator_node.destroy(node);
+				allocator_node.deallocate(node, 1);
+			}
+
+			
 	};
 }
 
