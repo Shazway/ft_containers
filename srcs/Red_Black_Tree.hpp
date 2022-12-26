@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/26 17:59:43 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/26 20:30:53 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -453,6 +453,13 @@ namespace ft
 					insert(*first);
 			}
 		private:
+			void	_left_rotate(Node *node)
+			{
+				Node::left_rotate(node);
+
+				if (!node->parent->parent)
+					_root = node->parent;
+			}
 
 			void	_init_tree()
 			{
@@ -463,6 +470,69 @@ namespace ft
 				_root = _sentinelEnd;
 
 				_clear = true;
+			}
+
+			Node	*_find(const_reference val, Node **leaf = NULL)
+			{
+				Node	*node = _root;
+
+				while (node && node != _sentinelEnd && node != _sentinelStart)
+				{
+					if (leaf)
+						*leaf = node;
+					if (_comparator(val, node->data))
+						node = node->left;
+					else if (_comparator(node->data, val))
+						node = node->right;
+					else
+						return (node);
+				}
+				return (NULL);
+			}
+
+			Node	*_find(const_reference val, Node **leaf = NULL) const
+			{
+				Node	*node = _root;
+
+				while (node && node != _sentinelEnd && node != _sentinelStart)
+				{
+					if (leaf)
+						*leaf = node;
+					if (_comparator(val, node->data))
+						node = node->left;
+					else if (_comparator(node->data, val))
+						node = node->right;
+					else
+						return (node);
+				}
+				return (NULL);
+			}
+
+			iterator	_insert_worker(Node *node)
+			{
+				Node	*target;
+				Node	*n;
+
+				if ((n = __find(node->data, &target)))
+					return (iterator(n, _sentinelStart, _sentinelEnd));
+
+				node->parent = target;
+				if (_comparator(node->data, target->data))
+				{
+					if (target->left)
+						target->left->parent = node;
+					node->left = target->left;
+					target->left = node;
+				}
+				else
+				{
+					if (target->right)
+						target->right->parent = node;
+					node->right = target->right;
+					target->right = node;
+				}
+				_size++;
+				return (end());
 			}
 
 			void	_insert_empty(Node *node)
@@ -493,8 +563,6 @@ namespace ft
 				allocator_node.destroy(node);
 				allocator_node.deallocate(node, 1);
 			}
-
-			
 	};
 }
 

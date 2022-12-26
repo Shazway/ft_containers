@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/19 19:23:08 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/26 19:16:32 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	print_separator()
 void	display_my_v(ft::vector<TESTED_TYPE> vec)
 {
 	for (ft::vector<TESTED_TYPE>::iterator i = vec.begin(); i != vec.end(); i++)
-		std::cout << GREEN << "[" << (*i) << "]" << END << std::endl;
+		std::cout << RED << "[" << (*i) << "]" << END << std::endl;
 	if (vec.empty())
 		std::cout << YELLOW << "Empty arguments /!\\" << END << std::endl;
 }
@@ -46,17 +46,27 @@ void	display_std_v(std::vector<TESTED_TYPE> vec)
 
 int		main(void)
 {
-	ft::vector<ft::vector<int> >	v1;
+	std::vector<std::string>	tmp;
+	ft::vector<std::string>		vec;
+	std::string tmp_val = "oui";
+	size_t		n = 10;
 
-	for (int i = 0; i < 20; i++)
+	for (size_t i = 0; i < 500; i++)
 	{
-		ft::vector<int>	tmp(2, i);
-
-		v1.push_back(tmp);
+		if (i % 3 == 0) {
+			tmp.insert(tmp.begin(), n, tmp_val);
+			vec.insert(vec.begin(), n, tmp_val);
+		}
+		else if (i % 3 == 1) {
+			tmp.insert(tmp.begin() + tmp.size() / 2, n, tmp_val);
+			vec.insert(vec.begin() + vec.size() / 2, n, tmp_val);
+		}
+		else {
+			tmp.insert(tmp.end(), n, tmp_val);
+			vec.insert(vec.end(), n, tmp_val);
+		}
 	}
-	for (ft::vector<ft::vector<int> >::iterator it = v1.begin(); it != v1.end(); it++)
-	{
-		std::cout << (*it).size() << std::endl;
-	}
+	display_my_v(vec);
+	display_std_v(tmp);
 	return (0);
 }
