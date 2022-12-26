@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/22 23:06:35 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/26 17:59:43 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <cstdlib>
 # include <fstream>
 # include "iterators.hpp"
+# include "map.hpp"
 
 namespace ft
 {
@@ -387,7 +388,7 @@ namespace ft
 			typedef std::size_t			size_type;
 
 		private:
-			typedef RBTReeNode <vlue_type> Node;
+			typedef RBTReeNode <value_type> Node;
 			typename allocator_type::template rebind<Node>::other allocator_node;
 
 		public:
@@ -411,7 +412,46 @@ namespace ft
 			{
 				_init_tree();
 			}
-	
+
+			bool empty() const
+			{
+				return (_size == 0);
+			}
+
+			pair<iterator, bool>	insert(const_reference val)
+			{
+				Node	*node = create_node(val);
+
+				if (empty())
+				{
+					_insert_empty(node);
+					return (ft::make_pair(iterator(_root, _sentinelStart, _sentinelEnd), true));
+				}
+
+				iterator	it;
+				if ((it = _insert_bst(node) != end()))
+				{
+					destroy_node(node);
+					return (ft::make_pair(it, false));
+				}
+
+				if (node->parent && node->parent->parent)
+					_insert_rebalance_tree(node);
+				return (ft::make_pair(iterator(node, _sentinelStart, _sentinelEnd), true));
+			}
+
+			iterator insert(iterator pos, const_reference val)
+			{
+				(void)pos;
+				return (insert(val).first);
+			}
+
+			template <class InputIterator>
+			void	insert(InputIterator first, InputIterator last)
+			{
+				for (; first != last; first++)
+					insert(*first);
+			}
 		private:
 
 			void	_init_tree()
@@ -420,9 +460,20 @@ namespace ft
 				_sentinelStart = create_node();
 				_sentinelEnd->color = BLACK;
 				_sentinelStart->color = BLACK;
-				root = _sentinelEnd;
+				_root = _sentinelEnd;
 
 				_clear = true;
+			}
+
+			void	_insert_empty(Node *node)
+			{
+				_root = node;
+				_root->left = _sentinelStart;
+				_root->right = _sentinelEnd;
+				_sentinelStart->parent = _root;
+				_sentinelEnd->parent = _root;
+				_size++;
+				_root->color = BLACK;
 			}
 
 			Node	*create_node(const_reference val = value_type())
