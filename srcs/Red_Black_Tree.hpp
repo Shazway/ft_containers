@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/26 20:30:53 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/26 20:44:52 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -429,7 +429,7 @@ namespace ft
 				}
 
 				iterator	it;
-				if ((it = _insert_bst(node) != end()))
+				if ((it = _insert_worker(node) != end()))
 				{
 					destroy_node(node);
 					return (ft::make_pair(it, false));
@@ -452,10 +452,33 @@ namespace ft
 				for (; first != last; first++)
 					insert(*first);
 			}
+
+			void	clear()
+			{
+				_clear_worker(_root);
+				_size = 0;
+				_root = _sentinelEnd;
+			}
 		private:
+			void	_clear_worker(Node *node)
+			{
+				if (!node || node == _sentinelStart || node == _sentinelEnd)
+					return ;
+				_clear_worker(node->left);
+				_clear_worker(node->right);
+				destroy_node(node);
+			}
 			void	_left_rotate(Node *node)
 			{
 				Node::left_rotate(node);
+
+				if (!node->parent->parent)
+					_root = node->parent;
+			}
+
+			void	_right_rotate(Node *node)
+			{
+				Node::right_rotate(node);
 
 				if (!node->parent->parent)
 					_root = node->parent;
@@ -543,6 +566,61 @@ namespace ft
 				_sentinelStart->parent = _root;
 				_sentinelEnd->parent = _root;
 				_size++;
+				_root->color = BLACK;
+			}
+
+			void	_insert_rebalance_tree(Node *node)
+			{
+				while (node != _root && node->parent->color == RED)
+				{
+					Node	*parent = node->parent;
+					Node	*grand_parent node->parent->parent;
+					Node	*uncle;
+
+					if (parent == grand_parent->left) //Parent is left
+					{
+						uncle = grand_parent->right;
+						if (uncle && uncle->color == RED)
+						{
+							uncle->color = parent->color = BLACK;
+							grand_parent->color = RED;
+							node = grand_parent;
+						}
+						else
+						{
+							if (node == parent->right) // Node is the right child
+							{
+								node = parent;
+								_left_rotate(node);
+							}
+							node->parent->color = BLACK;
+							node->parent->parent->color = RED;
+							_right_rotate(node->parent->parent);
+						}
+					}
+					else // Parent is the right child
+					{
+						uncle = grand_parent->left;
+						if (uncle && uncle->color == RED)
+						{
+							uncle->color = BLACK;
+							parent->color = BLACK;
+							grand_parent->color = RED;
+							node = grand_parent;
+						}
+						else
+						{
+							if (node == parent->left) // current node is left child
+							{
+								node = parent;
+								_right_rotate(node);
+							}
+							node->parent->color = BLACK;
+							node->parent->parent->color = RED;
+							_left_rotate(node->parent->parent);
+						}
+					}
+				}
 				_root->color = BLACK;
 			}
 
