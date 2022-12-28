@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/28 01:29:55 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/28 01:32:17 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -506,7 +506,7 @@ namespace ft
 				return (const_reverse_iterator(end()));
 			}
 
-			const_reverse_iterator	rend() csont
+			const_reverse_iterator	rend() const
 			{
 				return (const_reverse_iterator(begin()));
 			}
@@ -524,11 +524,6 @@ namespace ft
 			size_type	max_size() const
 			{
 				return (allocator_node.max_size());
-			}
-
-			bool empty() const
-			{
-				return (_size == 0);
 			}
 
 			pair<iterator, bool>	insert(const_reference val)
@@ -581,6 +576,7 @@ namespace ft
 				_clear_worker(node->right);
 				destroy_node(node);
 			}
+
 			void	_left_rotate(Node *node)
 			{
 				Node::left_rotate(node);
