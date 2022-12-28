@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/28 01:28:14 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/28 01:29:55 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <cstdlib>
 # include <fstream>
 # include "iterators.hpp"
+# include "map.hpp"
 
 namespace ft
 {
@@ -387,7 +388,7 @@ namespace ft
 			typedef std::size_t			size_type;
 
 		private:
-			typedef RBTReeNode <vlue_type> Node;
+			typedef RBTReeNode <value_type> Node;
 			typename allocator_type::template rebind<Node>::other allocator_node;
 
 		public:
@@ -525,7 +526,76 @@ namespace ft
 				return (allocator_node.max_size());
 			}
 
+			bool empty() const
+			{
+				return (_size == 0);
+			}
+
+			pair<iterator, bool>	insert(const_reference val)
+			{
+				Node	*node = create_node(val);
+
+				if (empty())
+				{
+					_insert_empty(node);
+					return (ft::make_pair(iterator(_root, _sentinelStart, _sentinelEnd), true));
+				}
+
+				iterator	it;
+				if ((it = _insert_worker(node) != end()))
+				{
+					destroy_node(node);
+					return (ft::make_pair(it, false));
+				}
+
+				if (node->parent && node->parent->parent)
+					_insert_rebalance_tree(node);
+				return (ft::make_pair(iterator(node, _sentinelStart, _sentinelEnd), true));
+			}
+
+			iterator insert(iterator pos, const_reference val)
+			{
+				(void)pos;
+				return (insert(val).first);
+			}
+
+			template <class InputIterator>
+			void	insert(InputIterator first, InputIterator last)
+			{
+				for (; first != last; first++)
+					insert(*first);
+			}
+
+			void	clear()
+			{
+				_clear_worker(_root);
+				_size = 0;
+				_root = _sentinelEnd;
+			}
 		private:
+			void	_clear_worker(Node *node)
+			{
+				if (!node || node == _sentinelStart || node == _sentinelEnd)
+					return ;
+				_clear_worker(node->left);
+				_clear_worker(node->right);
+				destroy_node(node);
+			}
+			void	_left_rotate(Node *node)
+			{
+				Node::left_rotate(node);
+
+				if (!node->parent->parent)
+					_root = node->parent;
+			}
+
+			void	_right_rotate(Node *node)
+			{
+				Node::right_rotate(node);
+
+				if (!node->parent->parent)
+					_root = node->parent;
+			}
 
 			void	_init_tree()
 			{
@@ -533,9 +603,138 @@ namespace ft
 				_sentinelStart = create_node();
 				_sentinelEnd->color = BLACK;
 				_sentinelStart->color = BLACK;
-				root = _sentinelEnd;
+				_root = _sentinelEnd;
 
 				_clear = true;
+			}
+
+			Node	*_find(const_reference val, Node **leaf = NULL)
+			{
+				Node	*node = _root;
+
+				while (node && node != _sentinelEnd && node != _sentinelStart)
+				{
+					if (leaf)
+						*leaf = node;
+					if (_comparator(val, node->data))
+						node = node->left;
+					else if (_comparator(node->data, val))
+						node = node->right;
+					else
+						return (node);
+				}
+				return (NULL);
+			}
+
+			Node	*_find(const_reference val, Node **leaf = NULL) const
+			{
+				Node	*node = _root;
+
+				while (node && node != _sentinelEnd && node != _sentinelStart)
+				{
+					if (leaf)
+						*leaf = node;
+					if (_comparator(val, node->data))
+						node = node->left;
+					else if (_comparator(node->data, val))
+						node = node->right;
+					else
+						return (node);
+				}
+				return (NULL);
+			}
+
+			iterator	_insert_worker(Node *node)
+			{
+				Node	*target;
+				Node	*n;
+
+				if ((n = __find(node->data, &target)))
+					return (iterator(n, _sentinelStart, _sentinelEnd));
+
+				node->parent = target;
+				if (_comparator(node->data, target->data))
+				{
+					if (target->left)
+						target->left->parent = node;
+					node->left = target->left;
+					target->left = node;
+				}
+				else
+				{
+					if (target->right)
+						target->right->parent = node;
+					node->right = target->right;
+					target->right = node;
+				}
+				_size++;
+				return (end());
+			}
+
+			void	_insert_empty(Node *node)
+			{
+				_root = node;
+				_root->left = _sentinelStart;
+				_root->right = _sentinelEnd;
+				_sentinelStart->parent = _root;
+				_sentinelEnd->parent = _root;
+				_size++;
+				_root->color = BLACK;
+			}
+
+			void	_insert_rebalance_tree(Node *node)
+			{
+				while (node != _root && node->parent->color == RED)
+				{
+					Node	*parent = node->parent;
+					Node	*grand_parent node->parent->parent;
+					Node	*uncle;
+
+					if (parent == grand_parent->left) //Parent is left
+					{
+						uncle = grand_parent->right;
+						if (uncle && uncle->color == RED)
+						{
+							uncle->color = parent->color = BLACK;
+							grand_parent->color = RED;
+							node = grand_parent;
+						}
+						else
+						{
+							if (node == parent->right) // Node is the right child
+							{
+								node = parent;
+								_left_rotate(node);
+							}
+							node->parent->color = BLACK;
+							node->parent->parent->color = RED;
+							_right_rotate(node->parent->parent);
+						}
+					}
+					else // Parent is the right child
+					{
+						uncle = grand_parent->left;
+						if (uncle && uncle->color == RED)
+						{
+							uncle->color = BLACK;
+							parent->color = BLACK;
+							grand_parent->color = RED;
+							node = grand_parent;
+						}
+						else
+						{
+							if (node == parent->left) // current node is left child
+							{
+								node = parent;
+								_right_rotate(node);
+							}
+							node->parent->color = BLACK;
+							node->parent->parent->color = RED;
+							_left_rotate(node->parent->parent);
+						}
+					}
+				}
+				_root->color = BLACK;
 			}
 
 			Node	*create_node(const_reference val = value_type())
