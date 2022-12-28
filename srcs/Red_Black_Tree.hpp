@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/28 02:02:05 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/28 02:08:27 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -698,8 +698,30 @@ namespace ft
 				{
 					if (both_colors)
 						_delete_rebalance_tree(n);
+					else if (n == parent->left && parent->right)
+						parent->right->color = RED;
+					else if (parent->left)
+						parent->left->color = RED;
+					
+					if (n == parent->left)
+					{
+						parent->left = n->left;
+						if (n->left)
+							n->left->parent = parent;
+					}
+					else
+					{
+						parent->right = n->right;
+						if (n->right)
+							n->right->parent = parent;
+					}
 				}
+				destroy_node(n);
+			}
 
+			_delete_child(Node *n, Node *o, bool both_colors)
+			{
+				//TO BE DONE
 			}
 
 			Node	*_delete_node_worker(Node *n)
@@ -713,6 +735,12 @@ namespace ft
 				{
 					_size--;
 					_delete_leaf(n, both_colors);
+					return (successor);
+				}
+				else if(_is_null(n->left) || _is_null(n->right))
+				{
+					_size--;
+					_delete_child(o, n, both_colors);
 					return (successor);
 				}
 			}
