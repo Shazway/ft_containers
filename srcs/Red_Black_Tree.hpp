@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/22 23:06:35 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/28 01:28:14 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,7 +411,120 @@ namespace ft
 			{
 				_init_tree();
 			}
-	
+
+			RBTree(RBTree const& copy): _root(NULL), _size(0), _sentinelStart(NULL), _sentinelEnd(NULL),
+					_comparator(copy._comparator), _allocator(copy._allocator), _clear(true)
+			{
+				*this = copy;
+			}
+
+			~RBTree()
+			{
+				if (_clear)
+				{
+					_clear();
+					destroy_node(_sentinelEnd);
+					destroy_node(_sentinelStart);
+				}
+			}
+
+			RBTree &operator=(RBTree const& assign)
+			{
+				_clear();
+				if (_sentinelStart)
+					destroy_node(_sentinelStart);
+				if (_sentinelEnd)
+					destroy_node(_sentinelEnd);
+				_root = NULL;
+				_sentinelStart = NULL;
+				_sentinelEnd = NULL;
+
+				if (!assign.empty())
+				{
+					_root = _copy_tree(assign._root, NULL);
+					_size = assign._size;
+
+					Node *node = _root;
+					while (node && node->left)
+						node = node->left;
+					_sentinelStart = node;
+
+					node = _root;
+					while (node && node->right)
+						node = node->right;
+					_sentinelEnd = node;
+				}
+				else
+				{
+					_root = _sentinelEnd = create_node();
+					_sentinelStart = create_node();
+					_sentinelStart->color = BLACK;
+					_root->color = BLACK;
+				}
+				return (*this);
+			}
+
+			iterator	begin()
+			{
+				if (empty())
+					return (end());
+
+				return (iterator(_sentinelStart->parent, _sentinelStart, _sentinelEnd));
+			}
+
+			iterator	end()
+			{
+				return (iterator(_sentinelEnd, _sentinelStart, _sentinelEnd));
+			}
+
+			const_iterator	begin() const
+			{
+				if (empty())
+					return (end());
+
+				return (const_iterator(_sentinelStart->parent, _sentinelStart, _sentinelEnd));
+			}
+
+			const_iterator	end() const
+			{
+				return (const_iterator(_sentinelEnd, _sentinelStart, _sentinelEnd));
+			}
+
+			reverse_iterator	rbegin()
+			{
+				return (reverse_iterator(end()));
+			}
+
+			reverse_iterator	rend()
+			{
+				return (reverse_iterator(begin()));
+			}
+
+			const_reverse_iterator	rbegin() const
+			{
+				return (const_reverse_iterator(end()));
+			}
+
+			const_reverse_iterator	rend() csont
+			{
+				return (const_reverse_iterator(begin()));
+			}
+
+			bool	empty() const
+			{
+				return (_size == 0);
+			}
+
+			size_type	size() const
+			{
+				return (_size);
+			}
+
+			size_type	max_size() const
+			{
+				return (allocator_node.max_size());
+			}
+
 		private:
 
 			void	_init_tree()
@@ -443,7 +556,19 @@ namespace ft
 				allocator_node.deallocate(node, 1);
 			}
 
-			
+			Node	*_copy_tree(Node *node, Node *parent = NULL)
+			{
+				if (!n)
+					return (NULL);
+				
+				Node *node_copy = create_node(n->data);
+				node_copy->parent = parent;
+				node_copy->color = node->color;
+				node_copy->left = _copy_tree(node->left, node_copy);
+				node_copy->right = _copy_tree(node->right, node_copy);
+
+				return (node_copy);
+			}
 	};
 }
 
