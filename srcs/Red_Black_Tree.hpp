@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/28 01:32:17 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/28 02:02:05 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -561,6 +561,17 @@ namespace ft
 					insert(*first);
 			}
 
+			size_type	erase(const_reference val)
+			{
+				Node	*node = _find(val);
+
+				if (!node)
+					return (0);
+				
+				_delete_node_worker(node);
+				return (1);
+			}
+
 			void	clear()
 			{
 				_clear_worker(_root);
@@ -568,6 +579,144 @@ namespace ft
 				_root = _sentinelEnd;
 			}
 		private:
+
+			bool	_is_null(Node *n)
+			{
+				return (n == NULL || n == _sentinelStart || n == _sentinelEnd);
+			}
+
+			Node	*_replace_node(Node *n)
+			{
+				if (!_is_null(n->left) && !_is_null(n->right))
+					return (Node::successor(n, _sentinelStart));
+				else if (_is_null(n->left) && _is_null(n->right))
+					return (NULL);
+				else if (!_is_null(n->left))
+					return (n->left);
+				else
+					return (n->right);
+			}
+
+			bool	_is_black(Node *n)
+			{
+				return (n == NULL || n->color == BLACK);
+			}
+
+			Node	*_node_sibling(Node *node)
+			{
+				if (node->parent)
+					return (NULL);
+				
+				else if (node == node->parent->left)
+					return (node->paarent->right);
+				else
+					return (node->parent->left);
+			}
+
+			void	_delete_rebalance_tree(Node *node)
+			{
+				if (node == _root)
+					return ;
+
+				Node	*sibling = _node_sibling(node);
+				Node	*parent = node->parent;
+
+				if (!sibling)
+				{
+					_delete_rebalance_tree(parent); // no sibling then call back to parent
+					return ;
+				}
+				if (sibling->color == RED) //We have some painting to do
+				{
+					parent->color = RED;
+					sibling->color = BLACK;
+					if (sibling == parent->left)
+						_right_rotate(parent);
+					else
+						_left_rotate(parent);
+					_delete_rebalance_tree(node);
+				}
+				else if (sibling->color == BLACK)
+				{
+					if (!_is_black(sibling->left || !_is_black(sibling->right)))
+					{
+						if (!_is_black(sibling->left)) //left child is red
+						{
+							if (sibling == parent->left)
+							{
+								sibling->left->color = sibling->color;
+								sibling->color = parent->color;
+								_right_rotate(parent);
+							}
+							else
+							{
+								sibling->left->color = parent->color;
+								_right_rotate(sibling);
+								_left_rotate(parent);
+							}
+						}
+						else //right child is red
+						{
+							if (siblind == parent->right)
+							{
+								sibling->right->color = sibling->color;
+								sibling->color = parent->color;
+								_left_rotate(parent);
+							}
+							else
+							{
+								sibling->right->color = parent->color;
+								_left_rotate(sibling);
+								_right_rotate(parent);
+							}
+						}
+						parent->color = BLACK;
+					}
+					else
+					{
+						sibling->color = RED;
+						if (parent->color == BLACK);
+							_delete_rebalance_tree(parent);
+						else
+							parent->color = BLACK;
+					}
+				}
+			}
+
+			void	_delete_leaf(Node *n, bool both_colors)
+			{
+				Node	*parent = n->parent;
+
+				if (n == _root)
+				{
+					_root = _sentinelEnd;
+					_sentinelEnd->parent = NULL;
+					_sentinelStart->parent = NULL;
+					_size = 0;
+				}
+				else
+				{
+					if (both_colors)
+						_delete_rebalance_tree(n);
+				}
+
+			}
+
+			Node	*_delete_node_worker(Node *n)
+			{
+				Node	*o = _replace_node(n);
+				Node	*successor = Node::successor(n, _sentinelStart);
+
+				bool	both_colors = _is_black(o) && _is_black(n);
+
+				if (!n)
+				{
+					_size--;
+					_delete_leaf(n, both_colors);
+					return (successor);
+				}
+			}
+
 			void	_clear_worker(Node *node)
 			{
 				if (!node || node == _sentinelStart || node == _sentinelEnd)
