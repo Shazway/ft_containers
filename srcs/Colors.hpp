@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 18:07:24 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/18 02:01:24 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/29 17:18:25 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #define COLORS_HPP
 
 #include <iostream>
-#define BLACK "\e[1;30m"
-#define RED "\e[1;31m"
+#define C_BLACK "\e[1;30m"
+#define C_RED "\e[1;31m"
 #define GREEN "\e[1;32m"
 #define YELLOW "\e[1;33m"
 #define BLUE "\e[1;34m"

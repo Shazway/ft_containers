@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/28 02:08:27 by tmoragli         ###   ########.fr       */
+/*   Updated: 2022/12/29 18:36:32 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ namespace ft
 	class RBTreeConstIterator;
 
 	template <typename T>
-	struct RBTReeNode
+	struct RBTreeNode
 	{
 		typedef T					value_type;
 		typedef value_type&			reference;
@@ -55,7 +55,7 @@ namespace ft
 		Node		*right;
 		RBTreeColor	color;
 
-		RBTReeNode(): parent(NULL), left(NULL), data(), right(NULL)
+		RBTreeNode(): data(), parent(NULL), left(NULL), right(NULL), color(RED)
 		{
 		}
 
@@ -76,7 +76,7 @@ namespace ft
 			return (n);
 		}
 
-		static const* min(Node const* n, Node const* sentinel)
+		static Node const* min(Node const* n, Node const* sentinel)
 		{
 			while (n->left != sentinel && n->left)
 				n = n->left;
@@ -119,7 +119,7 @@ namespace ft
 
 			node->left = left_node->right;
 			if (left_node->right)
-				left_node->right->parent = x;
+				left_node->right->parent = node;
 
 			left_node->parent = node->parent;
 			if (node->parent && node == node->parent->left)
@@ -127,7 +127,7 @@ namespace ft
 			else if (node->parent && node == node->parent->right)
 				node->parent->right = left_node;
 
-			left_node->right = x;
+			left_node->right = node;
 			node->parent = left_node;
 		}
 
@@ -172,7 +172,7 @@ namespace ft
 			typedef	std::ptrdiff_t					difference_type;
 
 		private:
-			typedef RBTReeNode<T>					Node;
+			typedef RBTreeNode<T>					Node;
 
 			Node	*_current;
 			Node	*_start;
@@ -221,7 +221,7 @@ namespace ft
 
 			RBTreeIterator	&operator++()
 			{
-				_current = Node::successor(current, start);
+				_current = Node::successor(_current, _start);
 				return (*this);
 			}
 
@@ -235,7 +235,7 @@ namespace ft
 
 			RBTreeIterator	&operator--()
 			{
-				_current = Node::predecessor(current, end);
+				_current = Node::predecessor(_current, _end);
 				return (*this);
 			}
 
@@ -243,7 +243,7 @@ namespace ft
 			{
 				RBTreeIterator	it(*this);
 
-				_current = Node::predecessor(_current, end);
+				_current = Node::predecessor(_current, _end);
 				return (it);
 			}
 
@@ -312,7 +312,7 @@ namespace ft
 				return (*this);
 			}
 
-			operator RBTReeIterator<value_type>() const
+			operator RBTreeIterator<value_type>() const
 			{
 				return (RBTreeIterator<value_type>(_current, _start, _end));
 			}
@@ -371,7 +371,7 @@ namespace ft
 	};
 
 
-	template <typename T, typename Compare, typename Alloc>
+	template <typename T, class Alloc = std::allocator<ft::RBTreeNode<T> >, typename Compare = std::less<T> >
 	class RBTree
 	{
 		public:
@@ -387,8 +387,8 @@ namespace ft
 			typedef std::ptrdiff_t		difference_type;
 			typedef std::size_t			size_type;
 
+			typedef ft::RBTreeNode <value_type> Node;
 		private:
-			typedef RBTReeNode <value_type> Node;
 			typename allocator_type::template rebind<Node>::other allocator_node;
 
 		public:
@@ -408,7 +408,7 @@ namespace ft
 
 		public:
 			RBTree(compare_type const& comp = compare_type(), allocator_type const& alloc = allocator_type()): _root(NULL),
-			_size(0), _sentinelStart(NULL), _sentinelEnd(NULL), _comparator(comp), _alloc(alloc), _clear(true)
+			_size(0), _sentinelStart(NULL), _sentinelEnd(NULL), _comparator(comp), _allocator(alloc), _clear(true)
 			{
 				_init_tree();
 			}
@@ -423,15 +423,25 @@ namespace ft
 			{
 				if (_clear)
 				{
-					_clear();
+					clear();
 					destroy_node(_sentinelEnd);
 					destroy_node(_sentinelStart);
 				}
 			}
 
+
+			Node	*operator[](int nb)
+			{
+				Node	*node = begin().getCurrent();
+
+				for (int i = 0; i < nb; i++)
+					node = node->successor(node, _root);
+				return (node);
+			}
+
 			RBTree &operator=(RBTree const& assign)
 			{
-				_clear();
+				clear();
 				if (_sentinelStart)
 					destroy_node(_sentinelStart);
 				if (_sentinelEnd)
@@ -516,6 +526,11 @@ namespace ft
 				return (_size == 0);
 			}
 
+			Node	*root() const
+			{
+				return (_root);
+			}
+
 			size_type	size() const
 			{
 				return (_size);
@@ -537,7 +552,8 @@ namespace ft
 				}
 
 				iterator	it;
-				if ((it = _insert_worker(node) != end()))
+				it = _insert_worker(node);
+				if ((it != end()))
 				{
 					destroy_node(node);
 					return (ft::make_pair(it, false));
@@ -572,12 +588,27 @@ namespace ft
 				return (1);
 			}
 
+			size_type	erase(Node *node)
+			{
+				if (!node)
+					return (0);
+				
+				_delete_node_worker(node);
+				return (1);
+			}
+
 			void	clear()
 			{
 				_clear_worker(_root);
 				_size = 0;
 				_root = _sentinelEnd;
 			}
+
+			Node	*find(value_type	val)
+			{
+				return (_find(val, NULL));
+			}
+
 		private:
 
 			bool	_is_null(Node *n)
@@ -608,7 +639,7 @@ namespace ft
 					return (NULL);
 				
 				else if (node == node->parent->left)
-					return (node->paarent->right);
+					return (node->parent->right);
 				else
 					return (node->parent->left);
 			}
@@ -638,7 +669,7 @@ namespace ft
 				}
 				else if (sibling->color == BLACK)
 				{
-					if (!_is_black(sibling->left || !_is_black(sibling->right)))
+					if (!_is_black(sibling->left) || !_is_black(sibling->right))
 					{
 						if (!_is_black(sibling->left)) //left child is red
 						{
@@ -657,7 +688,7 @@ namespace ft
 						}
 						else //right child is red
 						{
-							if (siblind == parent->right)
+							if (sibling == parent->right)
 							{
 								sibling->right->color = sibling->color;
 								sibling->color = parent->color;
@@ -675,7 +706,7 @@ namespace ft
 					else
 					{
 						sibling->color = RED;
-						if (parent->color == BLACK);
+						if (parent->color == BLACK)
 							_delete_rebalance_tree(parent);
 						else
 							parent->color = BLACK;
@@ -719,9 +750,12 @@ namespace ft
 				destroy_node(n);
 			}
 
-			_delete_child(Node *n, Node *o, bool both_colors)
+			void _delete_child(Node *n, Node *o, bool both_colors)
 			{
-				//TO BE DONE
+				(void)n;
+				(void)o;
+				(void)both_colors;
+				return ;
 			}
 
 			Node	*_delete_node_worker(Node *n)
@@ -743,6 +777,7 @@ namespace ft
 					_delete_child(o, n, both_colors);
 					return (successor);
 				}
+				//To be added
 			}
 
 			void	_clear_worker(Node *node)
@@ -822,7 +857,7 @@ namespace ft
 				Node	*target;
 				Node	*n;
 
-				if ((n = __find(node->data, &target)))
+				if ((n = _find(node->data, &target)))
 					return (iterator(n, _sentinelStart, _sentinelEnd));
 
 				node->parent = target;
@@ -860,7 +895,7 @@ namespace ft
 				while (node != _root && node->parent->color == RED)
 				{
 					Node	*parent = node->parent;
-					Node	*grand_parent node->parent->parent;
+					Node	*grand_parent = node->parent->parent;
 					Node	*uncle;
 
 					if (parent == grand_parent->left) //Parent is left
@@ -915,25 +950,26 @@ namespace ft
 				Node	*node = allocator_node.allocate(1);
 
 				allocator_node.construct(node, Node());
-				_allocator.construct(node->data_addr(), val);
+				_allocator.construct(node, Node());
 
+				node->data = val;
 				node->color = RED;
 				return (node);
 			}
 
 			void	destroy_node(Node *node)
 			{
-				_allocator.destroy(node->data_addr());
+				_allocator.destroy(node);
 				allocator_node.destroy(node);
 				allocator_node.deallocate(node, 1);
 			}
 
 			Node	*_copy_tree(Node *node, Node *parent = NULL)
 			{
-				if (!n)
+				if (!node)
 					return (NULL);
 				
-				Node *node_copy = create_node(n->data);
+				Node *node_copy = create_node(node->data);
 				node_copy->parent = parent;
 				node_copy->color = node->color;
 				node_copy->left = _copy_tree(node->left, node_copy);
