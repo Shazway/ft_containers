@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/03 18:11:54 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/03 19:31:07 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,31 +138,31 @@ void main_map()
 		{
 			std::cerr << CYAN << e.what() << END << '\n';
 		}
-		// try
-		// {
-		// 	tree.erase(12);
-		// 	print_tree(tree);
-		// }
-		// catch(const std::exception& e)
-		// {
-		// 	std::cerr << CYAN << e.what() << END << '\n';
-		// }
-		// try
-		// {
-		// 	tree.erase(5);
-		// 	print_tree(tree);
-		// 	tree.erase(4);
-		// 	print_tree(tree);
-		// 	tree.erase(4);
-		// 	print_tree(tree);
-		// 	tree.erase(3);
-		// 	tree.erase(3);
-		// 	print_tree(tree);
-		// }
-		// catch(const std::exception& e)
-		// {
-		// 	std::cerr << CYAN << e.what() << END << '\n';
-		// }
+		try
+		{
+			tree.erase(12);
+			print_tree(tree);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << CYAN << e.what() << END << '\n';
+		}
+		try
+		{
+			tree.erase(5);
+			print_tree(tree);
+			tree.erase(4);
+			print_tree(tree);
+			tree.erase(4);
+			print_tree(tree);
+			tree.erase(3);
+			tree.erase(3);
+			print_tree(tree);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << CYAN << e.what() << END << '\n';
+		}
 	}
 	// {
 	// 	rbtree tree;

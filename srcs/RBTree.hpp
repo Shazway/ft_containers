@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/03 19:25:04 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/03 19:44:38 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,6 +318,23 @@ namespace ft
 				_root = _sentinelEnd;
 			}
 
+			iterator find(const_reference val)
+			{
+				Node	*seeker = _find(val);
+
+				if (!seeker)
+					return (end());
+				return (iterator(seeker, _sentinelStart, _sentinelEnd));
+			}
+
+			const_iterator find(const_reference val) const
+			{
+				Node	*seeker = _find(val);
+
+				if (!seeker)
+					return (end());
+				return (const_iterator(seeker, _sentinelStart, _sentinelEnd));
+			}
 			Node	*find(value_type	val)
 			{
 				return (_find(val, NULL));
@@ -472,7 +489,7 @@ namespace ft
 				{
 					ft::__swap(n->data, o->data);
 					o->left = _sentinelStart;
-					o->left = _sentinelEnd;
+					o->right = _sentinelEnd;
 					destroy_node(n); // Swapped data to erase
 				}
 				else
@@ -480,11 +497,11 @@ namespace ft
 					if (o == parent->left)
 						parent->left = n;
 					else
-						parent->left = n;
+						parent->right = n;
 					destroy_node(o);
 					n->parent = parent;
 					if (both_colors)
-						_delete_rebalance_tree(node);
+						_delete_rebalance_tree(n);
 					else
 						n->color = BLACK;
 				}
@@ -498,7 +515,7 @@ namespace ft
 
 				bool	both_colors = _is_black(o) && _is_black(n);
 
-				if (!n)
+				if (!o)
 				{
 					_size--;
 					_delete_leaf(n, both_colors);
@@ -511,9 +528,9 @@ namespace ft
 					return (successor);
 				}
 
-				ft::_swap(o->data, n->data);
+				ft::__swap(o->data, n->data);
 				_delete_node_worker(o);
-				return (o);
+				return (n);
 			}
 
 			void	_clear_worker(Node *node)
