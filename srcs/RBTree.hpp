@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/03 16:05:33 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/03 18:04:31 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,10 @@ namespace ft
 				}
 			}
 
+			bool	is_sentinel(Node const* node) const
+			{
+				return (node == _sentinelEnd || node == _sentinelStart);
+			}
 
 			Node	*operator[](int nb)
 			{
@@ -137,6 +141,16 @@ namespace ft
 					_root->color = BLACK;
 				}
 				return (*this);
+			}
+
+			Node	*getSentinelEnd() const
+			{
+				return (_sentinelEnd);
+			}
+
+			Node	*getSentinelStart() const
+			{
+				return (_sentinelStart);
 			}
 
 			iterator	begin()
@@ -473,6 +487,8 @@ namespace ft
 			{
 				_sentinelEnd = create_node();
 				_sentinelStart = create_node();
+				_sentinelEnd->is_sentinel = true;
+				_sentinelStart->is_sentinel = true;
 				_sentinelEnd->color = BLACK;
 				_sentinelStart->color = BLACK;
 				_root = _sentinelEnd;

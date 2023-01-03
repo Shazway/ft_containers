@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/03 16:02:33 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/03 18:11:54 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int get_max_depth(T ref, int depth = 0)
 	return ((d1 > d2) ? d1 : d2);
 }
 
-template <typename T>
-void print_tree_visual(T ref, int depth, std::ostream* os)
+template <typename T, typename B>
+void print_tree_visual(T ref, int depth, std::ostream* os, B tree)
 {
 	T new_stack;
 	int space = 1;
@@ -49,7 +49,7 @@ void print_tree_visual(T ref, int depth, std::ostream* os)
 	while ((int)ref.size() > j)
 	{
 		typename T::value_type n = ref[j];
-		if (n == NULL)
+		if (n == NULL || n->is_sentinel)
 		{
 			*os << "□";
 			new_stack.push_back(NULL);
@@ -70,7 +70,7 @@ void print_tree_visual(T ref, int depth, std::ostream* os)
 	}
 	*os << std::endl;
 	if (depth > 0)
-		print_tree_visual(new_stack, depth - 1, os);
+		print_tree_visual(new_stack, depth - 1, os, tree);
 }
 
 template <typename T>
@@ -81,7 +81,7 @@ void print_tree(T& rbtree, std::ostream* os = &(std::cout))
 		ft::vector<ref>	pile;
 		pile.push_back(rbtree.root());
 		*os << "~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-		print_tree_visual(pile, get_max_depth(rbtree.root()), os);
+		print_tree_visual(pile, get_max_depth(rbtree.root()) - 1, os, rbtree);
 		*os << "~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 	}
 	ref n = rbtree.begin().getCurrent();
@@ -92,7 +92,7 @@ void print_tree(T& rbtree, std::ostream* os = &(std::cout))
 		n = n->successor(n, NULL);
 	}
 	*os << END << std::endl;
-	for (int i = 0; i <= (int)rbtree.size(); i++)
+	for (int i = 0; i < (int)rbtree.size(); i++)
 		*os << (((i / 10) % 2) ? GREEN : YELLOW) << (i % 10) << " ";
 	*os << END << std::endl;
 }
@@ -107,12 +107,18 @@ void main_map()
 		try
 		{
 			tree.insert(4);
+			print_tree(tree);
 			tree.insert(3);
+			print_tree(tree);
 			tree.insert(2);
+			print_tree(tree);
 			tree.insert(1);
+			print_tree(tree);
 			tree.insert(5);
+			print_tree(tree);
 			tree.insert(6);
 			print_tree(tree);
+			std::cout << tree.size() << std::endl;
 		}
 		catch(const std::exception& e)
 		{
