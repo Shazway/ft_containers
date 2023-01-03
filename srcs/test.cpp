@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/03 19:31:07 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/03 20:25:16 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,16 +193,16 @@ void main_map()
 			}
 			std::cout << "\r";
 			print_tree(tree);
-			// for (int i = 0; i < 25; i++)
-			// {
-			// 	buff.str("");
-			// 	print_tree(tree, &err_str);
-			// 	std::cout << "\rdelete number " << i << std::flush;
-			// 	node_nbr = rand() % tree.size();
-			// 	tree.erase(tree[node_nbr]);
-			// }
-			// std::cout << "\r";
-		// 	print_tree(tree);
+			for (int i = 0; i < 25; i++)
+			{
+				buff.str("");
+				print_tree(tree, &err_str);
+				std::cout << "\rdelete number " << i << std::flush;
+				node_nbr = rand() % tree.size();
+				tree.erase(tree[node_nbr]);
+			}
+			std::cout << "\r";
+			print_tree(tree);
 		}
 		catch(const std::exception& e)
 		{
