@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/29 18:48:35 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/03 16:02:33 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "algorithm.hpp"
 #include "type_traits.hpp"
 #include <istream>
-#include "Red_Black_Tree.hpp"
+#include "RBTree.hpp"
 
 #define LEFT 
 
