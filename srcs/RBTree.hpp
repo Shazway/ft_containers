@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/03 18:04:31 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/03 19:25:04 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,6 +266,42 @@ namespace ft
 				return (1);
 			}
 
+			void	erase(iterator pos)
+			{
+				iterator last = pos;
+				last++;
+				erase(pos, last);
+			}
+
+			void	erase(iterator first, iterator last)
+			{
+				if (first == end())
+					return ;
+
+				if (first == begin() && last == end())
+				{
+					clear();
+					return ;
+				}
+
+				size_type	n = 0;
+				iterator	i = first;
+				
+				for (; i != last; i++)
+					n++;
+				
+				if (n < _size / 2)
+				{
+					Node	*to_delete = first._current;
+					value_type	last_node_data = *last;
+
+					while (to_delete->data != last_node_data)
+						to_delete = _delete_node_worker(to_delete);
+				}
+				// else
+				// 	_regen_tree(first, last); //TO BE FINISHED
+			}
+
 			size_type	erase(Node *node)
 			{
 				if (!node)
@@ -430,9 +466,28 @@ namespace ft
 
 			void _delete_child(Node *n, Node *o, bool both_colors)
 			{
-				(void)n;
-				(void)o;
-				(void)both_colors;
+				Node	*parent = o->parent;
+
+				if (o == _root) // 2 nodes are in tree
+				{
+					ft::__swap(n->data, o->data);
+					o->left = _sentinelStart;
+					o->left = _sentinelEnd;
+					destroy_node(n); // Swapped data to erase
+				}
+				else
+				{
+					if (o == parent->left)
+						parent->left = n;
+					else
+						parent->left = n;
+					destroy_node(o);
+					n->parent = parent;
+					if (both_colors)
+						_delete_rebalance_tree(node);
+					else
+						n->color = BLACK;
+				}
 				return ;
 			}
 
@@ -455,7 +510,10 @@ namespace ft
 					_delete_child(o, n, both_colors);
 					return (successor);
 				}
-				//To be added
+
+				ft::_swap(o->data, n->data);
+				_delete_node_worker(o);
+				return (o);
 			}
 
 			void	_clear_worker(Node *node)
