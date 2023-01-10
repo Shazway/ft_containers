@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/03 21:03:58 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/10 23:18:37 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ namespace ft
 	template <typename T>
 	class RBTreeConstIterator;
 
-	template <typename T, class Alloc = std::allocator<ft::RBTreeNode<T> >, typename Compare = std::less<T> >
+	template <typename T, typename Alloc, typename Compare>
 	class RBTree
 	{
 		public:
@@ -716,7 +716,8 @@ namespace ft
 			{
 				_allocator.destroy(node);
 				allocator_node.destroy(node);
-				allocator_node.deallocate(node, 1);
+				//if (node)
+				//	allocator_node.deallocate(node, 1);
 			}
 
 			Node	*_copy_tree(Node *node, Node *parent = NULL)

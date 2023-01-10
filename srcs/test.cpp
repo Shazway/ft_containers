@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/03 20:25:16 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/10 23:13:57 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ void print_tree(T& rbtree, std::ostream* os = &(std::cout))
 
 void main_map()
 {
-	typedef ft::RBTree<int>		rbtree;
+	
+	typedef ft::RBTree<int, std::allocator<ft::RBTreeNode<int> >, std::less<int> > rbtree;
 	// typedef ft::Rbtree<int, ft::forbid_double_class_tag>		rbtree;
 
 	{
@@ -198,7 +199,9 @@ void main_map()
 				buff.str("");
 				print_tree(tree, &err_str);
 				std::cout << "\rdelete number " << i << std::flush;
-				node_nbr = rand() % tree.size();
+				node_nbr = rand();
+				if (tree.size())
+					node_nbr %= tree.size();
 				tree.erase(tree[node_nbr]);
 			}
 			std::cout << "\r";
@@ -211,7 +214,6 @@ void main_map()
 		}
 	}
 }
-#include "common.hpp"
 
 int		main(void)
 {

@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 15:58:37 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/03 19:34:50 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/10 23:16:20 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ namespace	ft
 
 		static Node	*successor(Node *n, Node *start)
 		{
-			if (n->right)
+			if (n && n->right)
 			{
 				if (min(n->right, start)->is_sentinel)
 					return NULL;
