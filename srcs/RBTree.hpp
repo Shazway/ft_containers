@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/11 19:07:59 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/11 20:57:31 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 # include <cstdlib>
 # include <fstream>
 # include "iterators.hpp"
-# include "map.hpp"
 #include "RBTreeIterators.hpp"
 #include "RBTreeNode.hpp"
+#include "pair.hpp"
 
 namespace ft
 {
@@ -51,7 +51,7 @@ namespace ft
 	template<typename T, typename Compare, typename Alloc>
 	bool	operator!=(RBTree<T, Compare, Alloc> const& t1, RBTree<T, Compare, Alloc> const& t2)
 	{
-		return (!(t1 == t2))
+		return (!(t1 == t2));
 	}
 
 	template<typename T, typename Compare, typename Alloc>
@@ -69,7 +69,7 @@ namespace ft
 	template<typename T, typename Compare, typename Alloc>
 	bool	operator<=(RBTree<T, Compare, Alloc> const& t1, RBTree<T, Compare, Alloc> const& t2)
 	{
-		return (!(t1 > t2))
+		return (!(t1 > t2));
 	}
 	template<typename T, typename Compare, typename Alloc>
 	bool	operator>=(RBTree<T, Compare, Alloc> const& t1, RBTree<T, Compare, Alloc> const& t2)
@@ -138,7 +138,7 @@ namespace ft
 			{
 				if (_clear)
 				{
-					_clear();
+					__clear();
 					destroy_node(_sentinelEnd);
 					destroy_node(_sentinelStart);
 				}
@@ -160,7 +160,7 @@ namespace ft
 
 			RBTree &operator=(RBTree const& assign)
 			{
-				_clear();
+				__clear();
 				if (_sentinelStart)
 					destroy_node(_sentinelStart);
 				if (_sentinelEnd)
@@ -364,7 +364,7 @@ namespace ft
 
 			void	clear()
 			{
-				_clear();
+				__clear();
 			}
 
 			iterator find(const_reference val)
@@ -396,28 +396,36 @@ namespace ft
 
 			iterator	lower_bound(const_reference val)
 			{
-				for (iterator it = begin(); it != end() && _comparator(*it, val); it++)
+				iterator	it = begin();
+
+				for (; it != end() && _comparator(*it, val); it++)
 					;
 				return (it);
 			}
 
 			const_iterator	lower_bound(const_reference val) const
 			{
-				for (const_iterator it = begin(); it != end() && _comp(*it, val); it++)
+				const_iterator	it = begin();
+
+				for (; it != end() && _comp(*it, val); it++)
 					;
 				return (it);
 			}
 
 			iterator	upper_bound(const_reference val)
 			{
-				for (iterator it = begin(); it != end() && _comparator(val, *it); it++)
+				iterator	it = begin();
+
+				for (; it != end() && _comparator(val, *it); it++)
 					;
 				return (it);
 			}
 
 			const_iterator	upper_bound(const_reference val) const
 			{
-				for (const_iterator it = begin(); it != end() && _comp(val, *it); it++)
+				const_iterator	it = begin();
+
+				for (; it != end() && _comp(val, *it); it++)
 					;
 				return (it);
 			}
@@ -434,7 +442,7 @@ namespace ft
 
 		private:
 
-			void	_clear()
+			void	__clear()
 			{
 				_clear_worker(_root);
 				_size = 0;
@@ -454,7 +462,7 @@ namespace ft
 				}
 				new_tree._clear = false;
 
-				_clear();
+				__clear();
 				destroy_node(_sentinelEnd);
 				destroy_node(_sentinelStart);
 				_root = new_tree._root;
@@ -827,7 +835,7 @@ namespace ft
 				Node	*node = allocator_node.allocate(1);
 
 				allocator_node.construct(node, Node());
-				_allocator.construct(node, Node());
+				_allocator.construct(node->data_addr(), value_type());
 
 				node->data = val;
 				node->color = RED;

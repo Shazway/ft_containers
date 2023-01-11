@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/11 19:10:41 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/11 20:58:53 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "algorithm.hpp"
 #include "type_traits.hpp"
 #include <istream>
-#include "RBTree.hpp"
+#include "map.hpp"
 
 #define LEFT 
 
@@ -105,7 +105,7 @@ void main_map()
 	std::string	b = "testing";
 
 	map.insert(ft::make_pair(a, b));
-	print_tree(map)
+	//print_tree(map);
 }
 
 int		main(void)
