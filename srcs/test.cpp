@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/10 23:13:57 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/11 19:10:41 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,120 +99,13 @@ void print_tree(T& rbtree, std::ostream* os = &(std::cout))
 
 void main_map()
 {
-	
-	typedef ft::RBTree<int, std::allocator<ft::RBTreeNode<int> >, std::less<int> > rbtree;
-	// typedef ft::Rbtree<int, ft::forbid_double_class_tag>		rbtree;
+	ft::map<int, std::string>	map;
 
-	{
-		rbtree tree;
-		try
-		{
-			tree.insert(4);
-			print_tree(tree);
-			tree.insert(3);
-			print_tree(tree);
-			tree.insert(2);
-			print_tree(tree);
-			tree.insert(1);
-			print_tree(tree);
-			tree.insert(5);
-			print_tree(tree);
-			tree.insert(6);
-			print_tree(tree);
-			std::cout << tree.size() << std::endl;
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << CYAN << e.what() << END << '\n';
-		}
-		try
-		{
-			tree.insert(1);
-			tree.insert(2);
-			tree.insert(3);
-			tree.insert(4);
-			tree.insert(5);
-			tree.insert(6);
-			print_tree(tree);
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << CYAN << e.what() << END << '\n';
-		}
-		try
-		{
-			tree.erase(12);
-			print_tree(tree);
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << CYAN << e.what() << END << '\n';
-		}
-		try
-		{
-			tree.erase(5);
-			print_tree(tree);
-			tree.erase(4);
-			print_tree(tree);
-			tree.erase(4);
-			print_tree(tree);
-			tree.erase(3);
-			tree.erase(3);
-			print_tree(tree);
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << CYAN << e.what() << END << '\n';
-		}
-	}
-	// {
-	// 	rbtree tree;
-	// 	tree.insert(0);
-	// 	tree.insert(4);
-	// 	tree.insert(3);
-	// 	tree.insert(1);
-	// 	tree.insert(8);
-	// 	tree.insert(5);
-	// 	tree.insert(6);
-	// 	tree.insert(5);
-	// 	tree.insert(5);
-	// 	tree.insert(8);
-	// 	print_tree(tree);
-	// }
-	{
-		std::stringstream buff;
-		std::ostream err_str(buff.rdbuf());
-		int node_nbr = -1;
-		try
-		{
-			srand(6);
-			rbtree tree;
-			for (int i = 0; i < 50; i++)
-			{
-				std::cout << "\r insert number " << i << std::flush;
-				tree.insert(rand() % 10);
-			}
-			std::cout << "\r";
-			print_tree(tree);
-			for (int i = 0; i < 25; i++)
-			{
-				buff.str("");
-				print_tree(tree, &err_str);
-				std::cout << "\rdelete number " << i << std::flush;
-				node_nbr = rand();
-				if (tree.size())
-					node_nbr %= tree.size();
-				tree.erase(tree[node_nbr]);
-			}
-			std::cout << "\r";
-			print_tree(tree);
-		}
-		catch(const std::exception& e)
-		{
-			std::cout << std::endl;
-			std::cerr << C_RED << "Error while deleting the node " << node_nbr << ":\n" << END << buff.str() << CYAN << e.what() << END << '\n';
-		}
-	}
+	int		a = 5;
+	std::string	b = "testing";
+
+	map.insert(ft::make_pair(a, b));
+	print_tree(map)
 }
 
 int		main(void)

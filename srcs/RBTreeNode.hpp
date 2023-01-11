@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 15:58:37 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/10 23:16:20 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/11 18:14:57 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,20 +91,20 @@ namespace	ft
 			if (!node || !node->right)
 				return ;
 
-			Node	*right_node = node->right;
+			Node	*tmp = node->right;
 
-			node->right = right_node->left;
-			if (right_node->left)
-				right_node->left->parent = node;
+			node->right = tmp->left;
+			if (tmp->left)
+				tmp->left->parent = node;
 
-			right_node->parent = node->parent;
+			tmp->parent = node->parent;
 			if (node->parent && node == node->parent->left)
-				node->parent->left = right_node;
+				node->parent->left = tmp;
 			else if (node->parent && node == node->parent->right)
-				node->parent->right = right_node;
+				node->parent->right = tmp;
 
-			right_node->left = node;
-			node->parent = right_node;
+			tmp->left = node;
+			node->parent = tmp;
 		}
 
 		static void right_rotate(Node *node)
@@ -112,28 +112,28 @@ namespace	ft
 			if (!node || !node->left)
 				return ;
 			
-			Node	*left_node = node->left;
+			Node	*tmp = node->left;
 
-			node->left = left_node->right;
-			if (left_node->right)
-				left_node->right->parent = node;
+			node->left = tmp->right;
+			if (tmp->right)
+				tmp->right->parent = node;
 
-			left_node->parent = node->parent;
+			tmp->parent = node->parent;
 			if (node->parent && node == node->parent->left)
-				node->parent->left = left_node;
+				node->parent->left = tmp;
 			else if (node->parent && node == node->parent->right)
-				node->parent->right = left_node;
+				node->parent->right = tmp;
 
-			left_node->right = node;
-			node->parent = left_node;
+			tmp->right = node;
+			node->parent = tmp;
 		}
 
 		static Node	*successor(Node *n, Node *start)
 		{
 			if (n && n->right)
 			{
-				if (min(n->right, start)->is_sentinel)
-					return NULL;
+				// if (min(n->right, start)->is_sentinel)
+				// 	return NULL;
 				return (min(n->right, start));
 			}
 

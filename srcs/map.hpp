@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 17:37:09 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/11 00:43:21 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/11 19:13:00 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,6 @@ namespace ft
 		return (!(m1 > m2));
 	}
 
-	
-	template <typename Key, typename T, typename Compare, typename Alloc>
-	bool	operator<=(map<Key, T, Compare, Alloc> const& m1, map<Key, T, Compare, Alloc> const& m2)
-	{
-		return (!(m1 > m2));
-	}
-
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	bool	operator>=(map<Key, T, Compare, Alloc> const& m1, map<Key, T, Compare, Alloc> const& m2)
 	{
@@ -101,9 +94,6 @@ namespace ft
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	class map
 	{
-		private:
-			typedef RBTree<value_type, value_compare, allocator_type>	tree_type;
-
 		public:
 			typedef Key													key_type;
 			typedef T													data_type;
@@ -132,6 +122,8 @@ namespace ft
 					return (_comparator(x.first, y.first));
 				}
 			};
+
+			typedef RBTree<value_type, value_compare, allocator_type>	tree_type;
 
 			public:
 				typedef typename tree_type::reference			reference;

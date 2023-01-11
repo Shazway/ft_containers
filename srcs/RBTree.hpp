@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/10 23:18:37 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/11 19:07:59 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,50 @@ namespace ft
 	template <typename T>
 	class RBTreeConstIterator;
 
-	template <typename T, typename Alloc, typename Compare>
+	template<typename T, typename Compare, typename Alloc>
+	bool	operator==(RBTree<T, Compare, Alloc> const& t1, RBTree<T, Compare, Alloc> const& t2)
+	{
+		typedef typename RBTree<T, Compare, Alloc>::iterator iterator;
+
+		iterator	it1;
+		iterator	it2;
+		for (it1 = t1.begin(), it2 = t2.begin(); it1 != t1.end() && it2 != t2.end(); it1++, it2++)
+			if (*it1 != *it2)
+				return (false);
+		return (it1 == t1.end() && it2 == t2.end());
+	}
+
+	template<typename T, typename Compare, typename Alloc>
+	bool	operator!=(RBTree<T, Compare, Alloc> const& t1, RBTree<T, Compare, Alloc> const& t2)
+	{
+		return (!(t1 == t2))
+	}
+
+	template<typename T, typename Compare, typename Alloc>
+	bool	operator<(RBTree<T, Compare, Alloc> const& t1, RBTree<T, Compare, Alloc> const& t2)
+	{
+		return (ft::lexicographical_compare(t1.begin(), t1.end(), t2.begin(), t2.end()));
+	}
+
+	template<typename T, typename Compare, typename Alloc>
+	bool	operator>(RBTree<T, Compare, Alloc> const& t1, RBTree<T, Compare, Alloc> const& t2)
+	{
+		return (t2 < t1);
+	}
+
+	template<typename T, typename Compare, typename Alloc>
+	bool	operator<=(RBTree<T, Compare, Alloc> const& t1, RBTree<T, Compare, Alloc> const& t2)
+	{
+		return (!(t1 > t2))
+	}
+	template<typename T, typename Compare, typename Alloc>
+	bool	operator>=(RBTree<T, Compare, Alloc> const& t1, RBTree<T, Compare, Alloc> const& t2)
+	{
+		return (!(t1 < t2));
+	}
+
+
+	template <typename T, typename Compare, typename Alloc>
 	class RBTree
 	{
 		public:
@@ -51,8 +94,8 @@ namespace ft
 			typedef std::ptrdiff_t		difference_type;
 			typedef std::size_t			size_type;
 
-			typedef ft::RBTreeNode <value_type> Node;
 		private:
+			typedef ft::RBTreeNode <value_type> Node;
 			typename allocator_type::template rebind<Node>::other allocator_node;
 
 		public:
@@ -77,6 +120,14 @@ namespace ft
 				_init_tree();
 			}
 
+			template <class InputIterator>
+			RBTree(InputIterator first, InputIterator last, compare_type const& comp = compare_type(), allocator_type const& alloc = allocator_type()): _root(NULL), _size(0),
+			_sentinelStart(NULL), _sentinelEnd(NULL), _comparator(comp), _allocator(alloc), _clear(true)
+			{
+				_init_tree();
+				insert(first, last);
+			}
+
 			RBTree(RBTree const& copy): _root(NULL), _size(0), _sentinelStart(NULL), _sentinelEnd(NULL),
 					_comparator(copy._comparator), _allocator(copy._allocator), _clear(true)
 			{
@@ -87,7 +138,7 @@ namespace ft
 			{
 				if (_clear)
 				{
-					clear();
+					_clear();
 					destroy_node(_sentinelEnd);
 					destroy_node(_sentinelStart);
 				}
@@ -109,7 +160,7 @@ namespace ft
 
 			RBTree &operator=(RBTree const& assign)
 			{
-				clear();
+				_clear();
 				if (_sentinelStart)
 					destroy_node(_sentinelStart);
 				if (_sentinelEnd)
@@ -292,14 +343,14 @@ namespace ft
 				
 				if (n < _size / 2)
 				{
-					Node	*to_delete = first._current;
+					Node	*to_delete = first.getCurrent();
 					value_type	last_node_data = *last;
 
 					while (to_delete->data != last_node_data)
 						to_delete = _delete_node_worker(to_delete);
 				}
-				// else
-				// 	_regen_tree(first, last); //TO BE FINISHED
+				 else
+				 	_regen_tree(first, last); //TO BE FINISHED
 			}
 
 			size_type	erase(Node *node)
@@ -313,9 +364,7 @@ namespace ft
 
 			void	clear()
 			{
-				_clear_worker(_root);
-				_size = 0;
-				_root = _sentinelEnd;
+				_clear();
 			}
 
 			iterator find(const_reference val)
@@ -340,7 +389,79 @@ namespace ft
 				return (_find(val, NULL));
 			}
 
+			size_type	count(const_reference val) const
+			{
+				return (_find(val) ? 1 : 0);
+			}
+
+			iterator	lower_bound(const_reference val)
+			{
+				for (iterator it = begin(); it != end() && _comparator(*it, val); it++)
+					;
+				return (it);
+			}
+
+			const_iterator	lower_bound(const_reference val) const
+			{
+				for (const_iterator it = begin(); it != end() && _comp(*it, val); it++)
+					;
+				return (it);
+			}
+
+			iterator	upper_bound(const_reference val)
+			{
+				for (iterator it = begin(); it != end() && _comparator(val, *it); it++)
+					;
+				return (it);
+			}
+
+			const_iterator	upper_bound(const_reference val) const
+			{
+				for (const_iterator it = begin(); it != end() && _comp(val, *it); it++)
+					;
+				return (it);
+			}
+
+			pair<const_iterator, iterator>	equal_range(const_reference val)
+			{
+				return (ft::make_pair(lower_bound(val), upper_bound(val)));
+			}
+
+			allocator_type	get_allocator() const
+			{
+				return (_allocator);
+			}
+
 		private:
+
+			void	_clear()
+			{
+				_clear_worker(_root);
+				_size = 0;
+				_root = _sentinelEnd;
+			}
+
+			void	_regen_tree(iterator first, iterator last)
+			{
+				RBTree	new_tree(_comparator, _allocator);
+
+				for (iterator it = begin(); it != end(); it++)
+				{
+					if (first == last || _comparator(*it, *first) || _comparator(*first, *it))
+						new_tree.insert(*it);
+					else
+						first++;
+				}
+				new_tree._clear = false;
+
+				_clear();
+				destroy_node(_sentinelEnd);
+				destroy_node(_sentinelStart);
+				_root = new_tree._root;
+				_sentinelStart = new_tree._sentinelStart;
+				_sentinelEnd = new_tree._sentinelEnd;
+				_size = new_tree._size;
+			}
 
 			bool	_is_null(Node *n)
 			{
@@ -398,7 +519,7 @@ namespace ft
 						_left_rotate(parent);
 					_delete_rebalance_tree(node);
 				}
-				else if (sibling->color == BLACK)
+				else
 				{
 					if (!_is_black(sibling->left) || !_is_black(sibling->right))
 					{
@@ -443,6 +564,7 @@ namespace ft
 							parent->color = BLACK;
 					}
 				}
+				return ;
 			}
 
 			void	_delete_leaf(Node *n, bool both_colors)
@@ -714,10 +836,9 @@ namespace ft
 
 			void	destroy_node(Node *node)
 			{
-				_allocator.destroy(node);
+				_allocator.destroy(node->data_addr());
 				allocator_node.destroy(node);
-				//if (node)
-				//	allocator_node.deallocate(node, 1);
+				allocator_node.deallocate(node, 1);
 			}
 
 			Node	*_copy_tree(Node *node, Node *parent = NULL)
