@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 15:58:37 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/11 20:37:22 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/12 19:07:35 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 # include <fstream>
 # include "iterators.hpp"
 # include "RBTree.hpp"
+# include <fstream>
+# include <sstream>
+# define __DEBUG
+
 
 namespace	ft
 {
@@ -42,6 +46,40 @@ namespace	ft
 		Node		*right;
 		RBTreeColor	color;
 		bool		is_sentinel;
+
+		#ifdef __DEBUG
+			std::string	dump(bool	link)
+			{
+				std::ostringstream	oss;
+
+				if (!link)
+				{
+					oss << "\"" << this << "\" [shape=point]\n";
+					return (oss.str());
+				}
+
+				std::string	color = (this->color == BLACK ? "black" : "red"); //if black it'll assign black screen
+				std::string	style = (color == "black" ? ", color=white" : "");
+
+
+				oss << "\"" << this << "\" [label=<";
+				oss << "<table border='0' cellborder='1' cellspacing='0'>";
+				oss << "<tr>";
+				oss << "<td port='left' width='21px'></td>";
+				oss << "<td port='middle' bgcolor='" << color
+					<< "'><font color='white'>" << data << "</font></td>";
+				oss << "<td port='right' width='21px'></td>";
+				oss << "</tr>";
+				oss << "</table>";
+				oss << ">]\n";
+				if (left)
+					oss << "\t\"" << this << "\":left -- \"" << left << "\":middle\n";
+				if (right)
+					oss << "\t\"" << this << "\":right -- \"" << left << "\":middle\n";
+
+				return (oss.str());
+			}
+		#endif
 
 		RBTreeNode(): data(), parent(NULL), left(NULL), right(NULL), is_sentinel(false)
 		{

@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 20:38:54 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/11 20:39:53 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/12 19:17:25 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,41 @@ namespace ft
 		return (pair<T1, T2>(first, second));
 	}
 
+	template <class T1, class T2>
+	bool	operator==(pair<T1, T2> const&	p1, pair<T1, T2> const&	p2)
+	{
+		return (p1.first == p2.first && p1.second == p2.second);
+	}
+
+	template <class T1, class T2>
+	bool	operator!=(pair<T1, T2> const&	p1, pair<T1, T2> const&	p2)
+	{
+		return (!(p1 == p2));
+	}
+
+	template <class T1, class T2>
+	bool	operator<(pair<T1, T2> const&	p1, pair<T1, T2> const&	p2)
+	{
+		return (p1.first < p2.first || (!p2.first < p1.first) && p1.second < p2.second);
+	}
+	
+	template <class T1, class T2>
+	bool	operator<=(pair<T1, T2> const&	p1, pair<T1, T2> const&	p2)
+	{
+		return (!(p2 < p1));
+	}
+	
+	template <class T1, class T2>
+	bool	operator>(pair<T1, T2> const&	p1, pair<T1, T2> const&	p2)
+	{
+		return (p2 < p1);
+	}
+	
+	template <class T1, class T2>
+	bool	operator>=(pair<T1, T2> const&	p1, pair<T1, T2> const&	p2)
+	{
+		return (!(p1 < p2));
+	}
 	template <typename T1, typename T2>
 	struct pair
 	{

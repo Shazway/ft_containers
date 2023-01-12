@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/11 20:57:31 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/12 19:08:45 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@
 # include <cstdlib>
 # include <fstream>
 # include "iterators.hpp"
-#include "RBTreeIterators.hpp"
-#include "RBTreeNode.hpp"
-#include "pair.hpp"
+# include "RBTreeIterators.hpp"
+# include "RBTreeNode.hpp"
+# include "pair.hpp"
+# include <fstream>
+# include <sstream>
+# define __DEBUG
 
 namespace ft
 {
@@ -134,6 +137,7 @@ namespace ft
 				*this = copy;
 			}
 
+
 			~RBTree()
 			{
 				if (_clear)
@@ -143,6 +147,58 @@ namespace ft
 					destroy_node(_sentinelStart);
 				}
 			}
+
+			#ifdef __DEBUG
+
+				void	dump(std::string const& filename)
+				{
+					std::ofstream	ofs(filename.c_str());
+
+					if (!ofs.is_open())
+						return ;
+
+					ofs << "graph g {\n";
+					ofs << "\tnode [shape=plaintext, fontcolor=white, height=.1];\n\n";
+					ofs << "\t" << _sentinelStart->dump(false);
+					ofs << "\t" << _sentinelEnd->dump(false);
+					dumpTree(ofs, root);
+					ofs << "}";
+
+					ofs.close();
+				}
+
+				void	dumpTree(std::ofstream &ofs, Node *node)
+				{
+					ofs << "\t" << node->dump(true);
+
+					if (node->left && node->left != _sentinelStart)
+						dumpTree(ofs, node->left);
+					if (node->right && node->right != _sentinelStart)
+						dumpTree(ofs, node->right);
+				}
+
+				void	print_tree() const
+				{
+					const_iterator	it = begin();
+
+					std::cout << "Tree :";
+					if (it != end())
+						for (; it != end(); it++)
+							std::cout << " " << *it;
+					else
+						std::cout << "Tree is empty";
+					std::cout << std::endl;
+
+					const_reverse_iterator	c_rit = rbegin();
+					std::cout << "Tree :";
+					if (c_rit != rend())
+						for (; c_rit != rend(); c_rit++)
+							std::cout << " " << *c_rit;
+					else
+						std::cout << "Tree is empty";
+					std::cout << std::endl;
+				}
+			#endif
 
 			bool	is_sentinel(Node const* node) const
 			{

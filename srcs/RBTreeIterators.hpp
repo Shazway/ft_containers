@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 16:00:20 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/11 20:37:12 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/12 19:35:34 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ namespace ft
 			Node	*_start;
 			Node	*_end;
 		public:
-			RBTreeConstIterator(Node *n = NULL, Node **start = NULL, Node *end = NULL): _current(n), _start(start), _end(end)
+			RBTreeConstIterator(Node *n = NULL, Node *start = NULL, Node *end = NULL): _current(n), _start(start), _end(end)
 			{
 			}
 		
@@ -194,7 +194,7 @@ namespace ft
 
 			reference	operator*() const
 			{
-				return (_current->data_addr());
+				return (_current->data);
 			}
 
 			pointer	operator->() const

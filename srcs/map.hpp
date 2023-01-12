@@ -6,12 +6,13 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 17:37:09 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/11 20:54:06 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/12 19:05:58 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
 # define MAP_HPP
+# define __DEBUG
 
 #include "RBTree.hpp"
 #include "pair.hpp"
@@ -125,6 +126,13 @@ namespace ft
 				~map()
 				{
 				}
+
+				#ifdef __DEBUG
+					void	print_tree() const
+					{
+						_tree.print_tree();
+					}
+				#endif
 
 				map&	operator=(map const& assign)
 				{
