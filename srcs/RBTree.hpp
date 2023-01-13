@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/13 03:31:46 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/13 03:38:30 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include "pair.hpp"
 # include <fstream>
 # include <sstream>
-# define __DEBUG
 
 namespace ft
 {

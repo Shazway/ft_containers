@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 15:58:37 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/13 03:11:02 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/13 03:38:54 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include "RBTree.hpp"
 # include <fstream>
 # include <sstream>
-# define __DEBUG
 
 
 namespace	ft
