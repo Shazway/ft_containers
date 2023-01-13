@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/12 19:08:45 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/13 03:31:46 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -405,8 +405,8 @@ namespace ft
 					while (to_delete->data != last_node_data)
 						to_delete = _delete_node_worker(to_delete);
 				}
-				 else
-				 	_regen_tree(first, last); //TO BE FINISHED
+				else
+					_regen_tree(first, last); //TO BE FINISHED
 			}
 
 			size_type	erase(Node *node)
@@ -551,9 +551,8 @@ namespace ft
 
 			Node	*_node_sibling(Node *node)
 			{
-				if (node->parent)
+				if (!node->parent)
 					return (NULL);
-				
 				else if (node == node->parent->left)
 					return (node->parent->right);
 				else
@@ -628,7 +627,6 @@ namespace ft
 							parent->color = BLACK;
 					}
 				}
-				return ;
 			}
 
 			void	_delete_leaf(Node *n, bool both_colors)
@@ -671,6 +669,7 @@ namespace ft
 			{
 				Node	*parent = o->parent;
 
+				std::cout << "delete_child" << std::endl;
 				if (o == _root) // 2 nodes are in tree
 				{
 					ft::__swap(n->data, o->data);
@@ -691,7 +690,6 @@ namespace ft
 					else
 						n->color = BLACK;
 				}
-				return ;
 			}
 
 			Node	*_delete_node_worker(Node *n)
