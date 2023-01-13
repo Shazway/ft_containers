@@ -1,0 +1,37 @@
+size: 6
+max_size: 128102389400760775
+
+Content is:
+- key: 12 | value: no
+- key: 25 | value: funny
+- key: 27 | value: bee
+- key: 42 | value: fgzgxfn
+- key: 80 | value: hey
+- key: 90 | value: 8
+###############################################
+	-- FIND --
+key: 12 | value: no
+map::find(3) returned end()
+map::find(35) returned end()
+key: 90 | value: 8
+map::find(100) returned end()
+	-- COUNT --
+map::count(-3)	returned [0]
+map::count(12)	returned [1]
+map::count(3)	returned [0]
+map::count(35)	returned [0]
+map::count(90)	returned [1]
+map::count(100)	returned [0]
+size: 6
+max_size: 128102389400760775
+
+Content is:
+- key: 12 | value: no
+- key: 25 | value: funny
+- key: 27 | value: newly inserted mapped_value
+- key: 42 | value: fgzgxfn
+- key: 80 | value: hey
+- key: 90 | value: 8
+###############################################
+const map.find(42)->second: [fgzgxfn]
+const map.count(80): [1]

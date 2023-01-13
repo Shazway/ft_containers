@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/13 03:38:13 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/13 04:29:27 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,25 @@ std::ostream	&operator<<(std::ostream &os, ft::pair<T1, T2> const& p)
 int		main(void)
 {
 	ft::map<int, std::string>	map;
+	ft::map<int, std::string>	map2;
 
 	int		a = 1;
 	std::string	b = "a";
 	ft::pair<int, std::string>	p;
 
-	for (; a < 15; a++, b += "a")
-	{
-		p.first = a;
-		p.second = b;
-		map.insert(p);
-
-	}
-	map.print_tree();
-	while (map.size())
-	{
-		map.erase(a);
-		std::cout << "a is :" << a << std::endl;
-		map.print_tree();
-		a--;
-	}
-	//std::cout << map.size() << std::endl;
+	p.first = a;
+	p.second = b;
+	map2 = map;
+	map.insert(p);
+	map.at(5);
+	map.begin();
+	map.rbegin();
+	map.end();
+	map.rend();
+	map.empty();
+	map.swap(map2);
+	map.count(1);
+	map.key_comp();
+	map.value_comp();
 	return (0);
 }

@@ -1,0 +1,23 @@
+List contains: 9 elements.
+key: 42 | value: lol
+key: 50 | value: mdr
+key: 35 | value: funny
+key: 45 | value: bunny
+key: 21 | value: fizz
+key: 35 | value: this key is already inside
+key: 55 | value: fuzzy
+key: 38 | value: buzz
+key: 55 | value: inside too
+---------------------------------------------
+size: 7
+max_size: 128102389400760775
+
+Content is:
+- key: 21 | value: fizz
+- key: 35 | value: funny
+- key: 38 | value: buzz
+- key: 42 | value: lol
+- key: 45 | value: bunny
+- key: 50 | value: mdr
+- key: 55 | value: fuzzy
+###############################################

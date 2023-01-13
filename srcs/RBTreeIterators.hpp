@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 16:00:20 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/12 19:35:34 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/13 04:33:18 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,9 +166,9 @@ namespace ft
 
 			RBTreeConstIterator	&operator=(RBTreeIterator<value_type> const& assign)
 			{
-				_current = assign._current;
-				_start = assign._start;
-				_end = assign._end;
+				_current = assign.getCurrent();
+				_start = assign.getStart();
+				_end = assign.getEnd();
 
 				return (*this);
 			}

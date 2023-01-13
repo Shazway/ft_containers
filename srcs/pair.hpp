@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 20:38:54 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/12 19:17:25 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/13 04:40:19 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ namespace ft
 	template <class T1, class T2>
 	bool	operator<(pair<T1, T2> const&	p1, pair<T1, T2> const&	p2)
 	{
-		return (p1.first < p2.first || (!p2.first < p1.first) && p1.second < p2.second);
+		return (p1.first < p2.first || ((!p2.first < p1.first) && p1.second < p2.second));
 	}
 	
 	template <class T1, class T2>

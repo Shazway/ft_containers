@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/13 03:38:30 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/13 04:37:45 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "pair.hpp"
 # include <fstream>
 # include <sstream>
+# include "algorithm.hpp"
 
 namespace ft
 {
@@ -211,6 +212,15 @@ namespace ft
 				for (int i = 0; i < nb; i++)
 					node = node->successor(node, _root);
 				return (node);
+			}
+
+			void	swap(RBTree	&tree)
+			{
+				ft::__swap(_root, tree._root);
+				ft::__swap(_sentinelStart, tree._sentinelStart);
+				ft::__swap(_sentinelEnd, tree._sentinelEnd);
+				ft::__swap(_size, tree._size);
+				ft::__swap(_clear, tree._clear);
 			}
 
 			RBTree &operator=(RBTree const& assign)
@@ -439,10 +449,6 @@ namespace ft
 					return (end());
 				return (const_iterator(seeker, _sentinelStart, _sentinelEnd));
 			}
-			Node	*find(value_type	val)
-			{
-				return (_find(val, NULL));
-			}
 
 			size_type	count(const_reference val) const
 			{
@@ -462,7 +468,7 @@ namespace ft
 			{
 				const_iterator	it = begin();
 
-				for (; it != end() && _comp(*it, val); it++)
+				for (; it != end() && _comparator(*it, val); it++)
 					;
 				return (it);
 			}
@@ -480,12 +486,17 @@ namespace ft
 			{
 				const_iterator	it = begin();
 
-				for (; it != end() && _comp(val, *it); it++)
+				for (; it != end() && _comparator(val, *it); it++)
 					;
 				return (it);
 			}
 
-			pair<const_iterator, iterator>	equal_range(const_reference val)
+			pair<iterator, iterator> equal_range(const_reference val)
+			{
+				return (ft::make_pair(lower_bound(val), upper_bound(val)));
+			}
+
+			pair<const_iterator, const_iterator>	equal_range(const_reference val) const
 			{
 				return (ft::make_pair(lower_bound(val), upper_bound(val)));
 			}

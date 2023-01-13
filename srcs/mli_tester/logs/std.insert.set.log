@@ -1,0 +1,120 @@
+	-- [0] --
+insert return: value: lol
+Created new node: 1
+size: 1
+max_size: 144115188075855871
+
+Content is:
+- value: lol
+###############################################
+	-- [1] --
+insert return: value: mdr
+Created new node: 1
+size: 2
+max_size: 144115188075855871
+
+Content is:
+- value: lol
+- value: mdr
+###############################################
+	-- [2] --
+insert return: value: mdr
+Created new node: 0
+size: 2
+max_size: 144115188075855871
+
+Content is:
+- value: lol
+- value: mdr
+###############################################
+	-- [3] --
+insert return: value: funny
+Created new node: 1
+size: 3
+max_size: 144115188075855871
+
+Content is:
+- value: funny
+- value: lol
+- value: mdr
+###############################################
+	-- [4] --
+insert return: value: bunny
+Created new node: 1
+size: 4
+max_size: 144115188075855871
+
+Content is:
+- value: bunny
+- value: funny
+- value: lol
+- value: mdr
+###############################################
+	-- [5] --
+insert return: value: fizz
+Created new node: 1
+size: 5
+max_size: 144115188075855871
+
+Content is:
+- value: bunny
+- value: fizz
+- value: funny
+- value: lol
+- value: mdr
+###############################################
+	-- [6] --
+insert return: value: buzz
+Created new node: 1
+size: 6
+max_size: 144115188075855871
+
+Content is:
+- value: bunny
+- value: buzz
+- value: fizz
+- value: funny
+- value: lol
+- value: mdr
+###############################################
+	-- [7] --
+insert return: value: fuzzy
+size: 7
+max_size: 144115188075855871
+
+Content is:
+- value: bunny
+- value: buzz
+- value: fizz
+- value: funny
+- value: fuzzy
+- value: lol
+- value: mdr
+###############################################
+	-- [8] --
+insert return: value: beauty
+size: 1
+max_size: 144115188075855871
+
+Content is:
+- value: beauty
+###############################################
+	-- [9] --
+insert return: value: Hello
+size: 2
+max_size: 144115188075855871
+
+Content is:
+- value: Hello
+- value: beauty
+###############################################
+	-- [10] --
+insert return: value: World
+size: 3
+max_size: 144115188075855871
+
+Content is:
+- value: Hello
+- value: World
+- value: beauty
+###############################################

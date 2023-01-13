@@ -1,0 +1,50 @@
+size: 4
+max_size: 230584300921369395
+
+Content is:
+- value: a
+- value: b
+- value: c
+- value: d
+###############################################
+	-- [1] --
+with [a and a]: key_comp: 0 | value_comp: 0
+	-- [2] --
+with [a and b]: key_comp: 1 | value_comp: 1
+	-- [3] --
+with [a and c]: key_comp: 1 | value_comp: 1
+	-- [4] --
+with [a and d]: key_comp: 1 | value_comp: 1
+	-- [5] --
+with [b and a]: key_comp: 0 | value_comp: 0
+	-- [6] --
+with [b and b]: key_comp: 0 | value_comp: 0
+	-- [7] --
+with [b and c]: key_comp: 1 | value_comp: 1
+	-- [8] --
+with [b and d]: key_comp: 1 | value_comp: 1
+	-- [9] --
+with [c and a]: key_comp: 0 | value_comp: 0
+	-- [10] --
+with [c and b]: key_comp: 0 | value_comp: 0
+	-- [11] --
+with [c and c]: key_comp: 0 | value_comp: 0
+	-- [12] --
+with [c and d]: key_comp: 1 | value_comp: 1
+	-- [13] --
+with [d and a]: key_comp: 0 | value_comp: 0
+	-- [14] --
+with [d and b]: key_comp: 0 | value_comp: 0
+	-- [15] --
+with [d and c]: key_comp: 0 | value_comp: 0
+	-- [16] --
+with [d and d]: key_comp: 0 | value_comp: 0
+size: 4
+max_size: 230584300921369395
+
+Content is:
+- value: a
+- value: b
+- value: c
+- value: d
+###############################################

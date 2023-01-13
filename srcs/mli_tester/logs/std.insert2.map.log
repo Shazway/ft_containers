@@ -1,0 +1,60 @@
+List contains:
+key: 42 | value: lol
+key: 50 | value: mdr
+key: 35 | value: funny
+key: 45 | value: bunny
+key: 21 | value: fizz
+key: 38 | value: buzz
+key: 55 | value: fuzzy
+	-- [0] --
+size: 7
+max_size: 128102389400760775
+
+Content is:
+- key: 21 | value: fizz
+- key: 35 | value: funny
+- key: 38 | value: buzz
+- key: 42 | value: lol
+- key: 45 | value: bunny
+- key: 50 | value: mdr
+- key: 55 | value: fuzzy
+###############################################
+List contains:
+key: 87 | value: hey
+key: 47 | value: eqweqweq
+key: 35 | value: this key is already inside
+key: 23 | value: but not that one
+key: 1 | value: surprising isnt it?
+key: 100 | value: is it enough??
+key: 55 | value: inside map too
+	-- [1] --
+size: 7
+max_size: 128102389400760775
+
+Content is:
+- key: 21 | value: fizz
+- key: 35 | value: funny
+- key: 38 | value: buzz
+- key: 42 | value: lol
+- key: 45 | value: bunny
+- key: 50 | value: mdr
+- key: 55 | value: fuzzy
+###############################################
+	-- [2] --
+size: 12
+max_size: 128102389400760775
+
+Content is:
+- key: 1 | value: surprising isnt it?
+- key: 21 | value: fizz
+- key: 23 | value: but not that one
+- key: 35 | value: funny
+- key: 38 | value: buzz
+- key: 42 | value: lol
+- key: 45 | value: bunny
+- key: 47 | value: eqweqweq
+- key: 50 | value: mdr
+- key: 55 | value: fuzzy
+- key: 87 | value: hey
+- key: 100 | value: is it enough??
+###############################################

@@ -1,0 +1,5 @@
+75c75,76
+< ret: 1
+---
+> ret: delete_child
+> 1
