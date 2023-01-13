@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/13 04:37:45 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/13 18:09:37 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -457,36 +457,36 @@ namespace ft
 
 			iterator	lower_bound(const_reference val)
 			{
-				iterator	it = begin();
+				iterator	it;
 
-				for (; it != end() && _comparator(*it, val); it++)
+				for (it = begin(); it != end() && _comparator(*it, val); it++)
 					;
 				return (it);
 			}
 
 			const_iterator	lower_bound(const_reference val) const
 			{
-				const_iterator	it = begin();
+				const_iterator	it;
 
-				for (; it != end() && _comparator(*it, val); it++)
+				for (it = begin(); it != end() && _comparator(*it, val); it++)
 					;
 				return (it);
 			}
 
 			iterator	upper_bound(const_reference val)
 			{
-				iterator	it = begin();
+				iterator	it;
 
-				for (; it != end() && _comparator(val, *it); it++)
+				for (it = begin(); it != end() && !_comparator(val, *it); it++)
 					;
 				return (it);
 			}
 
 			const_iterator	upper_bound(const_reference val) const
 			{
-				const_iterator	it = begin();
+				const_iterator	it;
 
-				for (; it != end() && _comparator(val, *it); it++)
+				for (it = begin(); it != end() && !_comparator(val, *it); it++)
 					;
 				return (it);
 			}
@@ -679,7 +679,6 @@ namespace ft
 			{
 				Node	*parent = o->parent;
 
-				std::cout << "delete_child" << std::endl;
 				if (o == _root) // 2 nodes are in tree
 				{
 					ft::__swap(n->data, o->data);
