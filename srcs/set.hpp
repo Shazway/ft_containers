@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 02:06:24 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/15 03:01:52 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/15 23:48:08 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SET_HPP
 
 #include "RBTree.hpp"
+#include "type_traits.hpp"
 #include <iostream>
 
 namespace ft

@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/15 02:00:42 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/15 23:31:51 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include "type_traits.hpp"
 #include <istream>
 #include "map.hpp"
+#include "set.hpp"
+#include <set>
 #include <map>
 #define LEFT 
 
@@ -26,9 +28,10 @@
 
 int		main(void)
 {
-	ft::map<T1, T2> const mp;
-	ft::map<T1, T2>::iterator it = mp.begin(); // <-- error expected
+	int myints[] = {75,23,65,42,13};
+	ft::set<int> set (&myints, &myints+5);
+	// ft::set<T1> set(i, j);
 
-	(void)it;
+	(void)set;
 	return (0);
 }
