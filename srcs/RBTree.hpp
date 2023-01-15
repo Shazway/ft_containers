@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/13 18:09:37 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/14 19:51:55 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,16 +259,6 @@ namespace ft
 				return (*this);
 			}
 
-			Node	*getSentinelEnd() const
-			{
-				return (_sentinelEnd);
-			}
-
-			Node	*getSentinelStart() const
-			{
-				return (_sentinelStart);
-			}
-
 			iterator	begin()
 			{
 				if (empty())
@@ -346,8 +336,7 @@ namespace ft
 				}
 
 				iterator	it;
-				it = _insert_worker(node);
-				if ((it != end()))
+				if ((it = _insert_worker(node)) != end())
 				{
 					destroy_node(node);
 					return (ft::make_pair(it, false));
@@ -405,7 +394,7 @@ namespace ft
 				
 				for (; i != last; i++)
 					n++;
-				
+
 				if (n < _size / 2)
 				{
 					Node	*to_delete = first.getCurrent();
@@ -415,16 +404,7 @@ namespace ft
 						to_delete = _delete_node_worker(to_delete);
 				}
 				else
-					_regen_tree(first, last); //TO BE FINISHED
-			}
-
-			size_type	erase(Node *node)
-			{
-				if (!node)
-					return (0);
-				
-				_delete_node_worker(node);
-				return (1);
+					_regen_tree(first, last);
 			}
 
 			void	clear()
@@ -574,8 +554,7 @@ namespace ft
 				if (node == _root)
 					return ;
 
-				Node	*sibling = _node_sibling(node);
-				Node	*parent = node->parent;
+				Node	*sibling = _node_sibling(node), *parent = node->parent;
 
 				if (!sibling)
 				{
@@ -658,7 +637,6 @@ namespace ft
 						parent->right->color = RED;
 					else if (parent->left)
 						parent->left->color = RED;
-					
 					if (n == parent->left)
 					{
 						parent->left = n->left;
@@ -675,7 +653,7 @@ namespace ft
 				destroy_node(n);
 			}
 
-			void _delete_child(Node *n, Node *o, bool both_colors)
+			void _delete_child(Node *n, Node *o, bool both_black)
 			{
 				Node	*parent = o->parent;
 
@@ -694,7 +672,7 @@ namespace ft
 						parent->right = n;
 					destroy_node(o);
 					n->parent = parent;
-					if (both_colors)
+					if (both_black)
 						_delete_rebalance_tree(n);
 					else
 						n->color = BLACK;
@@ -706,18 +684,18 @@ namespace ft
 				Node	*o = _replace_node(n);
 				Node	*successor = Node::successor(n, _sentinelStart);
 
-				bool	both_colors = _is_black(o) && _is_black(n);
+				bool	both_black = _is_black(o) && _is_black(n);
 
 				if (!o)
 				{
 					_size--;
-					_delete_leaf(n, both_colors);
+					_delete_leaf(n, both_black);
 					return (successor);
 				}
 				else if(_is_null(n->left) || _is_null(n->right))
 				{
 					_size--;
-					_delete_child(o, n, both_colors);
+					_delete_child(o, n, both_black);
 					return (successor);
 				}
 
@@ -755,8 +733,6 @@ namespace ft
 			{
 				_sentinelEnd = create_node();
 				_sentinelStart = create_node();
-				_sentinelEnd->is_sentinel = true;
-				_sentinelStart->is_sentinel = true;
 				_sentinelEnd->color = BLACK;
 				_sentinelStart->color = BLACK;
 				_root = _sentinelEnd;
@@ -898,21 +874,20 @@ namespace ft
 				Node	*node = allocator_node.allocate(1);
 
 				allocator_node.construct(node, Node());
-				_allocator.construct(node->data_addr(), value_type());
+				_allocator.construct(node->data_addr(), val);
 
-				node->data = val;
 				node->color = RED;
 				return (node);
 			}
 
 			void	destroy_node(Node *node)
 			{
-				_allocator.destroy(node->data_addr());
+//				_allocator.destroy(node->data_addr());
 				allocator_node.destroy(node);
 				allocator_node.deallocate(node, 1);
 			}
 
-			Node	*_copy_tree(Node *node, Node *parent = NULL)
+			Node	*_copy_tree(Node *node, Node *parent = NULL) // Copies tree from n to end();
 			{
 				if (!node)
 					return (NULL);

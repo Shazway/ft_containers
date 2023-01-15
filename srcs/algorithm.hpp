@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 22:44:40 by tmoragli          #+#    #+#             */
-/*   Updated: 2022/12/08 22:43:06 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/15 02:12:32 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,24 @@ namespace ft
 		a = b;
 		b = temp;
 	}
+
+	template <typename T>
+	struct less
+	{
+		bool operator()(T const& a, T const& b) const
+		{
+			return (a < b);
+		}
+	};
+
+	template <typename T>
+	struct greater
+	{
+		bool operator()(T const& a, T const& b) const
+		{
+			return (a > b);
+		}
+	};
 
 	template <typename iterator1, typename iterator2>
 	bool	lexicographical_compare(iterator1 begin1, iterator1 end1, iterator2 begin2, iterator2 end2)

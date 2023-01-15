@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 16:00:20 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/13 04:33:18 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/15 02:06:08 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,11 +171,6 @@ namespace ft
 				_end = assign.getEnd();
 
 				return (*this);
-			}
-
-			operator RBTreeIterator<value_type>() const
-			{
-				return (RBTreeIterator<value_type>(_current, _start, _end));
 			}
 
 			~RBTreeConstIterator()

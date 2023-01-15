@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 17:37:09 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/13 04:25:46 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/15 02:09:39 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,21 @@
 
 namespace ft
 {
-	template <typename Key, typename T, typename Compare = std::less<Key>, typename Alloc = std::allocator<pair<Key, T> > >
+	template <typename Key, typename T, typename Compare = ft::less<Key>, typename Alloc = std::allocator<pair<Key, T> > >
 	class map;
 
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	bool	operator>(map<Key, T, Compare, Alloc> const& m1, map<Key, T, Compare, Alloc> const& m2)
 	{
-		return (m1 < m2);
+		return (m2 < m1);
 	}
 
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	bool	operator==(map<Key, T, Compare, Alloc> const& m1, map<Key, T, Compare, Alloc> const& m2)
 	{
-		return (!(m1 < m2) && !(m1 > m2));
+		return (!(m2 < m1) && !(m1 < m2));
 	}
+
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	bool	operator!=(map<Key, T, Compare, Alloc> const& m1, map<Key, T, Compare, Alloc> const& m2)
 	{
@@ -53,7 +54,7 @@ namespace ft
 	template <typename Key, typename T, typename Compare, typename Alloc>
 	void	swap(map<Key, T, Compare, Alloc> &m1, map<Key, T, Compare, Alloc> &m2)
 	{
-		m1.swap(m2); //to do in class
+		m1.swap(m2);
 	}
 
 	template <typename Key, typename T, typename Compare, typename Alloc>
