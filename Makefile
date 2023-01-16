@@ -1,36 +1,63 @@
-NAME	=	ft_containers
+FT_NAME	=	ft_containers
 
-CC	=	c++
-FLAGS = -Wall -Wextra -Werror -std=c++98
+FT_CC	=	c++
+FT_FLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC_PATH	=	srcs/
-OBJ_PATH	=	obj/
-INC	=	-Isrcs -Isrcs/mli_tester/srcs/map
+FT_SRC_PATH	=	srcs/
+FT_OBJ_PATH	=	obj/
+FT_INC	=	-Isrcs
 
-SRC_NAME	=	test.cpp
-OBJ_NAME	=	$(SRC_NAME:.cpp=.o)
+FT_SRC_NAME	=	containers_main.cpp
+FT_OBJ_NAME	=	$(FT_SRC_NAME:.cpp=.o)
 
-OBJ	=	$(addprefix $(OBJ_PATH), $(OBJ_NAME))
-SRC	=	$(addprefix $(SRC_PATH), $(SRC_NAME))
+FT_OBJ	=	$(addprefix $(FT_OBJ_PATH), $(FT_OBJ_NAME))
+FT_SRC	=	$(addprefix $(FT_SRC_PATH), $(FT_SRC_NAME))
+
+STD_NAME	=	std_containers
+
+STD_CC	=	c++
+STD_FLAGS = -D__STD -Wall -Wextra -Werror -std=c++98
+
+STD_SRC_PATH	=	srcs/
+STD_OBJ_PATH	=	obj/
+STD_INC	=	-Isrcs
+
+STD_SRC_NAME	=	containers_main.cpp
+STD_OBJ_NAME	=	$(STD_SRC_NAME:.cpp=.o)
+
+STD_OBJ	=	$(addprefix $(STD_OBJ_PATH), $(STD_OBJ_NAME))
+STD_SRC	=	$(addprefix $(STD_SRC_PATH), $(STD_SRC_NAME))
 
 
-$(NAME):	$(OBJ)
-	$(CC) $(FLAGS) $(INC) $(OBJ) -o $(NAME)
+$(FT_NAME):	$(FT_OBJ)
+	$(FT_CC) $(FT_FLAGS) $(FT_INC) $(FT_OBJ) -o $(FT_NAME)
 	clear
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.cpp
+$(STD_NAME):	$(STD_OBJ)
+	$(STD_CC) $(STD_FLAGS) $(STD_INC) $(STD_OBJ) -o $(STD_NAME)
+	clear
+
+$(FT_OBJ_PATH)%.o: $(FT_SRC_PATH)%.cpp
 	mkdir -p $(@D)
-	$(CC) $(FLAGS) $(INC) -MMD -c $< -o $@
+	$(FT_CC) $(FT_FLAGS) $(FT_INC) -MMD -c $< -o $@
 
--include $(OBJ:%.o=%.d)
+-include $(FT_OBJ:%.o=%.d)
 
-all: $(NAME)
+$(STD_OBJ_PATH)%.o: $(STD_SRC_PATH)%.cpp
+	mkdir -p $(@D)
+	$(STD_CC) $(STD_FLAGS) $(STD_INC) -MMD -c $< -o $@
+
+-include $(STD_OBJ:%.o=%.d)
+
+all: $(FT_NAME) $(STD_NAME)
 
 clean:
-	rm -rf $(OBJ_PATH)
+	rm -rf $(FT_OBJ_PATH)
+	rm -rf $(STD_OBJ_PATH)
 
 fclean: clean
-	rm -rf $(NAME)
+	rm -rf $(FT_NAME)
+	rm -rf $(STD_NAME)
 
 re: fclean all
 
