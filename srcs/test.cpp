@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/15 23:31:51 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/16 15:30:17 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,5 @@
 
 int		main(void)
 {
-	int myints[] = {75,23,65,42,13};
-	ft::set<int> set (&myints, &myints+5);
-	// ft::set<T1> set(i, j);
-
-	(void)set;
 	return (0);
 }

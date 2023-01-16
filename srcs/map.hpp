@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 17:37:09 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/15 23:58:49 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/16 04:30:17 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ namespace ft
 				{
 				}
 				
-				template <class InputIterator>
+				template <typename InputIterator>
 				map(InputIterator const& first, InputIterator const& last, key_compare const& comp = key_compare(), allocator_type const& alloc = allocator_type()): _tree(first, last, value_compare(comp), alloc), _comp(comp)
 				{
 				}

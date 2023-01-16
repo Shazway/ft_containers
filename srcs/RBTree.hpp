@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/15 21:32:34 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/16 04:30:47 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ namespace ft
 				_init_tree();
 			}
 
-			template <class InputIterator>
+			template <typename InputIterator>
 			RBTree(InputIterator first, InputIterator last, compare_type const& comp = compare_type(), allocator_type const& alloc = allocator_type()): _root(NULL), _size(0),
 			_sentinelStart(NULL), _sentinelEnd(NULL), _comparator(comp), _allocator(alloc), _clear(true)
 			{
@@ -347,15 +347,18 @@ namespace ft
 				return (ft::make_pair(iterator(node, _sentinelStart, _sentinelEnd), true));
 			}
 
+
 			iterator insert(iterator pos, const_reference val)
 			{
 				(void)pos;
 				return (insert(val).first);
 			}
 
-			template <class InputIterator>
-			void	insert(InputIterator first, InputIterator last)
+			template <typename InputIterator>
+			void insert(InputIterator first, InputIterator last)
 			{
+				RBTree::iterator	trash = begin();
+
 				for (; first != last; first++)
 					insert(*first);
 			}

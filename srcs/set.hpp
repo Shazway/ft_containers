@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 02:06:24 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/15 23:48:08 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/16 15:22:53 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,8 @@ namespace ft
 			{
 			}
 
-			template <class InputIterator>
-			set(InputIterator const& first, InputIterator const& last, key_compare const& comp = key_compare(), allocator_type const& alloc = allocator_type()) : _tree(first, last, value_compare(comp), alloc), _comp(comp)
+			template <typename InputIterator>
+			set(InputIterator first, InputIterator last, key_compare const& comp = key_compare(), allocator_type const& alloc = allocator_type()) : _tree(first, last, value_compare(comp), alloc), _comp(comp)
 			{
 			}
 
@@ -180,7 +180,7 @@ namespace ft
 				return (_tree.insert(pos, val));
 			}
 
-			template <class InputIterator>
+			template <typename InputIterator>
 			void	insert(InputIterator first, InputIterator last)
 			{
 				_tree.insert(first, last);

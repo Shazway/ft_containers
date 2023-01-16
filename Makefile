@@ -1,7 +1,7 @@
 NAME	=	ft_containers
 
 CC	=	c++
-FLAGS = -Wall -Wextra -Werror -std=c++98 -g3
+FLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC_PATH	=	srcs/
 OBJ_PATH	=	obj/
