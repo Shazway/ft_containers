@@ -6,14 +6,14 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 17:37:09 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/16 04:30:17 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/16 18:30:02 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
 # define MAP_HPP
 
-#include "RBTree.hpp"
+#include "MapTree.hpp"
 #include "pair.hpp"
 
 namespace ft
@@ -89,7 +89,7 @@ namespace ft
 				}
 			};
 
-			typedef ft::RBTree<value_type, value_compare, allocator_type>	tree_type;
+			typedef ft::MapTree<value_type, value_compare, allocator_type>	tree_type;
 
 			public:
 				typedef typename tree_type::reference			reference;

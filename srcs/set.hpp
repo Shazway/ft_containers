@@ -6,14 +6,14 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 02:06:24 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/16 15:22:53 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/16 18:46:05 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SET_HPP
 # define SET_HPP
 
-#include "RBTree.hpp"
+#include "SetTree.hpp"
 #include "type_traits.hpp"
 #include <iostream>
 
@@ -71,7 +71,7 @@ namespace ft
 			typedef Alloc	allocator_type;
 
 		private:
-			typedef RBTree<value_type, value_compare, allocator_type>	tree_type;
+			typedef SetTree<value_type, value_compare, allocator_type>	tree_type;
 
 		public:
 			typedef typename tree_type::reference			reference;
@@ -79,9 +79,9 @@ namespace ft
 			typedef typename tree_type::pointer				pointer;
 			typedef typename tree_type::const_pointer		const_pointer;
 
-			typedef typename tree_type::iterator				iterator;
+			typedef typename tree_type::const_iterator		iterator;
 			typedef typename tree_type::const_iterator			const_iterator;
-			typedef typename tree_type::reverse_iterator		reverse_iterator;
+			typedef typename tree_type::const_reverse_iterator		reverse_iterator;
 			typedef typename tree_type::const_reverse_iterator	const_reverse_iterator;
 
 			typedef typename tree_type::difference_type			difference_type;
