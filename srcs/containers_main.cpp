@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/17 00:57:17 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/17 01:03:23 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int		main(void)
 {
 	NAMESPACE_TEST::map<int, std::string>	map;
 
-
-	std::cout << "Here" << std::endl;
+	
 	return (0);
 }

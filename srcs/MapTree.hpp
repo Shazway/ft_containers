@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/17 00:41:53 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/17 01:03:18 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ namespace ft
 			MapTree(compare_type const& comp = compare_type(), allocator_type const& alloc = allocator_type()): _root(NULL),
 			_size(0), _sentinelStart(NULL), _sentinelEnd(NULL), _comparator(comp), _allocator(alloc), _clear(true)
 			{
-				std::cout << "ft::map" << std::endl;
 				_init_tree();
 			}
 
