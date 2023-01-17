@@ -6,12 +6,11 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:33:49 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/17 16:01:24 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/17 20:42:01 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tests.hpp"
-#include "Colors.hpp"
 
 #define PRINT 1
 
@@ -439,8 +438,6 @@ void map_relational_operators()
 
 void	map_tests()
 {
-	std::cout << C_RED << "====MAP TESTS====" << C_END << std::endl;
-	std::cout << std::endl;
 	map_constructors();
 	std::cout << std::endl;
 	map_comparators();
@@ -461,6 +458,5 @@ void	map_tests()
 	std::cout << std::endl;
 	map_relational_operators();
 	std::cout << std::endl;
-	std::cout << C_RED << "====END OF MAP TESTS====" << C_END << std::endl;
 	return ;
 }

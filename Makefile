@@ -1,32 +1,23 @@
-FT_NAME	=	ft_containers
-
-FT_CC	=	c++
-FT_FLAGS = -Wall -Wextra -Werror -std=c++98
-
-FT_SRC_PATH	=	srcs/
-FT_OBJ_PATH	=	obj_ft/
-FT_INC	=	-Iincludes -Isrcs
-
-FT_SRC_NAME	=	main.cpp map_tests.cpp
-FT_OBJ_NAME	=	$(FT_SRC_NAME:.cpp=.o)
-
-FT_OBJ	=	$(addprefix $(FT_OBJ_PATH), $(FT_OBJ_NAME))
-FT_SRC	=	$(addprefix $(FT_SRC_PATH), $(FT_SRC_NAME))
-
+FT_NAME		=	ft_containers
 STD_NAME	=	std_containers
 
-STD_CC	=	c++
-STD_FLAGS = -D__STD -Wall -Wextra -Werror -std=c++98
+CC			=	c++
+INC			=	-Iincludes -Isrcs
+SRCS		=	srcs/
+SRC_NAME	=	main.cpp map_tests.cpp
 
-STD_SRC_PATH	=	srcs/
+FT_FLAGS	=	-Wall -Wextra -Werror -std=c++98
+STD_FLAGS 	=	-D__STD -Wall -Wextra -Werror -std=c++98
+
+FT_OBJ_PATH		=	obj_ft/
 STD_OBJ_PATH	=	obj_std/
-STD_INC	=	-Isrcs -Iincludes
 
-STD_SRC_NAME	=	main.cpp map_tests.cpp
-STD_OBJ_NAME	=	$(STD_SRC_NAME:.cpp=.o)
+FT_OBJ_NAME		=	$(SRC_NAME:.cpp=.o)
+STD_OBJ_NAME	=	$(SRC_NAME:.cpp=.o)
 
+FT_OBJ	=	$(addprefix $(FT_OBJ_PATH), $(FT_OBJ_NAME))
 STD_OBJ	=	$(addprefix $(STD_OBJ_PATH), $(STD_OBJ_NAME))
-STD_SRC	=	$(addprefix $(STD_SRC_PATH), $(STD_SRC_NAME))
+
 
 #----------COLORS---------#
 BLACK		=	\033[1;30m
@@ -39,25 +30,25 @@ WHITE		=	\033[1;37m
 EOC			=	\033[0;0m
 
 $(FT_NAME):	$(FT_OBJ)
-	$(FT_CC) $(FT_FLAGS) $(FT_INC) $(FT_OBJ) -o $(FT_NAME)
+	$(CC) $(FT_FLAGS) $(INC) $(FT_OBJ) -o $(FT_NAME)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
 
 $(STD_NAME):	$(STD_OBJ)
-	$(STD_CC) $(STD_FLAGS) $(STD_INC) $(STD_OBJ) -o $(STD_NAME)
+	$(CC) $(STD_FLAGS) $(INC) $(STD_OBJ) -o $(STD_NAME)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
 	@echo "$(CYAN)Containers executables are ready ✅ $(EOC)"
 
-$(FT_OBJ_PATH)%.o: $(FT_SRC_PATH)%.cpp
+$(FT_OBJ_PATH)%.o: $(SRCS)%.cpp
 	@echo "$(RED)=====>Compiling FT_NAMESPACE Containers<===== $(WHITE)"
 	mkdir -p $(@D)
-	$(FT_CC) $(FT_FLAGS) $(FT_INC) -MMD -c $< -o $@
+	$(CC) $(FT_FLAGS) $(INC) -MMD -c $< -o $@
 
 -include $(FT_OBJ:%.o=%.d)
 
-$(STD_OBJ_PATH)%.o: $(STD_SRC_PATH)%.cpp
+$(STD_OBJ_PATH)%.o: $(SRCS)%.cpp
 	@echo "$(RED)=====>Compiling STD_NAMESPACE Containers<===== $(WHITE)"
 	mkdir -p $(@D)
-	$(STD_CC) $(STD_FLAGS) $(STD_INC) -MMD -c $< -o $@
+	$(CC) $(STD_FLAGS) $(INC) -MMD -c $< -o $@
 
 -include $(STD_OBJ:%.o=%.d)
 
