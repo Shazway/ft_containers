@@ -5,9 +5,9 @@ FT_FLAGS = -Wall -Wextra -Werror -std=c++98
 
 FT_SRC_PATH	=	srcs/
 FT_OBJ_PATH	=	ft_obj/
-FT_INC	=	-Isrcs
+FT_INC	=	-Iincludes -Isrcs
 
-FT_SRC_NAME	=	containers_main.cpp
+FT_SRC_NAME	=	main.cpp map_tests.cpp
 FT_OBJ_NAME	=	$(FT_SRC_NAME:.cpp=.o)
 
 FT_OBJ	=	$(addprefix $(FT_OBJ_PATH), $(FT_OBJ_NAME))
@@ -20,9 +20,9 @@ STD_FLAGS = -D__STD -Wall -Wextra -Werror -std=c++98
 
 STD_SRC_PATH	=	srcs/
 STD_OBJ_PATH	=	std_obj/
-STD_INC	=	-Isrcs
+STD_INC	=	-Isrcs -Iincludes
 
-STD_SRC_NAME	=	containers_main.cpp
+STD_SRC_NAME	=	main.cpp map_tests.cpp
 STD_OBJ_NAME	=	$(STD_SRC_NAME:.cpp=.o)
 
 STD_OBJ	=	$(addprefix $(STD_OBJ_PATH), $(STD_OBJ_NAME))

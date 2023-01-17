@@ -1,42 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   containers_main.cpp                                :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/17 01:03:23 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/17 03:10:57 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <vector.hpp>
-#include "vector.hpp"
-#include "stack.hpp"
-#include "algorithm.hpp"
-#include "type_traits.hpp"
-#include <istream>
-#include "map.hpp"
-#include "set.hpp"
-#include <set>
-#include <map>
-
-#ifdef __STD
-# define NAMESPACE_TEST	std
-#else
-# define NAMESPACE_TEST	ft
-#endif
-
-# define LEFT
-
-#define T1 int
-#define T2 int
+#include "tests.hpp"
 
 int		main(void)
 {
-	NAMESPACE_TEST::map<int, std::string>	map;
-
-	
+	map_tests();
 	return (0);
 }
