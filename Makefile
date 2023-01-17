@@ -4,7 +4,7 @@ FT_CC	=	c++
 FT_FLAGS = -Wall -Wextra -Werror -std=c++98
 
 FT_SRC_PATH	=	srcs/
-FT_OBJ_PATH	=	ft_obj/
+FT_OBJ_PATH	=	obj_ft/
 FT_INC	=	-Iincludes -Isrcs
 
 FT_SRC_NAME	=	main.cpp map_tests.cpp
@@ -19,7 +19,7 @@ STD_CC	=	c++
 STD_FLAGS = -D__STD -Wall -Wextra -Werror -std=c++98
 
 STD_SRC_PATH	=	srcs/
-STD_OBJ_PATH	=	std_obj/
+STD_OBJ_PATH	=	obj_std/
 STD_INC	=	-Isrcs -Iincludes
 
 STD_SRC_NAME	=	main.cpp map_tests.cpp
