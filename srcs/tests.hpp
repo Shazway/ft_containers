@@ -6,19 +6,20 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:36:28 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/18 16:26:43 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/18 17:04:25 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TESTS_HPP
 # define TESTS_HPP
 
+
 #ifdef __STD
 #include <set>
 #include <vector>
 #include <stack>
 #include <map>
-# define NAMESPACE	std
+# define NAMESPACE	std //<-- Changing the namespace depending on the -D__STD include flag in the Makefile
 #else
 #include "algorithm.hpp"
 #include "type_traits.hpp"
@@ -28,6 +29,8 @@
 #include "set.hpp"
 # define NAMESPACE	ft
 #endif
+
+
 #define PRINT 1
 #include <deque>
 #include <iostream>

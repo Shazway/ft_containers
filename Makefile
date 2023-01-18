@@ -1,32 +1,21 @@
-FT_NAME	=	ft_containers
-
-FT_CC	=	c++
-FT_FLAGS = -Wall -Wextra -Werror -std=c++98
-
-FT_SRC_PATH	=	srcs/
-FT_OBJ_PATH	=	obj_ft/
-FT_INC		=	-Iincludes -Isrcs
-
-FT_SRC_NAME	=	main.cpp map_tests.cpp
-FT_OBJ_NAME	=	$(FT_SRC_NAME:.cpp=.o)
-
-FT_OBJ	=	$(addprefix $(FT_OBJ_PATH), $(FT_OBJ_NAME))
-FT_SRC	=	$(addprefix $(FT_SRC_PATH), $(FT_SRC_NAME))
-
+FT_NAME		=	ft_containers
 STD_NAME	=	std_containers
 
-STD_CC	=	c++
-STD_FLAGS = -D__STD -Wall -Wextra -Werror -std=c++98
+FT_FLAGS	=	-Wall -Wextra -Werror -std=c++98
+STD_FLAGS	=	-D__STD -Wall -Wextra -Werror -std=c++98 #<--Here __STD is included to change the namespace from ft:: to std:: (i.e std::vector, ft::vector)
 
-STD_SRC_PATH	=	srcs/
+FT_OBJ_PATH		=	obj_ft/
 STD_OBJ_PATH	=	obj_std/
-STD_INC	=	-Isrcs -Iincludes
 
-STD_SRC_NAME	=	main.cpp map_tests.cpp
-STD_OBJ_NAME	=	$(STD_SRC_NAME:.cpp=.o)
+CC			=	c++
+SRC_PATH	=	srcs/
+INCLUDES	=	-Iincludes -Isrcs
+SRC_NAME	=	main.cpp map_tests.cpp set_tests.cpp
 
-STD_OBJ	=	$(addprefix $(STD_OBJ_PATH), $(STD_OBJ_NAME))
-STD_SRC	=	$(addprefix $(STD_SRC_PATH), $(STD_SRC_NAME))
+
+OBJ_NAME	=	$(SRC_NAME:.cpp=.o)
+FT_OBJ		=	$(addprefix $(FT_OBJ_PATH), $(OBJ_NAME))
+STD_OBJ		=	$(addprefix $(STD_OBJ_PATH), $(OBJ_NAME))
 
 #----------COLORS---------#
 BLACK		=	\033[1;30m
@@ -38,30 +27,35 @@ CYAN		=	\033[1;36m
 WHITE		=	\033[1;37m
 EOC			=	\033[0;0m
 
+FT_CC_MESSAGE	=	@echo "$(RED)=====>Compiling FT_NAMESPACE Containers<===== $(WHITE)"
+STD_CC_MESSAGE	=		@echo "$(RED)=====>Compiling STD_NAMESPACE Containers<===== $(WHITE)"
+
+all: $(MESSAGE_1) $(FT_NAME) $(MESSAGE_2) $(STD_NAME)
+
+$(MESSAGE_1): $(STD_CC_MESSAGE)
+$(MESSAGE_2): $(FT_CC_MESSAGE)
+
 $(FT_NAME):	$(FT_OBJ)
-	$(FT_CC) $(FT_FLAGS) $(FT_INC) $(FT_OBJ) -o $(FT_NAME)
+	$(CC) $(FT_FLAGS) $(INCLUDES) $(FT_OBJ) -o $(FT_NAME)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
 
-$(FT_OBJ_PATH)%.o: $(FT_SRC_PATH)%.cpp
-	@echo "$(RED)=====>Compiling FT_NAMESPACE Containers<===== $(WHITE)"
+$(FT_OBJ_PATH)%.o: $(SRC_PATH)%.cpp
 	mkdir -p $(@D)
-	$(FT_CC) $(FT_FLAGS) $(FT_INC) -MMD -c $< -o $@
+	$(CC) $(FT_FLAGS) $(INCLUDES) -MMD -c $< -o $@
 
 -include $(FT_OBJ:%.o=%.d)
 
 $(STD_NAME):	$(STD_OBJ)
-	$(STD_CC) $(STD_FLAGS) $(STD_INC) $(STD_OBJ) -o $(STD_NAME)
+	$(CC) $(STD_FLAGS) $(INCLUDES) $(STD_OBJ) -o $(STD_NAME)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
 	@echo "$(CYAN)Containers executables are ready ✅ $(EOC)"
 
-$(STD_OBJ_PATH)%.o: $(STD_SRC_PATH)%.cpp
-	@echo "$(RED)=====>Compiling STD_NAMESPACE Containers<===== $(WHITE)"
+$(STD_OBJ_PATH)%.o: $(SRC_PATH)%.cpp
 	mkdir -p $(@D)
-	$(STD_CC) $(STD_FLAGS) $(STD_INC) -MMD -c $< -o $@
+	$(CC) $(STD_FLAGS) $(INCLUDES) -MMD -c $< -o $@
 
 -include $(STD_OBJ:%.o=%.d)
 
-all: $(FT_NAME) $(STD_NAME)
 
 clean:
 	@echo "$(CYAN)♻  Cleaning obj files ♻ $(WHITE)"
