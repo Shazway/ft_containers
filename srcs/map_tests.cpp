@@ -6,13 +6,11 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:33:49 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/17 20:42:01 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/18 16:15:58 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tests.hpp"
-
-#define PRINT 1
 
 template<typename T1, typename T2>
 std::ostream	&operator<<(std::ostream &os, NAMESPACE::pair<T1, T2> const& p)
@@ -22,7 +20,7 @@ std::ostream	&operator<<(std::ostream &os, NAMESPACE::pair<T1, T2> const& p)
 }
 
 template<typename Key, typename T, typename Compare, typename Alloc>
-static	std::ostream	&operator<<(std::ostream &os, NAMESPACE::map<Key, T, Compare, Alloc> const& map)
+std::ostream	&operator<<(std::ostream &os, NAMESPACE::map<Key, T, Compare, Alloc> const& map)
 {
 	if (map.empty() && PRINT)
 		return (os << "Empty map");
@@ -42,7 +40,7 @@ static	std::ostream	&operator<<(std::ostream &os, NAMESPACE::map<Key, T, Compare
 	return (os);
 }
 
-NAMESPACE::vector<NAMESPACE::pair<int, int> > generate_data(int n = 20, bool use_i = true)
+NAMESPACE::vector<NAMESPACE::pair<int, int> > generate_map_data(int n = 20, bool use_i = true)
 {
 	NAMESPACE::vector<NAMESPACE::pair<int, int> > v;
 
@@ -58,38 +56,41 @@ NAMESPACE::vector<NAMESPACE::pair<int, int> > generate_data(int n = 20, bool use
 
 void	map_constructors()
 {
-	{
 		std::cout << C_GREEN << "====MAP CONSTRUCTORS TESTS====" << C_WHITE << std::endl;
+	{
+		title("Default constructor");
 		NAMESPACE::map<int, int> m;
 		std::cout << "Map content: \n" << m << std::endl; // should be empty
 	}
 
 	{
-		NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_data();
+		title("Range constructor");
+		NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_map_data();
 		NAMESPACE::map<int, int> m(v.begin(), v.end());
 		std::cout << "Map content: \n" << m << std::endl; // should be same content as the vec
 	}
-		std::cout << C_GREEN << "====END OF CONSTRUCTORS TESTS====" << C_END << std::endl;
+		std::cout << C_GREEN << "====END OF CONSTRUCTORS TESTS====" << C_END << std::endl << std::endl;
 }
 
 void map_comparators()
 {
-	std::cout << C_GREEN << "====MAP COMPARATOR TESTS====" << C_END << std::endl;
-	NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_data(10, false);
+	std::cout << C_GREEN << "====MAP COMPARATOR TESTS====" << C_END << std::endl << std::endl;
+	NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_map_data(10, false);
 
 	NAMESPACE::map<int, int, NAMESPACE::greater<int> > m(v.begin(), v.end());	// should sort in reverse order
 	NAMESPACE::map<int, int> m1(v.begin(), v.end());							// should sort in reverse order
 
 	std::cout << "m (comparator = greater): " << m << std::endl;
 	std::cout << "m1 (comparator = less): " << m1 << std::endl;
-	std::cout << C_GREEN << "====END OF COMPARATOR TESTS====" << C_END << std::endl;
+	std::cout << C_GREEN << "====END OF COMPARATOR TESTS====" << C_END << std::endl << std::endl;
 }
 
 void map_copy()
 {
 	std::cout << C_GREEN << "====MAP COPY TESTS====" << C_WHITE << std::endl;
 	{
-		NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_data(10, false);
+		title("Test copy constructor");
+		NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_map_data(10, false);
 		NAMESPACE::map<int, int> m(v.begin(), v.end());
 		NAMESPACE::map<int, int> m1(m);
 
@@ -99,8 +100,9 @@ void map_copy()
 	}
 
 	{
-		NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_data(10);
-		NAMESPACE::vector<NAMESPACE::pair<int, int> > v1 = generate_data(10, false);
+		title("Test operator=");
+		NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_map_data(10);
+		NAMESPACE::vector<NAMESPACE::pair<int, int> > v1 = generate_map_data(10, false);
 		NAMESPACE::map<int, int> m(v.begin(), v.end());
 		NAMESPACE::map<int, int> m1(v1.begin(), v1.end());
 
@@ -110,7 +112,7 @@ void map_copy()
 		std::cout << "m with v : " << m << std::endl;
 		std::cout << "m1 copied (should be same as m): " << m1 << std::endl;
 	}
-	std::cout << C_GREEN << "====END OF COPY TESTS====" << C_END << std::endl;
+	std::cout << C_GREEN << "====END OF COPY TESTS====" << C_END << std::endl << std::endl;
 }
 
 void map_reverse_iterators()
@@ -120,11 +122,13 @@ void map_reverse_iterators()
 	typedef NAMESPACE::map<int, int>::const_reverse_iterator const_reverse_iterator;
 	typedef NAMESPACE::map<int, int>::const_iterator const_iterator;
 
-	NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_data(10);
+	NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_map_data(10);
 	NAMESPACE::map<int, int> m(v.begin(), v.end());
 	NAMESPACE::map<int, int> const m1(m);
 
 	{
+		title("Testing with non-const map");
+	
 		std::cout << "The map (displayed with reverse_iterator):";
 		for (reverse_iterator rit = m.rbegin(); rit != m.rend(); rit++)
 			std::cout << " " << *rit;
@@ -139,6 +143,8 @@ void map_reverse_iterators()
 		std::cout << std::endl;
 	}
 	{
+		title("Testing with const map");
+
 		std::cout << "The map (displayed with const_iterator):";
 		for (const_iterator it = m1.begin(); it != m1.end(); it++)
 			std::cout << " " << *it;
@@ -148,13 +154,15 @@ void map_reverse_iterators()
 			std::cout << " " << *rit;
 		std::cout << std::endl;
 	}
-	std::cout << C_GREEN << "====END OF REVERSE_IT TESTS====" << C_END << std::endl;
+	std::cout << C_GREEN << "====END OF REVERSE_IT TESTS====" << C_END << std::endl << std::endl;
 }
 
 void map_inserts()
 {
 	std::cout << C_GREEN << "====MAP INSERT TESTS====" << C_WHITE << std::endl;
 	{
+		title("Test of operator[]");
+
 		NAMESPACE::map<int, std::string> m;
 		int random_key = rand() % 10 + 100;
 
@@ -172,8 +180,10 @@ void map_inserts()
 		std::cout << "The map after editing some elements : " << m << std::endl;
 	}
 	{
+		title("Tests of insert");
 		{
-			NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_data(3, false);
+			title("Tests of insert with a value (inserting pairs of int)");
+			NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_map_data(3, false);
 			NAMESPACE::map<int, int> m;
 
 			data.push_back(data.back());
@@ -190,7 +200,8 @@ void map_inserts()
 			std::cout << "Final map : " << m << std::endl;
 		}
 		{
-			NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_data(10, false);
+			title("Tests of insert with hint");
+			NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_map_data(10, false);
 			NAMESPACE::map<int, int> m;
 
 			for (size_t i = 0; i < data.size(); i++)
@@ -202,14 +213,16 @@ void map_inserts()
 			std::cout << "Final map : " << m << std::endl;
 		}
 		{
-			NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_data(10, false);
+			title("Tests of insert with range");
+
+			NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_map_data(10, false);
 			NAMESPACE::map<int, int> m;
 
 			m.insert(data.begin(), data.end());
 			std::cout << "Final map : " << m << std::endl;
 		}
 	}
-	std::cout << C_GREEN << "====END OF INSERT TESTS====" << C_END << std::endl;
+	std::cout << C_GREEN << "====END OF INSERT TESTS====" << C_END << std::endl << std::endl;
 }
 
 void map_erase()
@@ -217,7 +230,8 @@ void map_erase()
 	std::cout << C_GREEN << "====MAP ERASE TESTS====" << C_WHITE << std::endl;
 	
 	{
-		NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_data(15);
+		title("Clearing a map");
+		NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_map_data(15);
 		NAMESPACE::map<int, int> m(data.begin(), data.end());
 
 		std::cout << "The map before clear : " << m << std::endl;
@@ -226,7 +240,7 @@ void map_erase()
 
 		std::cout << "\n\nTrying to reinsert new elements..." << std::endl;
 
-		data = generate_data(10, false);
+		data = generate_map_data(10, false);
 		m.insert(data.begin(), data.end());
 
 		std::cout << "The map before clear : " << m << std::endl;
@@ -234,7 +248,8 @@ void map_erase()
 		std::cout << "The map after clear : " << m << std::endl;
 	}
 	{
-		NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_data(15);
+		title("Tests of erase");
+		NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_map_data(15);
 
 		{
 
@@ -249,6 +264,7 @@ void map_erase()
 			std::cout << "The map after two erases : " << m << std::endl;
 		}
 		{
+			title("Trying to erase specific value");
 			NAMESPACE::map<int, int> m(data.begin(), data.end()); // Keys are from 0 to 14 inclusive
 
 			std::cout << "Initial map : " << m << std::endl;
@@ -260,6 +276,7 @@ void map_erase()
 			std::cout << "The map after two erases : " << m << std::endl; // should be same as before
 		}
 		{
+			title("Trying to remove multiple elements at once");
 			NAMESPACE::map<int, int> m(data.begin(), data.end());
 
 			std::cout << "Initial map : " << m << std::endl;
@@ -267,7 +284,7 @@ void map_erase()
 			std::cout << "The map after erasing : " << m << std::endl;
 		}
 	}
-	std::cout << C_GREEN << "====END OF ERASE TESTS====" << C_END << std::endl;
+	std::cout << C_GREEN << "====END OF ERASE TESTS====" << C_END << std::endl << std::endl;
 }
 
 void map_capacity()
@@ -290,7 +307,7 @@ void map_capacity()
 	m[12] = 232;
 	std::cout << "empty : " << std::boolalpha << m.empty() << std::noboolalpha << std::endl;
 	std::cout << "size : " << m.size() << std::endl;
-	std::cout << C_GREEN << "====END OF CAPACITY TESTS====" << C_END << std::endl;
+	std::cout << C_GREEN << "====END OF CAPACITY TESTS====" << C_END << std::endl << std::endl;
 }
 
 void map_swap()
@@ -328,7 +345,7 @@ void map_swap()
 	std::cout << "The second map : " << m1 << std::endl;
 
 	std::cout << "Iterators : it -> " << *it << ", it1 -> " << *it1 << std::endl; // same as before
-	std::cout << C_GREEN << "====END OF SWAP TESTS====" << C_END << std::endl;
+	std::cout << C_GREEN << "====END OF SWAP TESTS====" << C_END << std::endl << std::endl;
 }
 
 void map_operators()
@@ -336,10 +353,11 @@ void map_operators()
 	std::cout << C_GREEN << "====MAP OPERATORS TESTS====" << C_WHITE << std::endl;
 	typedef NAMESPACE::map<int, int>::iterator iterator;
 
-	NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_data(20);
+	NAMESPACE::vector<NAMESPACE::pair<int, int> > data = generate_map_data(20);
 	NAMESPACE::map<int, int> m(data.begin(), data.end());
 
 	{
+		title("Testing find");
 		std::cout << "Trying to find an existing element" << std::endl;
 		iterator it = m.find(12); //existing element
 		if (it == m.end())
@@ -355,12 +373,14 @@ void map_operators()
 			std::cout << "Element found : " << *it << std::endl;
 	}
 	{
+		title("Testing count");
 		std::cout	<< "There is " << m.count(12) << " elements with 12 as their key."
 					<< std::endl; //existing element
 		std::cout	<< "There is " << m.count(1212) << " elements with 1212 as their key."
 					<< std::endl; //nonexistent element
 	}
 	{
+		title("Testing upper_bound and lower_bound");
 		iterator u, l;
 
 		std::cout << "Upper and lower bound of existing element :" << std::endl;
@@ -380,6 +400,7 @@ void map_operators()
 		std::cout << "Upper bound : " << *u << ", lower bound : " << *l << std::endl;
 	}
 	{
+		title("Testing equal_range");
 		NAMESPACE::pair<iterator, iterator> ul;
 
 		std::cout << "Upper and lower bound of existing element :" << std::endl;
@@ -395,7 +416,7 @@ void map_operators()
 		ul = m.equal_range(11);
 		std::cout << "Upper bound : " << *ul.first << ", lower bound : " << *ul.second << std::endl;
 	}
-	std::cout << C_GREEN << "====END OF OPERATORS TESTS====" << C_END << std::endl;
+	std::cout << C_GREEN << "====END OF OPERATORS TESTS====" << C_END << std::endl << std::endl;
 }
 
 void map_relational_operators()
@@ -433,30 +454,20 @@ void map_relational_operators()
 	std::cout << "m > m2 = " << (m > m2) << std::endl;
 	std::cout << "m >= m2 = " << (m >= m2) << std::endl;
 	std::cout << std::noboolalpha;
-	std::cout << C_GREEN << "====END OF RELATIONAL_OPERATORS TESTS====" << C_END << std::endl;
+	std::cout << C_GREEN << "====END OF RELATIONAL_OPERATORS TESTS====" << C_END << std::endl << std::endl;
 }
 
 void	map_tests()
 {
 	map_constructors();
-	std::cout << std::endl;
 	map_comparators();
-	std::cout << std::endl;
 	map_copy();
-	std::cout << std::endl;
 	map_reverse_iterators();
-	std::cout << std::endl;
 	map_inserts();
-	std::cout << std::endl;
 	map_erase();
-	std::cout << std::endl;
 	map_capacity();
-	std::cout << std::endl;
 	map_swap();
-	std::cout << std::endl;
 	map_operators();
-	std::cout << std::endl;
 	map_relational_operators();
-	std::cout << std::endl;
 	return ;
 }

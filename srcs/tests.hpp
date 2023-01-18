@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:36:28 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/17 20:44:40 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/18 16:26:43 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 #include "set.hpp"
 # define NAMESPACE	ft
 #endif
-
+#define PRINT 1
 #include <deque>
 #include <iostream>
 #include <typeinfo>
@@ -39,6 +39,7 @@
 #include <algorithm>
 #include "Colors.hpp"
 
+void	title(std::string const title);
 void	map_tests();
 void	set_tests();
 

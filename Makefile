@@ -1,23 +1,33 @@
-FT_NAME		=	ft_containers
-STD_NAME	=	std_containers
+	clear
+FT_NAME	=	ft_containers
 
-CC			=	c++
-INC			=	-Iincludes -Isrcs
-SRCS		=	srcs/
-SRC_NAME	=	main.cpp map_tests.cpp
+FT_CC	=	c++
+FT_FLAGS = -Wall -Wextra -Werror -std=c++98
 
-FT_FLAGS	=	-Wall -Wextra -Werror -std=c++98
-STD_FLAGS 	=	-D__STD -Wall -Wextra -Werror -std=c++98
+FT_SRC_PATH	=	srcs/
+FT_OBJ_PATH	=	ft_obj/
+FT_INC	=	-Isrcs
 
-FT_OBJ_PATH		=	obj_ft/
-STD_OBJ_PATH	=	obj_std/
-
-FT_OBJ_NAME		=	$(SRC_NAME:.cpp=.o)
-STD_OBJ_NAME	=	$(SRC_NAME:.cpp=.o)
+FT_SRC_NAME	=	containers_main.cpp
+FT_OBJ_NAME	=	$(FT_SRC_NAME:.cpp=.o)
 
 FT_OBJ	=	$(addprefix $(FT_OBJ_PATH), $(FT_OBJ_NAME))
-STD_OBJ	=	$(addprefix $(STD_OBJ_PATH), $(STD_OBJ_NAME))
+FT_SRC	=	$(addprefix $(FT_SRC_PATH), $(FT_SRC_NAME))
 
+STD_NAME	=	std_containers
+
+STD_CC	=	c++
+STD_FLAGS = -D__STD -Wall -Wextra -Werror -std=c++98
+
+STD_SRC_PATH	=	srcs/
+STD_OBJ_PATH	=	std_obj/
+STD_INC	=	-Isrcs
+
+STD_SRC_NAME	=	containers_main.cpp
+STD_OBJ_NAME	=	$(STD_SRC_NAME:.cpp=.o)
+
+STD_OBJ	=	$(addprefix $(STD_OBJ_PATH), $(STD_OBJ_NAME))
+STD_SRC	=	$(addprefix $(STD_SRC_PATH), $(STD_SRC_NAME))
 
 #----------COLORS---------#
 BLACK		=	\033[1;30m
@@ -30,25 +40,25 @@ WHITE		=	\033[1;37m
 EOC			=	\033[0;0m
 
 $(FT_NAME):	$(FT_OBJ)
-	$(CC) $(FT_FLAGS) $(INC) $(FT_OBJ) -o $(FT_NAME)
+	$(FT_CC) $(FT_FLAGS) $(FT_INC) $(FT_OBJ) -o $(FT_NAME)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
 
 $(STD_NAME):	$(STD_OBJ)
-	$(CC) $(STD_FLAGS) $(INC) $(STD_OBJ) -o $(STD_NAME)
+	$(STD_CC) $(STD_FLAGS) $(STD_INC) $(STD_OBJ) -o $(STD_NAME)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
 	@echo "$(CYAN)Containers executables are ready ✅ $(EOC)"
 
-$(FT_OBJ_PATH)%.o: $(SRCS)%.cpp
+$(FT_OBJ_PATH)%.o: $(FT_SRC_PATH)%.cpp
 	@echo "$(RED)=====>Compiling FT_NAMESPACE Containers<===== $(WHITE)"
 	mkdir -p $(@D)
-	$(CC) $(FT_FLAGS) $(INC) -MMD -c $< -o $@
+	$(FT_CC) $(FT_FLAGS) $(FT_INC) -MMD -c $< -o $@
 
 -include $(FT_OBJ:%.o=%.d)
 
-$(STD_OBJ_PATH)%.o: $(SRCS)%.cpp
+$(STD_OBJ_PATH)%.o: $(STD_SRC_PATH)%.cpp
 	@echo "$(RED)=====>Compiling STD_NAMESPACE Containers<===== $(WHITE)"
 	mkdir -p $(@D)
-	$(CC) $(STD_FLAGS) $(INC) -MMD -c $< -o $@
+	$(STD_CC) $(STD_FLAGS) $(STD_INC) -MMD -c $< -o $@
 
 -include $(STD_OBJ:%.o=%.d)
 
