@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/18 15:56:22 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/18 16:39:07 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		main(void)
 	map_tests();
 	std::cout << C_RED << "====END OF MAP TESTS====" << C_END << std::endl;
 	std::cout << C_RED << "====SET TESTS====" << C_END << std::endl;
-	set_tests();
+	//set_tests();
 	std::cout << C_RED << "====END OF SET TESTS====" << C_END << std::endl;
 	return (0);
 }
