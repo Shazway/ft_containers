@@ -27,15 +27,12 @@ CYAN		=	\033[1;36m
 WHITE		=	\033[1;37m
 EOC			=	\033[0;0m
 
-FT_CC_MESSAGE	=	@echo "$(RED)=====>Compiling FT_NAMESPACE Containers<===== $(WHITE)"
-STD_CC_MESSAGE	=		@echo "$(RED)=====>Compiling STD_NAMESPACE Containers<===== $(WHITE)"
 
-all: $(MESSAGE_1) $(FT_NAME) $(MESSAGE_2) $(STD_NAME)
 
-$(MESSAGE_1): $(STD_CC_MESSAGE)
-$(MESSAGE_2): $(FT_CC_MESSAGE)
+all: $(FT_NAME) $(STD_NAME)
 
-$(FT_NAME):	$(FT_OBJ)
+$(FT_NAME): $(FT_OBJ)
+	@echo "$(RED)=====>Compiling FT_NAMESPACE Containers<===== $(WHITE)"
 	$(CC) $(FT_FLAGS) $(INCLUDES) $(FT_OBJ) -o $(FT_NAME)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
 
@@ -45,7 +42,8 @@ $(FT_OBJ_PATH)%.o: $(SRC_PATH)%.cpp
 
 -include $(FT_OBJ:%.o=%.d)
 
-$(STD_NAME):	$(STD_OBJ)
+$(STD_NAME): $(STD_OBJ)
+	@echo "$(RED)=====>Compiling STD_NAMESPACE Containers<===== $(WHITE)"
 	$(CC) $(STD_FLAGS) $(INCLUDES) $(STD_OBJ) -o $(STD_NAME)
 	@echo "$(GREEN)Done ! ✅ $(EOC)"
 	@echo "$(CYAN)Containers executables are ready ✅ $(EOC)"
