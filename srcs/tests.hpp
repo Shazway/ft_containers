@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:36:28 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/18 17:04:25 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/18 19:12:10 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,6 @@
 void	title(std::string const title);
 void	map_tests();
 void	set_tests();
+void	stack_tests();
 
 #endif

@@ -10,7 +10,10 @@ STD_OBJ_PATH	=	obj_std/
 CC			=	c++
 SRC_PATH	=	srcs/
 INCLUDES	=	-Iincludes -Isrcs
-SRC_NAME	=	main.cpp map_tests.cpp set_tests.cpp
+SRC_NAME	=	main.cpp							\
+				map_tests.cpp						\
+				set_tests.cpp						\
+				stack_tests.cpp
 
 
 OBJ_NAME	=	$(SRC_NAME:.cpp=.o)

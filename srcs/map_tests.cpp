@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:33:49 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/18 16:15:58 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/18 19:08:59 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ NAMESPACE::vector<NAMESPACE::pair<int, int> > generate_map_data(int n = 20, bool
 
 void	map_constructors()
 {
-		std::cout << C_GREEN << "====MAP CONSTRUCTORS TESTS====" << C_WHITE << std::endl;
+	std::cout << C_GREEN << "====MAP CONSTRUCTORS TESTS====" << C_WHITE << std::endl;
 	{
 		title("Default constructor");
 		NAMESPACE::map<int, int> m;
@@ -69,7 +69,7 @@ void	map_constructors()
 		NAMESPACE::map<int, int> m(v.begin(), v.end());
 		std::cout << "Map content: \n" << m << std::endl; // should be same content as the vec
 	}
-		std::cout << C_GREEN << "====END OF CONSTRUCTORS TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF CONSTRUCTORS TESTS====" << C_END << std::endl << std::endl;
 }
 
 void map_comparators()
