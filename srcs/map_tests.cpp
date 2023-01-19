@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:33:49 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/18 19:08:59 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/19 01:22:36 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,12 @@ void	map_constructors()
 		NAMESPACE::map<int, int> m(v.begin(), v.end());
 		std::cout << "Map content: \n" << m << std::endl; // should be same content as the vec
 	}
-	std::cout << C_GREEN << "====END OF CONSTRUCTORS TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF CONSTRUCTORS TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void map_comparators()
 {
-	std::cout << C_GREEN << "====MAP COMPARATOR TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====MAP COMPARATOR TESTS====" << C_WHITE << std::endl << std::endl;
 	NAMESPACE::vector<NAMESPACE::pair<int, int> > v = generate_map_data(10, false);
 
 	NAMESPACE::map<int, int, NAMESPACE::greater<int> > m(v.begin(), v.end());	// should sort in reverse order
@@ -82,7 +82,7 @@ void map_comparators()
 
 	std::cout << "m (comparator = greater): " << m << std::endl;
 	std::cout << "m1 (comparator = less): " << m1 << std::endl;
-	std::cout << C_GREEN << "====END OF COMPARATOR TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF COMPARATOR TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void map_copy()
@@ -112,7 +112,7 @@ void map_copy()
 		std::cout << "m with v : " << m << std::endl;
 		std::cout << "m1 copied (should be same as m): " << m1 << std::endl;
 	}
-	std::cout << C_GREEN << "====END OF COPY TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF COPY TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void map_reverse_iterators()
@@ -154,7 +154,7 @@ void map_reverse_iterators()
 			std::cout << " " << *rit;
 		std::cout << std::endl;
 	}
-	std::cout << C_GREEN << "====END OF REVERSE_IT TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF REVERSE_IT TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void map_inserts()
@@ -222,7 +222,7 @@ void map_inserts()
 			std::cout << "Final map : " << m << std::endl;
 		}
 	}
-	std::cout << C_GREEN << "====END OF INSERT TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF INSERT TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void map_erase()
@@ -284,7 +284,7 @@ void map_erase()
 			std::cout << "The map after erasing : " << m << std::endl;
 		}
 	}
-	std::cout << C_GREEN << "====END OF ERASE TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF ERASE TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void map_capacity()
@@ -307,7 +307,7 @@ void map_capacity()
 	m[12] = 232;
 	std::cout << "empty : " << std::boolalpha << m.empty() << std::noboolalpha << std::endl;
 	std::cout << "size : " << m.size() << std::endl;
-	std::cout << C_GREEN << "====END OF CAPACITY TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF CAPACITY TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void map_swap()
@@ -345,7 +345,7 @@ void map_swap()
 	std::cout << "The second map : " << m1 << std::endl;
 
 	std::cout << "Iterators : it -> " << *it << ", it1 -> " << *it1 << std::endl; // same as before
-	std::cout << C_GREEN << "====END OF SWAP TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF SWAP TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void map_operators()
@@ -416,7 +416,7 @@ void map_operators()
 		ul = m.equal_range(11);
 		std::cout << "Upper bound : " << *ul.first << ", lower bound : " << *ul.second << std::endl;
 	}
-	std::cout << C_GREEN << "====END OF OPERATORS TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF OPERATORS TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void map_relational_operators()
@@ -454,7 +454,7 @@ void map_relational_operators()
 	std::cout << "m > m2 = " << (m > m2) << std::endl;
 	std::cout << "m >= m2 = " << (m >= m2) << std::endl;
 	std::cout << std::noboolalpha;
-	std::cout << C_GREEN << "====END OF RELATIONAL_OPERATORS TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF RELATIONAL_OPERATORS TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void	map_tests()

@@ -13,7 +13,8 @@ INCLUDES	=	-Iincludes -Isrcs
 SRC_NAME	=	main.cpp							\
 				map_tests.cpp						\
 				set_tests.cpp						\
-				stack_tests.cpp
+				stack_tests.cpp						\
+				vector_tests.cpp
 
 
 OBJ_NAME	=	$(SRC_NAME:.cpp=.o)

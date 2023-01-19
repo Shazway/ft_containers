@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 19:03:19 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/18 19:11:22 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/19 01:22:15 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void stack_constructors()
 		NAMESPACE::stack<int, std::deque<int> > q(d);
 		std::cout << "The stack : " << q << std::endl;
 	}
-	std::cout << C_GREEN << "====END OF CONSTRUCTORS TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF CONSTRUCTORS TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void stack_size_push()
@@ -66,7 +66,7 @@ void stack_size_push()
 		std::cout << "The stack : " << q << std::endl;
 		std::cout << "Size : " << q.size() << std::endl;
 	}
-	std::cout << C_GREEN << "====END OF SIZE_PUSH TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF SIZE_PUSH TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void stack_accessors()
@@ -84,7 +84,7 @@ void stack_accessors()
 	std::cout << "top element : " << q.top() << std::endl;
 	std::cout << "top element but stack is const : " << q1.top() << std::endl;
 	std::cout << "The stack after the tests : " << q << std::endl;
-	std::cout << C_GREEN << "====END OF ACCESSORS TESTS====" << C_END << std::endl << std::endl;
+	std::cout << C_GREEN << "====END OF ACCESSORS TESTS====" << C_WHITE << std::endl << std::endl;
 }
 
 void	stack_tests()
