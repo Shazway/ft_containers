@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:36:28 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/19 00:17:20 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/20 15:48:44 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@
 #endif
 
 
-#define PRINT 1
+#define PRINT 0
+
 #include <deque>
 #include <iostream>
 #include <typeinfo>
