@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 20:44:08 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/18 16:16:10 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/20 19:52:06 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ std::ostream	&operator<<(std::ostream &os, NAMESPACE::set<T, Compare, Alloc> con
 	if (set.empty() && PRINT)
 		return os << "Set is empty";
 	else if(set.empty())
-
+		return (os);
 	for (typename NAMESPACE::set<T, Compare, Alloc>::const_iterator it = set.begin(), it1 = ++set.begin();
 		it != set.end(); it++)
 	{
