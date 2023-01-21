@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/21 04:53:14 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/21 16:52:26 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,6 @@ namespace ft
 	}
 }
 
-/*template <typename T, typename T1>
-Coder la classe iterator sur vector
-*/
-
 template <typename T, typename Alloc>
 class ft::vector
 {
@@ -95,7 +91,6 @@ public:
 	typedef typename allocator_type::const_reference	const_reference;
 	typedef typename allocator_type::pointer			pointer;
 	typedef typename allocator_type::const_pointer		const_pointer;
-	//Iterators (les faire soit même)
 	typedef typename ft::RandomAccessIterator<T>				iterator;
 	typedef typename ft::RandomAccessIterator<const T>			const_iterator;
 	typedef typename ft::reverse_iterator<iterator>				reverse_iterator;
@@ -110,11 +105,11 @@ private:
 	allocator_type	_allocator;
 public:
 	//CONSTRUCT/DESTRUCT
-	explicit vector(const allocator_type &alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
+	explicit vector(allocator_type const& alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
 	{
 	}
 	
-	explicit vector(size_type count, value_type const& val = value_type(), allocator_type const& alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
+	explicit vector(size_type count, const_reference val = value_type(), allocator_type const& alloc = allocator_type()): _data(NULL), _capacity(0), _size(0), _allocator(alloc)
 	{
 		_data = _allocator.allocate(count);
 		_capacity = count;
@@ -219,6 +214,15 @@ public:
 		return (!_size);
 	}
 
+	void	push_back(const_reference val)
+	{
+		const value_type	tmp = val;
+		if (_size == _capacity || _capacity == 0)
+			reserve(_capacity * 2);
+		_allocator.construct(_data + _size, tmp);
+		_size++;
+	}
+
 	void	reserve(size_type n)
 	{
 		if (n > max_size())
@@ -232,7 +236,8 @@ public:
 
 			for (size_type i = 0; i < _size; i++)
 			{
-				_allocator.construct(tmp_data + i, _data[i]);
+				value_type	tmp_val = _data[i];
+				_allocator.construct(tmp_data + i, tmp_val);
 				_allocator.destroy(&(_data[i]));
 			}
 			_allocator.deallocate(_data, _capacity);
@@ -290,26 +295,19 @@ public:
 			insert(begin(), first, last);
 		}
 
-	void	assign(size_type n, value_type const& val)
+	void	assign(size_type n, const_reference val)
 	{
 		clear();
 		insert(begin(), n, val);
 	}
 
-	void	push_back(const value_type &val)
-	{
-		if (_size == _capacity || _capacity == 0)
-			reserve(_capacity * 2);
-		_allocator.construct(_data + _size, val);
-		_size++;
-	}
 
 	void	pop_back()
 	{
 		_data[--_size].~value_type();
 	}
 
-	iterator	insert(iterator pos, value_type const& val)
+	iterator	insert(iterator pos, const_reference val)
 	{
 		if (_size == 0 || pos == end())
 		{
@@ -339,7 +337,7 @@ public:
 		return (pos);
 	}
 
-	void	insert(iterator pos, size_type n, value_type const& val)
+	void	insert(iterator pos, size_type n, const_reference val)
 	{
 		if (_size + n > _capacity) 
 		{

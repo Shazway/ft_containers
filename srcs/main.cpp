@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/21 04:58:42 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/21 16:43:16 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,7 @@ int		main(void)
 	std::cout << "Vector: " << data << std::endl;
 	std::cout << "Capacity: " << data.capacity() << std::endl;
 	std::cout << "size: " << data.size() << std::endl;
+	//data.reserve(8);
 	data.push_back(data.back());
-	std::cout << "Vector: " << data << std::endl;
-	std::cout << "Capacity: " << data.capacity() << std::endl;
-	std::cout << "size: " << data.size() << std::endl;
-	data.push_back(1235);
-	std::cout << "Vector: " << data << std::endl;
 	return (0);
 }
