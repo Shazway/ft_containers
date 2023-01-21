@@ -1,8 +1,8 @@
 FT_NAME		=	ft_containers
 STD_NAME	=	std_containers
 
-FT_FLAGS	=	-Wall -Wextra -Werror -std=c++98
-STD_FLAGS	=	-D__STD -Wall -Wextra -Werror -std=c++98 #<--Here __STD is included to change the namespace from ft:: to std:: (i.e std::vector, ft::vector)
+FT_FLAGS	=	-Wall -Wextra -Werror -std=c++98 -g3
+STD_FLAGS	=	-D__STD -Wall -Wextra -Werror -std=c++98 -g3 #<--Here __STD is included to change the namespace from ft:: to std:: (i.e std::vector, ft::vector)
 
 FT_OBJ_PATH		=	obj_ft/
 STD_OBJ_PATH	=	obj_std/

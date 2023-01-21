@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/15 23:45:51 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/21 04:53:14 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,20 +227,17 @@ public:
 			n = n ? n : 1;
 		if (_capacity < n)
 		{
-			pointer	tmp_data;
-			size_type	tmp_cap;
+			size_type	tmp_cap = n;
+			pointer	tmp_data = _allocator.allocate(tmp_cap);
 
-			tmp_data = _data;
-			tmp_cap = _capacity;
-
-			_data = _allocator.allocate(n);
-			_capacity = n;
 			for (size_type i = 0; i < _size; i++)
 			{
-				_allocator.construct(_data + i, *(tmp_data + i));
-				_allocator.destroy(tmp_data + i);
+				_allocator.construct(tmp_data + i, _data[i]);
+				_allocator.destroy(&(_data[i]));
 			}
-			_allocator.deallocate(tmp_data, tmp_cap);
+			_allocator.deallocate(_data, _capacity);
+			_data = tmp_data;
+			_capacity = tmp_cap;
 		}
 	}
 
@@ -267,12 +264,12 @@ public:
 
 	reference		front()
 	{
-		return (_data[0]);
+		return (*_data);
 	}
 
 	const_reference	front() const
 	{
-		return (_data[0]);
+		return (*_data);
 	}
 
 	reference		back()
@@ -303,7 +300,8 @@ public:
 	{
 		if (_size == _capacity || _capacity == 0)
 			reserve(_capacity * 2);
-		_allocator.construct(_data + _size++, val);
+		_allocator.construct(_data + _size, val);
+		_size++;
 	}
 
 	void	pop_back()
