@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/21 16:43:16 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/21 16:53:18 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ NAMESPACE::vector<int> gen_data(int n = 20, bool use_i = true)
 
 int		main(void)
 {
-	/*try
+	try
 	{
 		std::cout << C_RED << "====MAP TESTS====" << C_END << std::endl;
 		map_tests();
@@ -73,16 +73,6 @@ int		main(void)
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
-	}*/
-	NAMESPACE::vector<int> data = gen_data(3, false);
-
-	std::cout << "Capacity: " << data.capacity() << std::endl;
-	std::cout << "size: " << data.size() << std::endl;
-	data.push_back(data.front());
-	std::cout << "Vector: " << data << std::endl;
-	std::cout << "Capacity: " << data.capacity() << std::endl;
-	std::cout << "size: " << data.size() << std::endl;
-	//data.reserve(8);
-	data.push_back(data.back());
+	}
 	return (0);
 }
