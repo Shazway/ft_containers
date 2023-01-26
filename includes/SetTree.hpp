@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 18:36:10 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/25 23:44:46 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/26 04:02:53 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -942,6 +942,7 @@ namespace ft
 				Node	*node = allocator_node.allocate(1);
 
 				allocator_node.construct(node, Node());
+				node->data = _allocator.allocate(1);
 				_allocator.construct(node->data_addr(), val);
 
 				node->color = RED;
@@ -950,7 +951,7 @@ namespace ft
 
 			void	destroy_node(Node *node)
 			{
-//				_allocator.destroy(node->data_addr());
+				_allocator.deallocate(node->data, 1);
 				allocator_node.destroy(node);
 				allocator_node.deallocate(node, 1);
 			}

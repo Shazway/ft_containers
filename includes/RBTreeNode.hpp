@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 15:58:37 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/26 02:33:29 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/26 04:44:55 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,13 @@ namespace	ft
 	template <typename T>
 	struct RBTreeNode
 	{
-	public:
 		typedef T					value_type;
 		typedef value_type&			reference;
 		typedef	value_type const& 	const_reference;
 		typedef value_type*			pointer;
 		typedef value_type const*	const_pointer;
 		typedef	RBTreeNode<T> 		Node;
-	private:
-		std::allocator<value_type>	_alloc;
-	public:
+
 		pointer		data;
 		Node		*parent;
 		Node		*left;
@@ -81,16 +78,10 @@ namespace	ft
 			}
 		#endif
 
-		RBTreeNode(): parent(NULL), left(NULL), right(NULL), is_sentinel(false)
+		RBTreeNode(): data(), parent(NULL), left(NULL), right(NULL), is_sentinel(false)
 		{
-			//data = _alloc.allocate(1);
 		}
 
-	/*	~RBTreeNode()
-		{
-			//_alloc.deallocate(data, 1);
-		}
-*/
 		pointer	data_addr()
 		{
 			return (data);

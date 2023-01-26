@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/26 02:36:14 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/26 03:44:45 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -662,6 +662,7 @@ namespace ft
 				if (o == _root) // 2 nodes are in tree
 				{
 					ft::__swap(n->data, o->data);
+					//ft::__swap(o->data, &n->data);
 					o->left = _sentinelStart;
 					o->right = _sentinelEnd;
 					destroy_node(n); // Swapped data to erase
@@ -702,6 +703,7 @@ namespace ft
 				}
 
 				ft::__swap(o->data, n->data);
+				_delete_node_worker(o);
 				return (n);
 			}
 
@@ -883,7 +885,6 @@ namespace ft
 
 			void	destroy_node(Node *node)
 			{
-				//_allocator.destroy(node->data_addr());
 				_allocator.deallocate(node->data, 1);
 				allocator_node.destroy(node);
 				allocator_node.deallocate(node, 1);
