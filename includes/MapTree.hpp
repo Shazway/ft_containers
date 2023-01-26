@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/17 01:03:18 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/26 02:36:14 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -402,7 +402,7 @@ namespace ft
 					Node	*to_delete = first.getCurrent();
 					value_type	last_node_data = *last;
 
-					while (to_delete->data != last_node_data)
+					while (*(to_delete->data) != last_node_data)
 						to_delete = _delete_node_worker(to_delete);
 				}
 				else
@@ -702,7 +702,6 @@ namespace ft
 				}
 
 				ft::__swap(o->data, n->data);
-				_delete_node_worker(o);
 				return (n);
 			}
 
@@ -750,9 +749,9 @@ namespace ft
 				{
 					if (leaf)
 						*leaf = node;
-					if (_comparator(val, node->data))
+					if (_comparator(val, *(node->data)))
 						node = node->left;
-					else if (_comparator(node->data, val))
+					else if (_comparator(*(node->data), val))
 						node = node->right;
 					else
 						return (node);
@@ -768,9 +767,9 @@ namespace ft
 				{
 					if (leaf)
 						*leaf = node;
-					if (_comparator(val, node->data))
+					if (_comparator(val, *(node->data)))
 						node = node->left;
-					else if (_comparator(node->data, val))
+					else if (_comparator(*(node->data), val))
 						node = node->right;
 					else
 						return (node);
@@ -783,11 +782,11 @@ namespace ft
 				Node	*target;
 				Node	*n;
 
-				if ((n = _find(node->data, &target)))
+				if ((n = _find(*(node->data), &target)))
 					return (iterator(n, _sentinelStart, _sentinelEnd));
 
 				node->parent = target;
-				if (_comparator(node->data, target->data))
+				if (_comparator(*(node->data), *(target->data)))
 				{
 					if (target->left)
 						target->left->parent = node;
@@ -876,15 +875,16 @@ namespace ft
 				Node	*node = allocator_node.allocate(1);
 
 				allocator_node.construct(node, Node());
+				node->data = _allocator.allocate(1);
 				_allocator.construct(node->data_addr(), val);
-
 				node->color = RED;
 				return (node);
 			}
 
 			void	destroy_node(Node *node)
 			{
-//				_allocator.destroy(node->data_addr());
+				//_allocator.destroy(node->data_addr());
+				_allocator.deallocate(node->data, 1);
 				allocator_node.destroy(node);
 				allocator_node.deallocate(node, 1);
 			}
@@ -894,7 +894,7 @@ namespace ft
 				if (!node)
 					return (NULL);
 				
-				Node *node_copy = create_node(node->data);
+				Node *node_copy = create_node(*(node->data));
 				node_copy->parent = parent;
 				node_copy->color = node->color;
 				node_copy->left = _copy_tree(node->left, node_copy);

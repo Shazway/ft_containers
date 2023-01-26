@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 18:36:10 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/16 18:42:53 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/25 23:44:46 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -446,7 +446,7 @@ namespace ft
 					Node	*to_delete = _find(*first);
 					value_type	last_node_data = *last;
 
-					while (to_delete->data != last_node_data)
+					while (*(to_delete->data) != last_node_data)
 						to_delete = _delete_node_worker(to_delete);
 				}
 				else
@@ -816,9 +816,9 @@ namespace ft
 				{
 					if (leaf)
 						*leaf = node;
-					if (_comparator(val, node->data))
+					if (_comparator(val, *(node->data)))
 						node = node->left;
-					else if (_comparator(node->data, val))
+					else if (_comparator(*(node->data), val))
 						node = node->right;
 					else
 						return (node);
@@ -834,9 +834,9 @@ namespace ft
 				{
 					if (leaf)
 						*leaf = node;
-					if (_comparator(val, node->data))
+					if (_comparator(val, *(node->data)))
 						node = node->left;
-					else if (_comparator(node->data, val))
+					else if (_comparator(*(node->data), val))
 						node = node->right;
 					else
 						return (node);
@@ -849,11 +849,11 @@ namespace ft
 				Node	*target;
 				Node	*n;
 
-				if ((n = _find(node->data, &target)))
+				if ((n = _find(*(node->data), &target)))
 					return (iterator(n, _sentinelStart, _sentinelEnd));
 
 				node->parent = target;
-				if (_comparator(node->data, target->data))
+				if (_comparator(*(node->data), *(target->data)))
 				{
 					if (target->left)
 						target->left->parent = node;
@@ -960,7 +960,7 @@ namespace ft
 				if (!node)
 					return (NULL);
 				
-				Node *node_copy = create_node(node->data);
+				Node *node_copy = create_node(*(node->data));
 				node_copy->parent = parent;
 				node_copy->color = node->color;
 				node_copy->left = _copy_tree(node->left, node_copy);

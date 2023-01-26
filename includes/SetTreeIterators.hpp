@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 18:37:13 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/16 18:40:16 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/25 23:45:16 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ namespace ft
 
 			reference	operator*() const
 			{
-				return (_current->data);
+				return (*(_current->data));
 			}
 
 			pointer	operator->() const
@@ -195,7 +195,7 @@ namespace ft
 
 			reference	operator*() const
 			{
-				return (_current->data);
+				return (*(_current->data));
 			}
 
 			pointer	operator->() const

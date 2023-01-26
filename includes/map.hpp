@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 17:37:09 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/16 18:30:02 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:04:09 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 namespace ft
 {
-	template <typename Key, typename T, typename Compare = ft::less<Key>, typename Alloc = std::allocator<pair<Key, T> > >
+	template <typename Key, typename T, typename Compare = ft::less<Key>, typename Alloc = std::allocator<pair<const Key, T> > >
 	class map;
 
 	template <typename Key, typename T, typename Compare, typename Alloc>
@@ -62,12 +62,11 @@ namespace ft
 	{
 		public:
 			typedef Key													key_type;
-			typedef T													data_type;
-			typedef pair<key_type, data_type>							value_type;
+			typedef T													mapped_type;
+			typedef pair<const key_type, mapped_type>					value_type;
 			typedef Compare												key_compare;
 			typedef Alloc												allocator_type;
 
-		private:
 			//Comparator class
 			class value_compare
 			{
@@ -88,7 +87,7 @@ namespace ft
 					return (_comparator(x.first, y.first));
 				}
 			};
-
+			private:
 			typedef ft::MapTree<value_type, value_compare, allocator_type>	tree_type;
 
 			public:
@@ -202,9 +201,9 @@ namespace ft
 					return (_tree.max_size());
 				}
 
-				data_type	&operator[](key_type const& key)
+				mapped_type	&operator[](key_type const& key)
 				{
-					return ((insert(ft::make_pair(key, data_type())).first)->second);
+					return ((insert(ft::make_pair(key, mapped_type())).first)->second);
 				}
 
 				pair<iterator, bool>	insert(const_reference val)
@@ -230,7 +229,7 @@ namespace ft
 
 				size_type	erase(key_type const& key)
 				{
-					return (_tree.erase(ft::make_pair(key, data_type())));
+					return (_tree.erase(ft::make_pair(key, mapped_type())));
 				}
 
 				void	erase(iterator first, iterator last)
@@ -260,47 +259,47 @@ namespace ft
 
 				iterator find(key_type const& key)
 				{
-					return (_tree.find(ft::make_pair(key, data_type())));
+					return (_tree.find(ft::make_pair(key, mapped_type())));
 				}
 
 				const_iterator find(key_type const& key) const
 				{
-					return (_tree.find(ft::make_pair(key, data_type())));
+					return (_tree.find(ft::make_pair(key, mapped_type())));
 				}
 
 				size_type count(key_type const& key) const
 				{
-					return (_tree.count(ft::make_pair(key, data_type())));
+					return (_tree.count(ft::make_pair(key, mapped_type())));
 				}
 
 				iterator lower_bound(key_type const& key)
 				{
-					return (_tree.lower_bound(ft::make_pair(key, data_type())));
+					return (_tree.lower_bound(ft::make_pair(key, mapped_type())));
 				}
 
 				const_iterator lower_bound(key_type const& key) const
 				{
-					return (_tree.lower_bound(ft::make_pair(key, data_type())));
+					return (_tree.lower_bound(ft::make_pair(key, mapped_type())));
 				}
 
 				iterator upper_bound(key_type const& key)
 				{
-					return (_tree.upper_bound(ft::make_pair(key, data_type())));
+					return (_tree.upper_bound(ft::make_pair(key, mapped_type())));
 				}
 
 				const_iterator upper_bound(key_type const& key) const
 				{
-					return (_tree.upper_bound(ft::make_pair(key, data_type())));
+					return (_tree.upper_bound(ft::make_pair(key, mapped_type())));
 				}
 
 				pair<iterator, iterator> equal_range(key_type const& key)
 				{
-					return (_tree.equal_range(ft::make_pair(key, data_type())));
+					return (_tree.equal_range(ft::make_pair(key, mapped_type())));
 				}
 
 				pair<const_iterator, const_iterator> equal_range(key_type const& key) const
 				{
-					return (_tree.equal_range(ft::make_pair(key, data_type())));
+					return (_tree.equal_range(ft::make_pair(key, mapped_type())));
 				}
 
 				allocator_type get_allocator() const

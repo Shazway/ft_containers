@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 20:38:54 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/14 20:02:44 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/25 23:59:14 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,21 @@ namespace ft
 	{
 		return (!(p1 < p2));
 	}
+	
 	template <typename T1, typename T2>
 	struct pair
 	{
-		T1 first;
-		T2 second;
+		typedef T1	first_type;
+		typedef T2	second_type;
 
-		pair()
+		first_type first;
+		second_type	second;
+
+		pair(): first(T1()), second(T2())
 		{
 		}
 
-		pair(T1 const& _first, T2 const& _second): first(_first), second(_second)
+		pair(first_type const& _first, second_type const& _second): first(_first), second(_second)
 		{
 		}
 
