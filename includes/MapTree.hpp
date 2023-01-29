@@ -6,13 +6,12 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/26 03:44:45 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/29 22:42:32 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAPTREE_HPP
 # define MAPTREE_HPP
-
 # include <memory>
 # include <cstdlib>
 # include <fstream>
@@ -369,6 +368,7 @@ namespace ft
 				if (!node)
 					return (0);
 				
+				std::cout << C_BLUE <<node->data << C_END << std::endl;
 				_delete_node_worker(node);
 				return (1);
 			}
@@ -661,10 +661,15 @@ namespace ft
 
 				if (o == _root) // 2 nodes are in tree
 				{
+					std::cout << C_RED <<n->data << std::endl;
+					std::cout << o->data << std::endl;
 					ft::__swap(n->data, o->data);
-					//ft::__swap(o->data, &n->data);
+					std::cout << n->data << std::endl;
+					std::cout << o->data << C_END <<std::endl;
 					o->left = _sentinelStart;
 					o->right = _sentinelEnd;
+					_sentinelEnd->parent = o;
+					_sentinelStart->parent = o;
 					destroy_node(n); // Swapped data to erase
 				}
 				else
@@ -686,23 +691,28 @@ namespace ft
 			{
 				Node	*o = _replace_node(n);
 				Node	*successor = Node::successor(n, _sentinelStart);
-
 				bool	both_black = _is_black(o) && _is_black(n);
 
 				if (!o)
 				{
 					_size--;
+				//	std::cout << *this << std::endl;
 					_delete_leaf(n, both_black);
 					return (successor);
 				}
 				else if(_is_null(n->left) || _is_null(n->right))
 				{
 					_size--;
+					std::cout << C_GREEN "Delete_child" << std::endl;
 					_delete_child(o, n, both_black);
 					return (successor);
 				}
 
-				ft::__swap(o->data, n->data);
+				//std::cout << C_RED << "Delete_node worker swap: " << n->data << std::endl;
+				//std::cout << o->data << std::endl;
+				ft::__swap(n->data, o->data);
+				//std::cout << n->data << std::endl;
+				//std::cout << o->data << C_END << std::endl;
 				_delete_node_worker(o);
 				return (n);
 			}
@@ -885,6 +895,7 @@ namespace ft
 
 			void	destroy_node(Node *node)
 			{
+				_allocator.destroy(node->data);
 				_allocator.deallocate(node->data, 1);
 				allocator_node.destroy(node);
 				allocator_node.deallocate(node, 1);
