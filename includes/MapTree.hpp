@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/26 03:44:45 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/29 03:25:49 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <fstream>
 # include <sstream>
 # include "algorithm.hpp"
-
+# define __DEBUG
 namespace ft
 {
 	template <typename T>
@@ -402,7 +402,7 @@ namespace ft
 					Node	*to_delete = first.getCurrent();
 					value_type	last_node_data = *last;
 
-					while (*(to_delete->data) != last_node_data)
+					while (to_delete->data != last_node_data)
 						to_delete = _delete_node_worker(to_delete);
 				}
 				else
@@ -657,18 +657,16 @@ namespace ft
 
 			void _delete_child(Node *n, Node *o, bool both_black)
 			{
-				Node	*parent = o->parent;
-
 				if (o == _root) // 2 nodes are in tree
 				{
-					ft::__swap(n->data, o->data);
-					//ft::__swap(o->data, &n->data);
+					swap_node_data_delete_child(o, n->data);
 					o->left = _sentinelStart;
 					o->right = _sentinelEnd;
 					destroy_node(n); // Swapped data to erase
 				}
 				else
 				{
+					Node	*parent = o->parent;
 					if (o == parent->left)
 						parent->left = n;
 					else
@@ -680,6 +678,89 @@ namespace ft
 					else
 						n->color = BLACK;
 				}
+			}
+
+			// Here i swap everything except for the data of the node, relinking it all together (because of pair<CONST key, T data> i can't just swap the data)//
+			//Case where only two nodes are in the tree, so i have little to change and don't want to change sentinels.
+			void	swap_node_data_delete_child(Node *node, value_type &data)
+			{
+				Node	*sponge = create_node(data);
+				Node	*left = node->left;
+				Node	*right = node->right;
+				Node	*parent = node->parent;
+
+				_root = sponge;
+				sponge->color = node->color;
+				if (left)
+					if (left->parent == node)
+						left->parent = sponge;
+				if (right)
+					if (right->parent == node)
+						right->parent = sponge;
+				if (parent)
+				{
+					if (parent->left == node)
+						parent->left = sponge;
+					else if (parent->right == node)
+						parent->right = sponge;
+				}
+				sponge->left = left;
+				sponge->right = right;
+				sponge->parent = parent;
+				destroy_node(node);
+			}
+
+			void	swap_sentinels_and_root(Node *a, Node *b)
+			{
+				if (a == _root)
+					_root = b;
+				else if (b == _root)
+					_root = a;
+				if (a == _sentinelEnd)
+					_sentinelEnd = b;
+				else if (b == _sentinelEnd)
+					_sentinelEnd = a;
+				if (a == _sentinelStart)
+					_sentinelStart = b;
+				if (b == _sentinelStart)
+					_sentinelStart = a;
+			}
+
+			void	change_data_node(Node *node, value_type const& data)
+			{
+				Node	*sponge = create_node(data);
+				Node	*left = node->left;
+				Node	*right = node->right;
+				Node	*parent = node->parent;
+
+				sponge->color = node->color;
+				if (left)
+					if (left->parent == node)
+						left->parent = sponge;
+				if (right)
+					if (right->parent == node)
+						right->parent = sponge;
+				if (parent)
+				{
+					if (parent->left == node)
+						parent->left = sponge;
+					else if (parent->right == node)
+						parent->right = sponge;
+				}
+				sponge->left = left;
+				sponge->right = right;
+				sponge->parent = parent;
+				destroy_node(node);
+			}
+
+			void	swap_nodes_data(Node *a, Node *b)
+			{
+				value_type	const&	a_data = a->data;
+				value_type	const&	b_data = b->data;
+
+				swap_sentinels_and_root(a, b);
+				change_data_node(a, b_data);
+				change_data_node(b, a_data);
 			}
 
 			Node	*_delete_node_worker(Node *n)
@@ -702,7 +783,7 @@ namespace ft
 					return (successor);
 				}
 
-				ft::__swap(o->data, n->data);
+				swap_nodes_data(n, o);
 				_delete_node_worker(o);
 				return (n);
 			}
@@ -751,9 +832,9 @@ namespace ft
 				{
 					if (leaf)
 						*leaf = node;
-					if (_comparator(val, *(node->data)))
+					if (_comparator(val, node->data))
 						node = node->left;
-					else if (_comparator(*(node->data), val))
+					else if (_comparator(node->data, val))
 						node = node->right;
 					else
 						return (node);
@@ -769,9 +850,9 @@ namespace ft
 				{
 					if (leaf)
 						*leaf = node;
-					if (_comparator(val, *(node->data)))
+					if (_comparator(val, node->data))
 						node = node->left;
-					else if (_comparator(*(node->data), val))
+					else if (_comparator(node->data, val))
 						node = node->right;
 					else
 						return (node);
@@ -784,11 +865,11 @@ namespace ft
 				Node	*target;
 				Node	*n;
 
-				if ((n = _find(*(node->data), &target)))
+				if ((n = _find(node->data, &target)))
 					return (iterator(n, _sentinelStart, _sentinelEnd));
 
 				node->parent = target;
-				if (_comparator(*(node->data), *(target->data)))
+				if (_comparator(node->data, target->data))
 				{
 					if (target->left)
 						target->left->parent = node;
@@ -876,16 +957,15 @@ namespace ft
 			{
 				Node	*node = allocator_node.allocate(1);
 
+				value_type	tmp = val;
 				allocator_node.construct(node, Node());
-				node->data = _allocator.allocate(1);
-				_allocator.construct(node->data_addr(), val);
+				_allocator.construct(node->data_addr(), tmp);
 				node->color = RED;
 				return (node);
 			}
 
 			void	destroy_node(Node *node)
 			{
-				_allocator.deallocate(node->data, 1);
 				allocator_node.destroy(node);
 				allocator_node.deallocate(node, 1);
 			}
@@ -894,8 +974,9 @@ namespace ft
 			{
 				if (!node)
 					return (NULL);
-				
-				Node *node_copy = create_node(*(node->data));
+				value_type	tmp(node->data.first, node->data.second);
+
+				Node *node_copy = create_node(tmp);
 				node_copy->parent = parent;
 				node_copy->color = node->color;
 				node_copy->left = _copy_tree(node->left, node_copy);

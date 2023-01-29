@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 15:58:37 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/26 04:44:55 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/27 17:44:15 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,13 @@ namespace	ft
 		typedef value_type const*	const_pointer;
 		typedef	RBTreeNode<T> 		Node;
 
-		pointer		data;
+		value_type	data;
 		Node		*parent;
 		Node		*left;
 		Node		*right;
 		RBTreeColor	color;
 		bool		is_sentinel;
+
 		#ifdef __DEBUG
 			std::string	dump(bool	link)
 			{
@@ -84,12 +85,12 @@ namespace	ft
 
 		pointer	data_addr()
 		{
-			return (data);
+			return (&data);
 		}
 
 		const_pointer data_addr() const
 		{
-			return (data);
+			return (&data);
 		}
 
 		static Node *min(Node *n, Node *sentinel)
