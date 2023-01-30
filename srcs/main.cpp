@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/27 19:18:30 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/30 01:38:37 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,19 @@ void	ft_erase(MAP &mp, U param, V param2)
 	mp.erase(param, param2);
 	printSize(mp);
 }
+#define T1 int
+#define T2 std::string
+#include "vector.hpp"
+
+
+typedef ft::pair<const T1, T2> T3;
 
 int		main(void)
 {
 	//try
 	//{
 	//	std::cout << C_RED << "====MAP TESTS====" << C_END << std::endl;
-	//	map_tests();
+		map_tests();
 	//	std::cout << C_RED << "====END OF MAP TESTS====" << C_END << std::endl << std::endl;
 
 		//std::cout << C_RED << "====SET TESTS====" << C_END << std::endl;
@@ -94,37 +100,5 @@ int		main(void)
 	//	std::cerr << e.what() << '\n';
 	//}
 
-#define T1 int
-#define T2 std::string
-
-
-typedef ft::pair<const T1, T2> T3;
-
-	std::list<T3> lst;
-	unsigned int lst_size = 10;
-	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
-	ft::map<T1, T2> mp(lst.begin(), lst.end());
-	printSize(mp);
-
-	ft_erase(mp, ++mp.begin());
-
-	ft_erase(mp, mp.begin());
-	ft_erase(mp, --mp.end());
-
-	ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
-	ft_erase(mp, --(--(--mp.end())), --mp.end());
-
-	mp[10] = "Hello";
-	mp[11] = "Hi there";
-	printSize(mp);
-	ft_erase(mp, --(--(--mp.end())), mp.end());
-
-	mp[12] = "ONE";
-	mp[13] = "TWO";
-	mp[14] = "THREE";
-	mp[15] = "FOUR";
-	printSize(mp);
-	ft_erase(mp, mp.begin(), mp.end());
 	return (0);
 }

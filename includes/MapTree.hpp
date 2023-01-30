@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/29 03:25:49 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/30 16:23:39 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <fstream>
 # include <sstream>
 # include "algorithm.hpp"
-# define __DEBUG
 namespace ft
 {
 	template <typename T>
@@ -659,7 +658,8 @@ namespace ft
 			{
 				if (o == _root) // 2 nodes are in tree
 				{
-					swap_node_data_delete_child(o, n->data);
+					//swap_node_data_delete_child(o, n->data);
+					ft::__swap(o, n);
 					o->left = _sentinelStart;
 					o->right = _sentinelEnd;
 					destroy_node(n); // Swapped data to erase
@@ -682,85 +682,39 @@ namespace ft
 
 			// Here i swap everything except for the data of the node, relinking it all together (because of pair<CONST key, T data> i can't just swap the data)//
 			//Case where only two nodes are in the tree, so i have little to change and don't want to change sentinels.
-			void	swap_node_data_delete_child(Node *node, value_type &data)
+
+			Node	*change_data_node(Node *node, value_type const& data)
 			{
 				Node	*sponge = create_node(data);
-				Node	*left = node->left;
-				Node	*right = node->right;
-				Node	*parent = node->parent;
 
-				_root = sponge;
-				sponge->color = node->color;
-				if (left)
-					if (left->parent == node)
-						left->parent = sponge;
-				if (right)
-					if (right->parent == node)
-						right->parent = sponge;
-				if (parent)
-				{
-					if (parent->left == node)
-						parent->left = sponge;
-					else if (parent->right == node)
-						parent->right = sponge;
-				}
-				sponge->left = left;
-				sponge->right = right;
-				sponge->parent = parent;
-				destroy_node(node);
-			}
-
-			void	swap_sentinels_and_root(Node *a, Node *b)
-			{
-				if (a == _root)
-					_root = b;
-				else if (b == _root)
-					_root = a;
-				if (a == _sentinelEnd)
-					_sentinelEnd = b;
-				else if (b == _sentinelEnd)
-					_sentinelEnd = a;
-				if (a == _sentinelStart)
-					_sentinelStart = b;
-				if (b == _sentinelStart)
-					_sentinelStart = a;
-			}
-
-			void	change_data_node(Node *node, value_type const& data)
-			{
-				Node	*sponge = create_node(data);
-				Node	*left = node->left;
-				Node	*right = node->right;
-				Node	*parent = node->parent;
+				sponge->left = node->left;
+				sponge->right = node->right;
+				sponge->parent = node->parent;
 
 				sponge->color = node->color;
-				if (left)
-					if (left->parent == node)
-						left->parent = sponge;
-				if (right)
-					if (right->parent == node)
-						right->parent = sponge;
-				if (parent)
+				if (node->left)
+						sponge->left->parent = sponge;
+				if (node->right)
+						sponge->right->parent = sponge;
+				if (node->parent)
 				{
-					if (parent->left == node)
-						parent->left = sponge;
-					else if (parent->right == node)
-						parent->right = sponge;
+					if (node->parent->left == node)
+						sponge->parent->left = sponge;
+					else if (node->parent->right == node)
+						sponge->parent->right = sponge;
 				}
-				sponge->left = left;
-				sponge->right = right;
-				sponge->parent = parent;
 				destroy_node(node);
+				return (sponge);
 			}
 
-			void	swap_nodes_data(Node *a, Node *b)
+			pair<Node *, Node *>	swap_nodes_data(Node *a, Node *b)
 			{
 				value_type	const&	a_data = a->data;
 				value_type	const&	b_data = b->data;
 
-				swap_sentinels_and_root(a, b);
-				change_data_node(a, b_data);
-				change_data_node(b, a_data);
+				a = change_data_node(a, b_data);
+				b = change_data_node(b, a_data);
+				return(make_pair(a, b));
 			}
 
 			Node	*_delete_node_worker(Node *n)
@@ -782,8 +736,11 @@ namespace ft
 					_delete_child(o, n, both_black);
 					return (successor);
 				}
+				pair<Node *, Node *>	ab;
 
-				swap_nodes_data(n, o);
+				ab = swap_nodes_data(n, o);
+				n = ab.first;
+				o = ab.second;
 				_delete_node_worker(o);
 				return (n);
 			}

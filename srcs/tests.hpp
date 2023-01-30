@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:36:28 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/29 01:58:12 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/29 22:46:53 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@
 #include <ctime>
 #include <algorithm>
 #include "Colors.hpp"
-#define __DEBUG
 
 void	title(std::string const title);
 void	map_tests();
