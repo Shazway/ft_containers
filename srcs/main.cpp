@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 17:31:23 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/30 01:38:37 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/30 17:53:50 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <string>
 #include <list>
 
-static int iter = 0;
 
 void	title(std::string const title)
 {
@@ -38,49 +37,24 @@ std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::
 		o << std::endl;
 	return ("");
 }
-
-template <typename T_MAP>
-void	printSize(T_MAP const &mp, bool print_content = 1)
-{
-	std::cout << "size: " << mp.size() << std::endl;
-	std::cout << "max_size: " << mp.max_size() << std::endl;
-	if (print_content)
-	{
-		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << printPair(it, false) << std::endl;
-	}
-	std::cout << "###############################################" << std::endl;
-}
-template <typename MAP, typename U>
-void	ft_erase(MAP &mp, U param)
-{
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	mp.erase(param);
-	printSize(mp);
-}
-
-template <typename MAP, typename U, typename V>
-void	ft_erase(MAP &mp, U param, V param2)
-{
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	mp.erase(param, param2);
-	printSize(mp);
-}
-#define T1 int
-#define T2 std::string
 #include "vector.hpp"
 
 
-typedef ft::pair<const T1, T2> T3;
+using namespace NAMESPACE;
 
-int		main(void)
+template <class Key, class T>
+void	print(map<Key, T>& lst)
 {
+	for (typename map<Key, T>::iterator it = lst.begin(); it != lst.end(); it++)
+		std::cout << it->first << " => " << it->second << '\n';
+}
+
+//int		main(void)
+//{
 	//try
 	//{
 	//	std::cout << C_RED << "====MAP TESTS====" << C_END << std::endl;
-		map_tests();
+	//	map_tests();
 	//	std::cout << C_RED << "====END OF MAP TESTS====" << C_END << std::endl << std::endl;
 
 		//std::cout << C_RED << "====SET TESTS====" << C_END << std::endl;
@@ -99,6 +73,38 @@ int		main(void)
 	//{
 	//	std::cerr << e.what() << '\n';
 	//}
+//}
+int main ()
+{
+	map<char,int> mymap;
+	map<char,int>::iterator it;
+
+	// insert some values:
+	mymap['a']=10;
+	mymap['b']=20;
+	mymap['c']=30;
+	mymap['d']=40;
+	mymap['e']=50;
+	mymap['f']=60;
+
+	print(mymap);
+	it=mymap.find('b');
+	std::cout << "found b\n";
+	mymap.erase (it);                   // erasing by iterator
+	print(mymap);
+	std::cout << "erase iterator to b\n";
+	mymap.erase ('c');                  // erasing by key
+	print(mymap);
+	std::cout << "erase by key 'c'\n";
+	it=mymap.find ('e');
+	std::cout << "erase by range 'e' to end\n";
+	mymap.erase ( it, mymap.end() );    // erasing by range
+	print(mymap);
+
+	std::cout << " display :\n";
+	// show content:
+	for (it=mymap.begin(); it!=mymap.end(); ++it)
+	std::cout << it->first << " => " << it->second << '\n';
 
 	return (0);
 }

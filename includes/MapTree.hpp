@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/30 17:27:54 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/30 17:52:51 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -692,6 +692,16 @@ namespace ft
 				sponge->parent = node->parent;
 
 				sponge->color = node->color;
+				if (_root == node)
+				{
+					_root = sponge;
+					_root->left = sponge->left;
+					_root->right = sponge->right;
+				}
+				if (_sentinelEnd == node)
+					_sentinelEnd = sponge;
+				if (_sentinelStart == node)
+					_sentinelStart = sponge;
 				if (node->left)
 						sponge->left->parent = sponge;
 				if (node->right)
@@ -714,7 +724,7 @@ namespace ft
 
 				a = change_data_node(a, b_data);
 				b = change_data_node(b, a_data);
-				return(make_pair(a, b));
+				return(ft::make_pair(a, b));
 			}
 
 			Node	*_delete_node_worker(Node *n)
