@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/30 16:23:39 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/30 17:27:54 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -658,8 +658,9 @@ namespace ft
 			{
 				if (o == _root) // 2 nodes are in tree
 				{
-					//swap_node_data_delete_child(o, n->data);
-					ft::__swap(o, n);
+					pair<Node *, Node *>	on = swap_nodes_data(o, n);
+					o = on.first;
+					n = on.second;
 					o->left = _sentinelStart;
 					o->right = _sentinelEnd;
 					destroy_node(n); // Swapped data to erase
@@ -682,8 +683,7 @@ namespace ft
 
 			// Here i swap everything except for the data of the node, relinking it all together (because of pair<CONST key, T data> i can't just swap the data)//
 			//Case where only two nodes are in the tree, so i have little to change and don't want to change sentinels.
-
-			Node	*change_data_node(Node *node, value_type const& data)
+			Node	*change_data_node(Node *node, value_type data)
 			{
 				Node	*sponge = create_node(data);
 
@@ -709,8 +709,8 @@ namespace ft
 
 			pair<Node *, Node *>	swap_nodes_data(Node *a, Node *b)
 			{
-				value_type	const&	a_data = a->data;
-				value_type	const&	b_data = b->data;
+				value_type	a_data = a->data;
+				value_type	b_data = b->data;
 
 				a = change_data_node(a, b_data);
 				b = change_data_node(b, a_data);
@@ -736,11 +736,11 @@ namespace ft
 					_delete_child(o, n, both_black);
 					return (successor);
 				}
-				pair<Node *, Node *>	ab;
+				pair<Node *, Node *>	no;
 
-				ab = swap_nodes_data(n, o);
-				n = ab.first;
-				o = ab.second;
+				no = swap_nodes_data(n, o);
+				n = no.first;
+				o = no.second;
 				_delete_node_worker(o);
 				return (n);
 			}
@@ -914,9 +914,8 @@ namespace ft
 			{
 				Node	*node = allocator_node.allocate(1);
 
-				value_type	tmp = val;
 				allocator_node.construct(node, Node());
-				_allocator.construct(node->data_addr(), tmp);
+				_allocator.construct(node->data_addr(), val);
 				node->color = RED;
 				return (node);
 			}
