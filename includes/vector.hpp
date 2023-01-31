@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/30 18:12:19 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/31 16:50:42 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@
 #include <stdexcept>
 #include <exception>
 #include <memory>
-#include <vector>
-#include "Colors.hpp"
 
 namespace ft
 {

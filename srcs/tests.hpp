@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:36:28 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/29 22:46:53 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/31 16:51:56 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include "stack.hpp"
 #include "map.hpp"
 #include "set.hpp"
+#include "pair.hpp"
 # define NAMESPACE	ft
 #endif
 

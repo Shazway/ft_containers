@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 18:36:10 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/27 17:48:21 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/31 16:44:47 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ namespace ft
 
 			#ifdef __DEBUG
 
+
 				void	dump(std::string const& filename)
 				{
 					std::ofstream	ofs(filename.c_str());
@@ -161,7 +162,7 @@ namespace ft
 					ofs << "\tnode [shape=plaintext, fontcolor=white, height=.1];\n\n";
 					ofs << "\t" << _sentinelStart->dump(false);
 					ofs << "\t" << _sentinelEnd->dump(false);
-					dumpTree(ofs, root);
+					dumpTree(ofs, _root);
 					ofs << "}";
 
 					ofs.close();
@@ -177,14 +178,21 @@ namespace ft
 						dumpTree(ofs, node->right);
 				}
 
-				void	print_tree() const
+				void	print_tree_advanced() const
 				{
 					const_iterator	it = begin();
 
 					std::cout << "Tree :";
 					if (it != end())
+					{
 						for (; it != end(); it++)
-							std::cout << " " << *it;
+						{
+							std::cout << " " << *it << ": " << it.getCurrent() << std::endl
+							<< "parent: " << it.getCurrent()->parent << std::endl
+							<< "left: " << it.getCurrent()->left << std::endl
+							<< "right: " << it.getCurrent()->right << std::endl;
+						}
+					}
 					else
 						std::cout << "Tree is empty";
 					std::cout << std::endl;
@@ -199,6 +207,27 @@ namespace ft
 					std::cout << std::endl;
 				}
 
+				void	print_tree() const
+				{
+					const_iterator	it = begin();
+
+					std::cout << "Tree :";
+					if (it != end())
+						for (; it != end(); it++)
+							std::cout << " " << *it << ": " << it.getCurrent();
+					else
+						std::cout << "Tree is empty";
+					std::cout << std::endl;
+
+					const_reverse_iterator	c_rit = rbegin();
+					std::cout << "Tree :";
+					if (c_rit != rend())
+						for (; c_rit != rend(); c_rit++)
+							std::cout << " " << *c_rit;
+					else
+						std::cout << "Tree is empty";
+					std::cout << std::endl;
+				}
 			#endif
 
 			bool	is_sentinel(Node const* node) const
@@ -355,12 +384,6 @@ namespace ft
 				return (insert(val).first);
 			}
 
-			const_iterator insert(const_iterator pos, const_reference val)
-			{
-				(void)pos;
-				return (insert(val).first);
-			}
-
 			template <typename InputIterator>
 			void insert(InputIterator first, InputIterator last)
 			{
@@ -388,13 +411,6 @@ namespace ft
 				erase(pos, last);
 			}
 
-			void	erase(const_iterator pos)
-			{
-				const_iterator last = pos;
-				last++;
-				erase(pos, last);
-			}
-
 			void	erase(iterator first, iterator last)
 			{
 				if (first == end())
@@ -415,35 +431,6 @@ namespace ft
 				if (n < _size / 2)
 				{
 					Node	*to_delete = first.getCurrent();
-					value_type	last_node_data = *last;
-
-					while (to_delete->data != last_node_data)
-						to_delete = _delete_node_worker(to_delete);
-				}
-				else
-					_regen_tree(first, last);
-			}
-
-			void	erase(const_iterator first, const_iterator last)
-			{
-				if (first == end())
-					return ;
-
-				if (first == begin() && last == end())
-				{
-					clear();
-					return ;
-				}
-
-				size_type	n = 0;
-				const_iterator	i = first;
-				
-				for (; i != last; i++)
-					n++;
-
-				if (n < _size / 2)
-				{
-					Node	*to_delete = _find(*first);
 					value_type	last_node_data = *last;
 
 					while (to_delete->data != last_node_data)
@@ -542,28 +529,6 @@ namespace ft
 			}
 
 			void	_regen_tree(iterator first, iterator last)
-			{
-				SetTree	new_tree(_comparator, _allocator);
-
-				for (iterator it = begin(); it != end(); it++)
-				{
-					if (first == last || _comparator(*it, *first) || _comparator(*first, *it))
-						new_tree.insert(*it);
-					else
-						first++;
-				}
-				new_tree._clear = false;
-
-				__clear();
-				destroy_node(_sentinelEnd);
-				destroy_node(_sentinelStart);
-				_root = new_tree._root;
-				_sentinelStart = new_tree._sentinelStart;
-				_sentinelEnd = new_tree._sentinelEnd;
-				_size = new_tree._size;
-			}
-
-			void	_regen_tree(const_iterator first, const_iterator last)
 			{
 				SetTree	new_tree(_comparator, _allocator);
 
@@ -727,7 +692,9 @@ namespace ft
 
 				if (o == _root) // 2 nodes are in tree
 				{
-					ft::__swap(n->data, o->data);
+					pair<Node *, Node *>	on = swap_nodes_data(o, n);
+					o = on.first;
+					n = on.second;
 					o->left = _sentinelStart;
 					o->right = _sentinelEnd;
 					destroy_node(n); // Swapped data to erase
@@ -738,13 +705,75 @@ namespace ft
 						parent->left = n;
 					else
 						parent->right = n;
+					if (_sentinelEnd == o)
+						_sentinelEnd = n;
+					if (_sentinelStart == o)
+						_sentinelStart = n;
+					if (_sentinelStart == o->left)
+					{
+						Node	*sentinel_parent = n->min(n, _sentinelStart);
+						sentinel_parent->left = _sentinelStart;
+						_sentinelStart->parent = sentinel_parent;
+					}
+					if (_sentinelEnd == o->right)
+					{
+						Node	*sentinel_parent = n->max(n, _sentinelEnd);
+						sentinel_parent->right = _sentinelEnd;
+						_sentinelEnd->parent = sentinel_parent;
+					}
+					n->parent = o->parent;
 					destroy_node(o);
-					n->parent = parent;
 					if (both_black)
 						_delete_rebalance_tree(n);
 					else
 						n->color = BLACK;
 				}
+			}
+
+			// Here i swap everything except for the data of the node, relinking it all together (because of pair<CONST key, T data> i can't just swap the data)//
+			//Case where only two nodes are in the tree, so i have little to change and don't want to change sentinels.
+			Node	*change_data_node(Node *node, value_type data)
+			{
+				Node	*sponge = create_node(data);
+
+				sponge->left = node->left;
+				sponge->right = node->right;
+				sponge->parent = node->parent;
+
+				sponge->color = node->color;
+				if (_root == node)
+				{
+					_root = sponge;
+					_root->left = sponge->left;
+					_root->right = sponge->right;
+				}
+				if (_sentinelEnd == node)
+					_sentinelEnd = sponge;
+				if (_sentinelStart == node)
+					_sentinelStart = sponge;
+				if (node->left)
+						sponge->left->parent = sponge;
+				if (node->right)
+						sponge->right->parent = sponge;
+				if (node->parent)
+				{
+					if (node->parent->left == node)
+						sponge->parent->left = sponge;
+					else if (node->parent->right == node)
+						sponge->parent->right = sponge;
+				}
+				destroy_node(node);
+				return (sponge);
+			}
+
+			pair<Node *, Node *>	swap_nodes_data(Node *a, Node *b)
+			{
+				value_type	a_data = a->data;
+				value_type	b_data = b->data;
+
+				a = change_data_node(a, b_data);
+				b = change_data_node(b, a_data);
+				return(ft::make_pair(a, b));
 			}
 
 			Node	*_delete_node_worker(Node *n)
@@ -766,8 +795,11 @@ namespace ft
 					_delete_child(o, n, both_black);
 					return (successor);
 				}
+				pair<Node *, Node *>	no;
 
-				ft::__swap(o->data, n->data);
+				no = swap_nodes_data(n, o);
+				n = no.first;
+				o = no.second;
 				_delete_node_worker(o);
 				return (n);
 			}
@@ -943,7 +975,6 @@ namespace ft
 
 				allocator_node.construct(node, Node());
 				_allocator.construct(node->data_addr(), val);
-
 				node->color = RED;
 				return (node);
 			}
@@ -958,8 +989,9 @@ namespace ft
 			{
 				if (!node)
 					return (NULL);
-				
-				Node *node_copy = create_node(node->data);
+				value_type	tmp(node->data);
+
+				Node *node_copy = create_node(tmp);
 				node_copy->parent = parent;
 				node_copy->color = node->color;
 				node_copy->left = _copy_tree(node->left, node_copy);

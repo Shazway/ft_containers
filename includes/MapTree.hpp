@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/31 02:34:18 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/31 16:31:51 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,6 @@ namespace ft
 
 	template <typename T>
 	class MapTreeConstIterator;
-
-	template<typename T1, typename T2>
-	std::ostream	&operator<<(std::ostream &os, ft::pair<T1, T2> const& p)
-	{
-		os << "[" << p.first << ", " << p.second << "]";
-		return (os);
-	}
 
 	template<typename T, typename Compare, typename Alloc>
 	bool	operator==(MapTree<T, Compare, Alloc> const& t1, MapTree<T, Compare, Alloc> const& t2)
