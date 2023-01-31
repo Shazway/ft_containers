@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/31 17:11:24 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/31 17:24:21 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <fstream>
 # include <sstream>
 # include "algorithm.hpp"
+
 namespace ft
 {
 	template <typename T>
@@ -397,7 +398,6 @@ namespace ft
 				if (!node)
 					return (0);
 				
-				std::cout << C_BLUE <<node->data << C_END << std::endl;
 				_delete_node_worker(node);
 				return (1);
 			}
@@ -785,14 +785,12 @@ namespace ft
 				if (!o)
 				{
 					_size--;
-				//	std::cout << *this << std::endl;
 					_delete_leaf(n, both_black);
 					return (successor);
 				}
 				else if(_is_null(n->left) || _is_null(n->right))
 				{
 					_size--;
-					std::cout << C_GREEN "Delete_child" << std::endl;
 					_delete_child(o, n, both_black);
 					return (successor);
 				}
