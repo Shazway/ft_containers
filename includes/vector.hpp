@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 00:07:02 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/26 04:54:41 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:12:19 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,7 +309,6 @@ public:
 
 	iterator	insert(iterator pos, const_reference val)
 	{
-		std::cout << "insert of val: " << val << std::endl;
 		if (_size == 0 || pos == end())
 		{
 			push_back(val);

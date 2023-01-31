@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 02:33:49 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/19 01:22:36 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/30 22:12:17 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ std::ostream	&operator<<(std::ostream &os, NAMESPACE::pair<T1, T2> const& p)
 	os << "[" << p.first << ", " << p.second << "]";
 	return (os);
 }
-
 template<typename Key, typename T, typename Compare, typename Alloc>
 std::ostream	&operator<<(std::ostream &os, NAMESPACE::map<Key, T, Compare, Alloc> const& map)
 {

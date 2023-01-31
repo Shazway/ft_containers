@@ -6,7 +6,7 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 16:00:20 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/29 22:46:21 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/30 21:17:00 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,21 @@ namespace ft
 
 				_current = Node::predecessor(_current, _end);
 				return (it);
+			}
+			
+			Node	*getCurrent() const
+			{
+				return (_current);
+			}
+
+			Node	*getStart() const
+			{
+				return (_start);
+			}
+
+			Node	*getEnd() const
+			{
+				return (_end);
 			}
 	};
 }

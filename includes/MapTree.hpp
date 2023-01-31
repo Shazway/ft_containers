@@ -6,13 +6,12 @@
 /*   By: tmoragli <tmoragli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 18:14:38 by tmoragli          #+#    #+#             */
-/*   Updated: 2023/01/30 17:52:51 by tmoragli         ###   ########.fr       */
+/*   Updated: 2023/01/31 02:34:18 by tmoragli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAPTREE_HPP
 # define MAPTREE_HPP
-
 # include <memory>
 # include <cstdlib>
 # include <fstream>
@@ -35,6 +34,13 @@ namespace ft
 
 	template <typename T>
 	class MapTreeConstIterator;
+
+	template<typename T1, typename T2>
+	std::ostream	&operator<<(std::ostream &os, ft::pair<T1, T2> const& p)
+	{
+		os << "[" << p.first << ", " << p.second << "]";
+		return (os);
+	}
 
 	template<typename T, typename Compare, typename Alloc>
 	bool	operator==(MapTree<T, Compare, Alloc> const& t1, MapTree<T, Compare, Alloc> const& t2)
@@ -148,6 +154,7 @@ namespace ft
 
 			#ifdef __DEBUG
 
+
 				void	dump(std::string const& filename)
 				{
 					std::ofstream	ofs(filename.c_str());
@@ -159,7 +166,7 @@ namespace ft
 					ofs << "\tnode [shape=plaintext, fontcolor=white, height=.1];\n\n";
 					ofs << "\t" << _sentinelStart->dump(false);
 					ofs << "\t" << _sentinelEnd->dump(false);
-					dumpTree(ofs, root);
+					dumpTree(ofs, _root);
 					ofs << "}";
 
 					ofs.close();
@@ -175,6 +182,35 @@ namespace ft
 						dumpTree(ofs, node->right);
 				}
 
+				void	print_tree_advanced() const
+				{
+					const_iterator	it = begin();
+
+					std::cout << "Tree :";
+					if (it != end())
+					{
+						for (; it != end(); it++)
+						{
+							std::cout << " " << *it << ": " << it.getCurrent() << std::endl
+							<< "parent: " << it.getCurrent()->parent << std::endl
+							<< "left: " << it.getCurrent()->left << std::endl
+							<< "right: " << it.getCurrent()->right << std::endl;
+						}
+					}
+					else
+						std::cout << "Tree is empty";
+					std::cout << std::endl;
+
+					const_reverse_iterator	c_rit = rbegin();
+					std::cout << "Tree :";
+					if (c_rit != rend())
+						for (; c_rit != rend(); c_rit++)
+							std::cout << " " << *c_rit;
+					else
+						std::cout << "Tree is empty";
+					std::cout << std::endl;
+				}
+
 				void	print_tree() const
 				{
 					const_iterator	it = begin();
@@ -182,7 +218,7 @@ namespace ft
 					std::cout << "Tree :";
 					if (it != end())
 						for (; it != end(); it++)
-							std::cout << " " << *it;
+							std::cout << " " << *it << ": " << it.getCurrent();
 					else
 						std::cout << "Tree is empty";
 					std::cout << std::endl;
@@ -656,6 +692,8 @@ namespace ft
 
 			void _delete_child(Node *n, Node *o, bool both_black)
 			{
+				Node	*parent = o->parent;
+
 				if (o == _root) // 2 nodes are in tree
 				{
 					pair<Node *, Node *>	on = swap_nodes_data(o, n);
@@ -667,13 +705,28 @@ namespace ft
 				}
 				else
 				{
-					Node	*parent = o->parent;
 					if (o == parent->left)
 						parent->left = n;
 					else
 						parent->right = n;
+					if (_sentinelEnd == o)
+						_sentinelEnd = n;
+					if (_sentinelStart == o)
+						_sentinelStart = n;
+					if (_sentinelStart == o->left)
+					{
+						Node	*sentinel_parent = n->min(n, _sentinelStart);
+						sentinel_parent->left = _sentinelStart;
+						_sentinelStart->parent = sentinel_parent;
+					}
+					if (_sentinelEnd == o->right)
+					{
+						Node	*sentinel_parent = n->max(n, _sentinelEnd);
+						sentinel_parent->right = _sentinelEnd;
+						_sentinelEnd->parent = sentinel_parent;
+					}
+					n->parent = o->parent;
 					destroy_node(o);
-					n->parent = parent;
 					if (both_black)
 						_delete_rebalance_tree(n);
 					else
